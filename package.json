@@ -1,0 +1,27 @@
+{
+  "name": "middle.messenger.praktikum.yandex",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Anatoly2403/middle.messenger.praktikum.yandex.git",
+  "author": "an_bir <an_bir@mail.com>",
+  "license": "MIT",
+  "browserslist": "last 2 versions, not dead",
+  "source": "static/index.pug",
+  "scripts": {
+    "start": "parcel --open -p 4200",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "@parcel/transformer-pug": "2.7.0",
+    "@parcel/transformer-sass": "2.7.0",
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "os-browserify": "^0.3.0",
+    "parcel": "^2.7.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "pug": "^3.0.2"
+  }
+}
