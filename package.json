@@ -6,7 +6,7 @@
   "author": "an_bir <an_bir@mail.com>",
   "license": "MIT",
   "browserslist": "last 2 versions, not dead",
-  "source": "static/index.pug",
+  "source": "src/pages/auth/auth.pug",
   "scripts": {
     "start": "parcel --open -p 4200",
     "build": "parcel build"

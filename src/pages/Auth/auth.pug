@@ -1,0 +1,17 @@
+
+
+extends ../../layout/layout
+block style
+  link(rel="stylesheet" href="./index.scss")
+block content
+  div.auth
+    -
+      const fields = [
+        { id: 'login', label: 'Логин', type: 'text', },
+        { id: 'password', label: 'Пароль', type: 'text', }
+      ]
+    -
+    div.auth-form__wrapper
+      +form('Вход', fields)
+block script
+  script( src="./auth.js" type="module")
