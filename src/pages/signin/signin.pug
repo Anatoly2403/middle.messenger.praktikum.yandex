@@ -1,0 +1,23 @@
+extends ../../layout/layout
+block style
+  link(rel="stylesheet" href="./index.scss")
+block content
+  div.signin
+    -
+      const formTitle = 'Регистрация'
+      const fields = [
+        { id: 'mail', label: 'Почта', type: 'email', },
+        { id: 'login', label: 'Логин', type: 'text', },
+        { id: 'name', label: 'Имя', type: 'text', },
+        { id: 'lastName', label: 'Фамилия', type: 'text', },
+        { id: 'phoneNumber', label: 'Телефон', type: 'tel', },
+        { id: 'password', label: 'Пароль', type: 'password', },
+        { id: 'confirmPassword', label: 'Пароль (ещё раз)', type: 'password', },
+      ]
+      const button = { id: 'signin', label: 'Зарегистрироваться', type: 'submit'}      
+      const link = { title: 'Войти', href: 'login' }
+    -
+    div.signin-form__wrapper      
+      +form(formTitle, fields, button, link)    
+block script
+  script( src="./signin.js" type="module")

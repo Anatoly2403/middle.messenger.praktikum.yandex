@@ -1,9 +1,4 @@
-@import 'src/styles/colors.scss';
-@import 'src/styles/mixins.scss';
-@import 'src/styles/components/field.scss';
-@import 'src/styles/components/form.scss';
-@import 'src/styles/components/button.scss';
-@import 'src/styles/components/link.scss';
+@import 'src/styles/shared.scss';
 
 * {
   box-sizing: border-box;
@@ -12,6 +7,7 @@
 }
 
 .layout {
-  height: 100vh;
-  background-color: $background;
+  position: relative;
+  background-color: $background; 
 }
+

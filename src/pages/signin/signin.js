@@ -11,6 +11,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function submitHandler(e) {
     e.preventDefault();
-    console.log(e);
   }
 });

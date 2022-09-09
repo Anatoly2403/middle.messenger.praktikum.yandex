@@ -1,20 +1,18 @@
-
-
 extends ../../layout/layout
 block style
   link(rel="stylesheet" href="./index.scss")
 block content
-  div.auth
+  div.login
     -
+      const formTitle = 'Вход'
       const fields = [
         { id: 'login', label: 'Логин', type: 'text', },
         { id: 'password', label: 'Пароль', type: 'text', }
       ]
-      const button = { id: 'logIn', label: 'Войти', type: 'submit'}
-      const formTitle = 'Вход'
-      const link = { title: 'asdasd', href: 'ASDASD' }
+      const button = { id: 'login', label: 'Войти', type: 'submit'}      
+      const link = { title: 'Нет аккаунта?', href: 'signin' }
     -
-    div.auth-form__wrapper      
+    div.login-form__wrapper      
       +form(formTitle, fields, button, link)    
 block script
   script( src="./login.js" type="module")
