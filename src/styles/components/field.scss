@@ -1,0 +1,35 @@
+@import 'src/styles/colors.scss';
+
+.field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 0 0;
+
+  &__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 9px;
+    color: $gray;
+    transition: all .2s;
+
+    &_low {
+      font-size: 13px;
+      transform: translateY(18px);
+      transition: all .2s;
+    }
+  }
+
+  &__input {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid $blue;
+    padding-bottom: 7px;
+  }
+
+  &__error {
+    font-size: 8px;
+    color: $red;
+  }
+}

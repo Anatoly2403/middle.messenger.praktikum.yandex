@@ -1,5 +1,9 @@
 @import 'src/styles/colors.scss';
 @import 'src/styles/mixins.scss';
+@import 'src/styles/components/field.scss';
+@import 'src/styles/components/form.scss';
+@import 'src/styles/components/button.scss';
+@import 'src/styles/components/link.scss';
 
 * {
   box-sizing: border-box;
@@ -10,75 +14,4 @@
 .layout {
   height: 100vh;
   background-color: $background;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  padding: 50px 30px 30px;
-  width: 340px;
-  height: 100%;
-  background-color: $white;
-  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
-  border-radius: 12px;
-
-  &__title {
-    font-weight: 500;
-    font-size: 20px;
-    text-align: center;
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-  }
-
-  &__fields {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  &__buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-.field {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 18px 0 0;
-
-  &__label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 9px;
-    color: $gray;
-    transition: all .2s;
-
-    &_low {
-      font-size: 13px;
-      transform: translateY(18px);
-      transition: all .2s;
-    }
-  }
-
-  &__input {
-    outline: none;
-    border: none;
-    border-bottom: 1px solid $blue;
-    padding-bottom: 7px;
-  }
-
-  &__error {
-    font-size: 8px;
-    color: $red;
-  }
 }

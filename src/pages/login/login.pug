@@ -10,8 +10,11 @@ block content
         { id: 'login', label: 'Логин', type: 'text', },
         { id: 'password', label: 'Пароль', type: 'text', }
       ]
+      const button = { id: 'logIn', label: 'Войти', type: 'submit'}
+      const formTitle = 'Вход'
+      const link = { title: 'asdasd', href: 'ASDASD' }
     -
-    div.auth-form__wrapper
-      +form('Вход', fields)
+    div.auth-form__wrapper      
+      +form(formTitle, fields, button, link)    
 block script
-  script( src="./auth.js" type="module")
+  script( src="./login.js" type="module")

@@ -1,0 +1,12 @@
+mixin form(title= "", fields= [], btnProp, linkProp)
+  form.form
+    div.form__title
+      h3= title
+    div.form__content
+      div.form__fields
+        each f in fields
+          +field(f)
+      div.form__footer
+          +button(btnProp)
+          +link(linkProp)
+        
