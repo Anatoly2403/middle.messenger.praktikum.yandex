@@ -1,0 +1,5 @@
+mixin textField(props)
+  - const value = props?.value || 'Нет данных'  
+  div(class='text-field' data-fieldId=props.id)
+    span(class='text-field__title')=props.label
+    span(class='text-field__value')=value

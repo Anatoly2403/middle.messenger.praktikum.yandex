@@ -1,9 +1,9 @@
-import { FormController } from '../../scripts';
+import { FormController } from '../../scripts/controllers';
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = new FormController({
     formSelector: '.form',
-    formFieldsSelector: '.field__input',
+    formFieldsSelector: '.input-field__input',
     submitHandler
   });
 

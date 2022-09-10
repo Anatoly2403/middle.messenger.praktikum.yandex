@@ -1,0 +1,10 @@
+mixin formBuilder(data)
+  form.form(data-formId=data.id)
+    div.form__title
+      h3=data.title
+    div.form__content
+      div.form__fields
+        +structureBuilder(data.fields)
+      div.form__footer
+        +structureBuilder(data.footer)
+        
