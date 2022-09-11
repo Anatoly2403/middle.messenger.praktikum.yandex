@@ -5,11 +5,11 @@
   "author": "an_bir <an_bir@mail.com>",
   "license": "MIT",
   "browserslist": "last 2 versions, not dead",
-  "source": "src/pages/signin/signin.pug",
+  "source": "src/pages/profile/profile.pug",
   "scripts": {
     "dev": "parcel --open --no-cache",
     "build": "parcel build src/pages/*/*.pug",
-    "server": "nodemon src/server/server.js localhost 8080" 
+    "server": "nodemon src/server/server.js localhost 8080"
   },
   "devDependencies": {
     "@parcel/transformer-pug": "2.7.0",

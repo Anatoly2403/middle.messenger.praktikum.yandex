@@ -1,8 +1,7 @@
 export class ModalController {
   constructor() {
     this._modalWrapper = document.querySelector('.modal-wrapper');
-    this._modal = document.querySelector('.modal');
-    this.init();
+    this._modalForm = document.querySelector('.modal');
   }
 
   init() {
@@ -10,7 +9,7 @@ export class ModalController {
       if (e.target.className !== "modal-wrapper") return;
       this.hideModal();
     })
-    this._modal.addEventListener('submit', this._submitForm.bind(this))
+    this._modalForm.addEventListener('submit', this._submitForm.bind(this))
   }
 
   showModal() {

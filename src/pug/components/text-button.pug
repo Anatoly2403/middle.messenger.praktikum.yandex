@@ -1,4 +1,4 @@
 mixin textButton(props)
   -const className = props?.btnType ? `text-button text-button_${props.btnType}` : 'text-button'
-  button(class=className data-buttonId=props.id)
+  button(class=className data-id=props.id)
     span=props.label

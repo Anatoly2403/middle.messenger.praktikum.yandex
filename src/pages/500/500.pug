@@ -1,0 +1,9 @@
+extends ../../layout/layout
+block style
+  link(rel="stylesheet" href="./index.scss")
+block content
+  div.root
+    div.root__code 500
+    div.root__message Мы уже фиксим
+    +structureBuilder([{ type: 'link', id: '404', title: 'Назад к чатам', href: '#', }])
+block script

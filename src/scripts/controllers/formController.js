@@ -4,7 +4,6 @@ export class FormController {
     this._form = document.querySelector(formSelector);
     this._formFields = this._form.querySelectorAll(formFieldsSelector);
     this._submitHandler = submitHandler;
-    console.log(formFieldsSelector)
   }
 
   _setSubmitHandler() {

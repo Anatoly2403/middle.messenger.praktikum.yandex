@@ -1,5 +1,5 @@
 mixin textField(props)
-  - const value = props?.value || 'Нет данных'  
-  div(class='text-field' data-fieldId=props.id)
+  - const value = props?.value || ''  
+  div(class='text-field' data-id=props.id)
     span(class='text-field__title')=props.label
     input(class='text-field__value' value=value disabled)

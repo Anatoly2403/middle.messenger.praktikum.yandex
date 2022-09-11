@@ -13,6 +13,12 @@
     text-decoration-line: underline;
     color: #3369F3;
     pointer-events: none;
+
+    &_full {
+      font-size: 14px;
+      color: #8D8D8D;
+      text-decoration-line: none;
+    }
   }
 
   &__input {
