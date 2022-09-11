@@ -4,6 +4,8 @@ mixin structureBuilder(structure=[])
         +textField(item)
       else if item.type === 'inputField'
         +inputField(item)
+      else if item.type === 'fileField'
+        +fileField(item)
       else if item.type === 'avatar'
         +avatar(item)
       else if item.type === 'link'

@@ -10,9 +10,15 @@ block content
       div.profile__avatar
         +structureBuilder(avatarBlockStructure)
       div.profile__user-data
-        +structureBuilder(userDataBlockStructure)
+        div.profile__main-info-wrapper
+          +structureBuilder(userMainDataBlockStructure)
+        div.profile__password-wrapper
+          +structureBuilder(userPasswordDataBlockStructure)
       div.profile__control
-        +structureBuilder(controlBlockStructure)
-
+        div.profile__main-btns-wrapper
+          +structureBuilder(controlBlockMainBtnsStructure)
+        div.profile__save-btns-wrapper
+          +structureBuilder(controlBlockSaveBtnsStructure)
+  +modal(modalData)
 block script
   script( src="./profile.js" type="module")

@@ -9,6 +9,10 @@
   font-weight: 500;
 
   &__value {
+    text-align: end;
+    outline: none;
+    border: none;
+    background: none;
     color: #999999;
   }
 }

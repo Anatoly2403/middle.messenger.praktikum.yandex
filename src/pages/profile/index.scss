@@ -30,7 +30,6 @@
     }
   }
 
-
   &__avatar {
     height: 191px;
     display: flex;
@@ -42,7 +41,20 @@
 
   }
 
-  &__user-data>div:last-child {
-    border-bottom: none;
+  &__user-data {
+    height: 198px;
   }
+
+  &__password-wrapper {
+    display: none;
+  }
+
+  .text-field:last-child {
+    border-bottom: 1px solid transparent;
+  }
+
+  &__save-btns-wrapper {
+    display: none;
+    text-align: center;
+  }  
 }

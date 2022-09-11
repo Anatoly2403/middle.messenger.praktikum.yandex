@@ -1,0 +1,5 @@
+mixin fileField(props)
+  div.file-field(data-fieldId=props.id)
+    label.file-field__label(for=props.id)=props.label
+    input.file-field__input(type='file' name=props.id)
+    span.input-field__error

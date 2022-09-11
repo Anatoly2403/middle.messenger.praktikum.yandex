@@ -1,0 +1,8 @@
+mixin modal(props)
+  div.modal-wrapper
+    form.modal
+      div.modal__title=props.title 
+      div.modal__structure
+        +structureBuilder(props.structure)
+      div.modal__button
+        +structureBuilder(props.button)
