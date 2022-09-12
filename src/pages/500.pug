@@ -1,9 +1,9 @@
 extends ../../layout/layout
 block style
-  link(rel="stylesheet" href="./index.scss")
+  link(rel="stylesheet" href="../styles/pages/500.scss")
 block content
   div.root
-    div.root__code 404
-    div.root__message Не туда попали
+    div.root__code 500
+    div.root__message Мы уже фиксим
     +structureBuilder([{ type: 'link', id: '404', title: 'Назад к чатам', href: '#', }])
 block script
