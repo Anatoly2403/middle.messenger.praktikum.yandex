@@ -12,7 +12,8 @@
   "scripts": {
     "dev": "parcel --open --no-cache",
     "build": "parcel build src/pages/*.pug",
-    "server": "node src/server/app.js"
+    "server": "node src/server/app.js",
+    "start": "yarn build && node src/server/app.js"
   },
   "devDependencies": {
     "@parcel/transformer-pug": "2.7.0",
