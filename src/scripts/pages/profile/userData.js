@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const value = item.lastChild.value;
       if (key === 'nikName') userNikName.textContent = value;
       return { ...acc, [key]: value }
-    }, {})
-    console.log(data);
+    }, {});
   }
 })

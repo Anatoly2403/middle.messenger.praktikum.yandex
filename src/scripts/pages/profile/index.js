@@ -1,3 +1,3 @@
-import '../../components/fileField'
-import './avatar'
-import './userData'
+import '../../components/fileField';
+import './avatar';
+import './userData';
