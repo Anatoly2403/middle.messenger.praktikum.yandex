@@ -2,11 +2,12 @@
   "name": "middle.messenger.praktikum.yandex",
   "version": "1.0.0",
   "repository": "https://github.com/Anatoly2403/middle.messenger.praktikum.yandex.git",
+  "private": false,
   "author": "an_bir <an_bir@mail.com>",
   "license": "MIT",
   "browserslist": "last 2 versions, not dead",
   "engines": {
-    "node": "v14.18.3"
+    "node": "14.18.3"
   },
   "scripts": {
     "dev": "parcel src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug --no-cache",
