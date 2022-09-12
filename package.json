@@ -5,14 +5,13 @@
   "author": "an_bir <an_bir@mail.com>",
   "license": "MIT",
   "browserslist": "last 2 versions, not dead",
-  "source": "src/pages/profile.pug",
   "engines": {
     "node": "v14.18.3"
   },
   "scripts": {
-    "dev": "parcel --open --no-cache",
+    "dev": "parcel src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug --no-cache",
     "build": "parcel build src/pages/*.pug",
-    "server": "node src/server/app.js",
+    "dev-server": "nodemon node src/server/app.js",
     "start": "yarn build && node src/server/app.js"
   },
   "devDependencies": {
