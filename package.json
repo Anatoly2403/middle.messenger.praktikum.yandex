@@ -10,7 +10,7 @@
     "dev": "parcel src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug --no-cache",
     "build": "parcel build src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug",
     "dev-server": "nodemon node src/server/app.js",
-    "start": "node src/server/app.js"
+    "start": "npm run build && node src/server/app.js"
   },
   "devDependencies": {
     "@parcel/transformer-pug": "^2.7.0",
