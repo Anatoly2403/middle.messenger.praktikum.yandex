@@ -1,6 +1,6 @@
-export function getNodeByDataAttr(nodeType, dataAttr, attrValue) {
+export function getNodeByDataAttr(nodeType, attrValue) {
   const attributeValue = attrValue ? `="${attrValue}"` : '';
-  return document.querySelector(`${nodeType}[data-${dataAttr}${attributeValue}]`)
+  return document.querySelector(`${nodeType}[data-id${attributeValue}]`)
 }
 
 export function getNode(selector) {

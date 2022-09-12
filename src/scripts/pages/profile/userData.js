@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainBtnsWrapper = getNode('.profile__main-btns-wrapper');
   const saveBtnsWrapper = getNode('.profile__save-btns-wrapper');
   // Кнопки
-  const changeUserPasswordBtn = getNodeByDataAttr('button', 'id', 'password');
-  const saveUserDataBtn = getNodeByDataAttr('button', 'id', 'save');
-  const changeUserDataBtn = getNodeByDataAttr('button', 'id', 'data');
-  const logoutBtn = getNodeByDataAttr('button', 'id', 'logout');
+  const changeUserPasswordBtn = getNodeByDataAttr('button', 'password');
+  const saveUserDataBtn = getNodeByDataAttr('button', 'save');
+  const changeUserDataBtn = getNodeByDataAttr('button', 'data');
+  const logoutBtn = getNodeByDataAttr('button', 'logout');
   const backBtn = getNode('.profile__block_left .arrowBtn');
   // Блоки полей
   const userMainDataFieldsWrapper = getNode('.profile__main-info-wrapper');
@@ -34,9 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
     handleMainUserData()
   });
 
-  logoutBtn.addEventListener('click', () => { })
+  logoutBtn.addEventListener('click', () => {
+    // TODO реализовать логику выхода из ЛК
+    window.location.href = '/login';
+  })
 
-  backBtn.addEventListener('click', () => { })
+  backBtn.addEventListener('click', () => window.location.href = '/main');
 
   function toggleUserDataChangeMode(isChangeMode) {
     if (isChangeMode) {

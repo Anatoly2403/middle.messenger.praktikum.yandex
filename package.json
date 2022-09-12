@@ -5,11 +5,14 @@
   "author": "an_bir <an_bir@mail.com>",
   "license": "MIT",
   "browserslist": "last 2 versions, not dead",
-  "source": "src/pages/profile/profile.pug",
+  "source": "src/pages/profile.pug",
+  "engines": {
+    "node": "v14.18.3"
+  },
   "scripts": {
     "dev": "parcel --open --no-cache",
-    "build": "parcel build src/pages/*/*.pug",
-    "server": "nodemon src/server/server.js localhost 8080"
+    "build": "parcel build src/pages/*.pug",
+    "server": "node src/server/app.js"
   },
   "devDependencies": {
     "@parcel/transformer-pug": "2.7.0",

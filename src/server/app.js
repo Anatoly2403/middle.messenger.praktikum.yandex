@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const PORT = 3000;
 
 const app = express();
 
@@ -11,4 +12,4 @@ app.get('/', (req, res) => {
   );
 })
 
-app.listen(8080);
+app.listen(PORT);
