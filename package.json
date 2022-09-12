@@ -8,7 +8,7 @@
   "browserslist": "last 2 versions, not dead",
   "scripts": {
     "dev": "parcel src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug --no-cache",
-    "build": "parcel build src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug",
+    "build": "npm install && parcel build src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug",
     "dev-server": "nodemon node src/server/app.js",
     "start": "npm run build && node src/server/app.js"
   },
