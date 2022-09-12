@@ -1,7 +1,12 @@
 const { exec } = require('child_process');
 const express = require('express');
 const path = require('path');
+
 const PORT = 3000;
+
+app.listen(3000, () => {
+  exec(`start http://localhost:${PORT}`);
+});
 
 const app = express();
 
@@ -46,9 +51,3 @@ app.get('*', (req, res) => {
     path.join(__dirname + '/../../dist/404.html')
   );
 })
-
-
-
-app.listen(PORT, () => {
-  exec(`start http://localhost:${PORT}`);
-});
