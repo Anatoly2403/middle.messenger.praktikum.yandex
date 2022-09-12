@@ -5,7 +5,7 @@
   "private": false,
   "author": "an_bir <an_bir@mail.com>",
   "license": "MIT",
-  "browserslist": "last 2 versions, not dead",  
+  "browserslist": "last 2 versions, not dead",
   "scripts": {
     "dev": "parcel src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug --no-cache",
     "build": "parcel build src/pages/*.pug",
