@@ -1,0 +1,12 @@
+@import 'src/styles/global.scss';
+
+.signin {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-form__wrapper{
+    height: 665px;
+  }
+}

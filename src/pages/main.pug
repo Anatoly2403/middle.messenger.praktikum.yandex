@@ -1,0 +1,8 @@
+extends ../layout/layout
+block style
+  link(rel="stylesheet" href="../styles/pages/main.scss")
+block content
+  div.root
+    h3.root__message Скоро здесь будет страница с чатами
+    +structureBuilder([{ type: 'link', id: 'main', title: 'Перейти в профиль', href: '/profile', }])
+block script

@@ -1,0 +1,19 @@
+-
+  const formData = {
+    id: 'signinForm',
+    title: 'Регистрация',
+    fields: [
+      { type: 'inputField', id: 'mail', label: 'Почта', fieldType: 'email' },
+      { type: 'inputField', id: 'login', label: 'Логин', fieldType: 'text' },
+      { type: 'inputField', id: 'name', label: 'Имя', fieldType: 'text' },
+      { type: 'inputField', id: 'lastName', label: 'Фамилия', fieldType: 'text' },
+      { type: 'inputField', id: 'phoneNumber', label: 'Телефон', fieldType: 'tel' },
+      { type: 'inputField', id: 'password', label: 'Пароль', fieldType: 'password' },
+      { type: 'inputField', id: 'confirmPassword', label: 'Пароль (ещё раз)', fieldType: 'password' },
+    ],
+    footer: [
+      { type: 'button', id: 'signin', label: 'Зарегистрироваться', btnType: 'submit' },
+      { type: 'link', id: 'signin', title: 'Войти', href: '/login' }
+    ]
+  }
+-
