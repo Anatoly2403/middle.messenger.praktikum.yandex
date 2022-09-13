@@ -7,10 +7,10 @@
   "license": "MIT",
   "browserslist": "last 2 versions, not dead",
   "scripts": {
-    "dev": "npx parcel watch src/pages/*.pug --no-cache",
-    "build": "npx parcel build src/pages/*",
+    "dev": "parcel watch src/pages/*.pug --no-cache",
+    "build": "parcel build src/pages/*",
     "dev-server": "nodemon node src/server/app.js",
-    "start": "npm install && npm run build && node src/server/app.js"
+    "start": "npm run dev && node src/server/app.js"
   },
   "devDependencies": {
     "@parcel/transformer-pug": "^2.7.0",
