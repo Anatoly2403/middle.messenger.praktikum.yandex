@@ -1,3 +1,5 @@
+@import 'src/styles/colors.scss';
+
 .file-field {
   position: relative;
   display: flex;
@@ -11,12 +13,12 @@
     font-size: 12px;
     text-align: center;
     text-decoration-line: underline;
-    color: #3369F3;
+    color: $blue;
     pointer-events: none;
 
     &_full {
       font-size: 14px;
-      color: #8D8D8D;
+      color: $gray;
       text-decoration-line: none;
     }
   }
