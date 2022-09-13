@@ -1,6 +1,6 @@
 {
   "extends": "@parcel/config-default",
-  "transforms": {
+  "transformers": {
     "*.pug": ["@parcel/transformer-pug"]   
   }
 }
