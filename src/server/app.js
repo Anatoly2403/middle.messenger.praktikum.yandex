@@ -37,11 +37,11 @@ app.get('/500', (req, res) => {
   );
 })
 
-app.get('/', (req, res) => {
-  res.redirect('/login')
-})
+// app.get('/', (req, res) => {
+//   res.redirect('/login')
+// })
 
-app.get('*', (req, res) => {
+app.get('/404', (req, res) => {
   res.sendFile(
     path.join(__dirname + '/../../dist/404.html')
   );
