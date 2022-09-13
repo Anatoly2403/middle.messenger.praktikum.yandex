@@ -14,13 +14,12 @@
   },
   "devDependencies": {
     "@parcel/transformer-pug": "^2.7.0",
-    "@parcel/transformer-sass": "2.7.0",
+    "@parcel/transformer-sass": "^2.7.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "nodemon": "^2.0.19",
     "os-browserify": "^0.3.0",
     "parcel": "^2.7.0",
-    "parcel-bundler": "^1.12.5",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "pug": "^3.0.2"
