@@ -10,7 +10,7 @@
     "dev": "npx parcel watch src/pages/*.pug --no-cache",
     "build": "npx parcel build src/pages/*.pug",
     "dev-server": "nodemon node src/server/app.js",
-    "start": "node src/server/app.js"
+    "start": "npm run build && node src/server/app.js"
   },
   "repository": {
     "type": "git",
