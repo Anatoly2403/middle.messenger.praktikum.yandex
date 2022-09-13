@@ -23,3 +23,7 @@
 ### Режим локального запуска проекта
 
 > Выполнить команду `yarn start`
+
+### Netlify
+
+> [Ссылка на развернутый проект](https://harmonious-daifuku-194f67.netlify.app/login)
