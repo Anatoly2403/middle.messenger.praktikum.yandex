@@ -1,8 +1,7 @@
-const { exec } = require('child_process');
 const express = require('express');
 const path = require('path');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.static('dist'));
@@ -37,10 +36,10 @@ app.get('/500', (req, res) => {
   );
 })
 
-app.get('/404', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(
     path.join(__dirname + '/../../dist/404.html')
   );
 })
 
-app.listen(3000);
+app.listen(PORT);
