@@ -1,0 +1,5 @@
+mixin inputField(props)
+  div.input-field(data-id=props.id)
+    label(class="input-field__label input-field__label_low" for=props.id)=props.label
+    input.input-field__input(type=props.fieldType name=props.id)
+    span.input-field__error

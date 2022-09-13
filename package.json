@@ -1,0 +1,34 @@
+{
+  "name": "middle.messenger.praktikum.yandex",
+  "version": "1.0.0",
+  "description": "> ### Проект мессенджер - учебный проект Яндекс Практикум.",
+  "author": "an_bir <an_bir@mail.com>",
+  "license": "MIT",
+  "browserslist": "last 2 versions, not dead",
+  "private": false,
+  "scripts": {
+    "dev": "npx parcel watch src/pages/*.pug --no-cache",
+    "build": "npx parcel build src/pages/*",
+    "dev-server": "nodemon node src/server/app.js",
+    "start": "npm run build && node src/server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anatoly2403/middle.messenger.praktikum.yandex.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Anatoly2403/middle.messenger.praktikum.yandex/issues"
+  },
+  "homepage": "https://github.com/Anatoly2403/middle.messenger.praktikum.yandex#readme",
+  "devDependencies": {
+    "@parcel/transformer-pug": "^2.7.0",
+    "@parcel/transformer-sass": "^2.7.0",
+    "parcel": "^2.7.0"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19",
+    "pug": "^3.0.2"
+  }
+}
