@@ -7,26 +7,26 @@
   "license": "MIT",
   "browserslist": "last 2 versions, not dead",
   "scripts": {
-    "dev": "npx parcel src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug --no-cache",
-    "build": "npx parcel build src/pages/profile.pug src/pages/404.pug src/pages/500.pug src/pages/main.pug src/pages/login.pug src/pages/signin.pug",
+    "dev": "npx parcel watch src/pages/*.pug --no-cache",
+    "build": "npx parcel build src/pages/*",
     "dev-server": "nodemon node src/server/app.js",
-    "start": "npm run build && node src/server/app.js"
+    "start": "npm install && npm run build && node src/server/app.js"
   },
   "devDependencies": {
+    "@parcel/transformer-pug": "^2.7.0",
+    "@parcel/transformer-sass": "2.7.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "nodemon": "^2.0.19",
     "os-browserify": "^0.3.0",
-    "path-browserify": "^1.0.1",
-    "process": "^0.11.10"    
-  },
-  "dependencies": {
     "parcel": "^2.7.0",
     "parcel-bundler": "^1.12.5",
-    "@parcel/transformer-pug": "^2.7.0",
-    "@parcel/transformer-sass": "2.7.0",
-    "express": "^4.18.1",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "pug": "^3.0.2"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
   },
   "engines": {
     "node": "14.18.3"
