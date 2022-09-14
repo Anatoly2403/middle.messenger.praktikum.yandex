@@ -1,0 +1,15 @@
+@import 'src/styles/global.scss';
+
+.root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+
+  &__message {
+    font-size: 20px;
+    margin-bottom: 69px;
+  }
+}

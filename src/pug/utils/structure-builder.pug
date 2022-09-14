@@ -1,0 +1,20 @@
+mixin structureBuilder(structure=[])  
+    each item in structure
+      if item.type === 'textField'
+        +textField(item)
+      else if item.type === 'inputField'
+        +inputField(item)
+      else if item.type === 'fileField'
+        +fileField(item)
+      else if item.type === 'avatar'
+        +avatar(item)
+      else if item.type === 'link'
+        +link(item)
+      else if item.type === 'button'
+        +button(item)    
+      else if item.type === 'textButton'
+        +textButton(item)    
+      else if item.type === 'text'
+        span=item.text
+      else
+        null

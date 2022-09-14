@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "/"
+  to = "/login"
+
+[build]
+  publish = "dist"   
