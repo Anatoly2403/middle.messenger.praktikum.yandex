@@ -23,11 +23,13 @@ export default abstract class Component<
   private events: TEvents;
 
   constructor({ props, state }: { props: TProps; state: TState }) {
+    console.log("constructor");
     this.id = makeUUID();
+    this.meta = { props: { ...props }, state: { ...state } };
     const eventBus = new EventBus();
     this._props = createProxy<TProps>(props, this.afterUpdateData.bind(this));
     this._state = createProxy<TState>(state, this.afterUpdateData.bind(this));
-    this.meta = { props, state };
+
     this.eventBus = () => eventBus;
     this.registerComponentEvents(eventBus);
     this.eventBus().emit(Events.INIT);
@@ -133,7 +135,7 @@ export default abstract class Component<
   }
 
   private updateMeta(props: TProps, state: TState) {
-    this.meta.props = props;
-    this.meta.state = state;
+    this.meta.props = { ...props };
+    this.meta.state = { ...state };
   }
 }

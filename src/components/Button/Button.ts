@@ -27,7 +27,7 @@ export class Button extends Component<Props, State, Events> {
   }
 
   protected componentDidMount(prevProps: Props): void {
-    console.log(prevProps);
+    console.dir(prevProps);
   }
   protected componentDidUpdate(prevProps: Props, prevState: State): void {
     console.log(prevProps, prevState);
