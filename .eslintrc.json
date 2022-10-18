@@ -6,12 +6,19 @@
   "parser": "@typescript-eslint/eslint-plugin",
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-var": "error",
-    "semi": "error",
-    "space-in-parens": "error",
-    "prefer-const": "error",
-    "no-const-assign": "error",
+    "no-var": 0,
+    "no-console": 0,
+    "semi": 0,
+    "space-in-parens": 0,
+    "prefer-const": 0,
+    "no-const-assign": 0,
     "max-len": [1, 100],
-    "max-params": [2, 3]
+    "max-params": [2, 3],
+    "tsc/config": [
+      1,
+      {
+        "configFile": "tsconfig.json"
+      }
+    ]
   }
 }

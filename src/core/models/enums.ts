@@ -1,6 +1,6 @@
 export enum Events {
   INIT = "INIT",
-  RENDER = "RENDER",
+  COMPILE = "COMPILE",
   MOUNT = "COMPONENT_DID_MOUNT",
   UPDATE = "COMPONENT_DID_UPDATE",
 }

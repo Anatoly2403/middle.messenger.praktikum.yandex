@@ -14,7 +14,6 @@ export function createProxy<T extends SimpleObject>(
 }
 
 export function getEvent(evString: string) {
-
   const [event, name] = evString.split(":");
   return {
     event: event.trim(),
