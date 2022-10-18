@@ -5,7 +5,7 @@ block content
   include ../pug/page-view-data/profile
   div.profile
     div.profile__block_left
-        +arrowButton()
+      +arrowButton()
     div.profile__block_right
       div.profile__avatar
         +structureBuilder(avatarBlockStructure)
@@ -21,4 +21,4 @@ block content
           +structureBuilder(controlBlockSaveBtnsStructure)
   +modal(modalData)
 block script
-  script( src="../scripts/pages/profile/index.js" type="module")
+  script( src="../scripts/pages/profile/index.ts" type="module")

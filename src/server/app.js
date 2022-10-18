@@ -18,7 +18,7 @@ app.get('/signin', (req, res) => {
   );
 })
 
-app.get('/', (req, res) => {
+app.get('/main', (req, res) => {
   res.sendFile(
     path.join(__dirname + '/../../dist/main.html')
   );
