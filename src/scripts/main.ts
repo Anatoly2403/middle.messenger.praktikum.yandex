@@ -1,6 +1,8 @@
-import { Button } from "../components/Button/Button";
-import { renderDOM } from '../core/utils/renderDOM';
+import { TestComponent } from "../components/TestComponent";
+import { App } from "../core/App";
 
-const button = new Button({});
+const app = new App({
+  imports: [TestComponent],
+});
 
-renderDOM('#root', button)
+app.renderDOM("#root", new TestComponent({}));

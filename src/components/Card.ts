@@ -1,16 +1,14 @@
-import Component from "../../core/Component";
-import { Event } from "../../core/Decorators";
+import { Component, Event } from "../core";
 
 type Props = {};
 type State = {
   label: string;
 };
-type Events = {
+type EEvents = {
   someHandle: () => void;
-  next: () => void;
 };
 
-export class Button extends Component<Props, State, Events> {
+export class Card extends Component<Props, State, EEvents> {
   constructor(props: Props) {
     super({
       props,
@@ -33,6 +31,10 @@ export class Button extends Component<Props, State, Events> {
     console.log(prevProps, prevState);
   }
   protected render(): string {
-    return `<button data-event="click:someHandle">${this.state.label}</button>`;
+    return `<div>
+      ${this.state.label}
+      {{ Button data-event="click:someHandle" }}
+      </div>`;
   }
 }
+

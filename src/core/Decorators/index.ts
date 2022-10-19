@@ -1,13 +1,11 @@
-import Component from "../Component";
+import { Component } from '../Component'
+import { Component2 } from '../Component2'
+import { EventsController } from '../EventsController'
 
-export function Event() {
-  return (
-    target: Component,
-    propKey: string | symbol,
-    descriptor: TypedPropertyDescriptor<(...args: any[]) => any>
-  ) => {
-    target.setEvents({
-      [propKey]: descriptor.value,
-    });
-  };
+export function Ev(
+  target: Component2,
+  propKey: string,
+  descriptor: TypedPropertyDescriptor<(...args: any[]) => any>,
+) {
+  target.setEvent(propKey, descriptor.value)
 }

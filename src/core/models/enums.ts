@@ -1,11 +1,11 @@
-export enum Events {
+export enum EEvents {
   INIT = "INIT",
   COMPILE = "COMPILE",
   MOUNT = "COMPONENT_DID_MOUNT",
   UPDATE = "COMPONENT_DID_UPDATE",
 }
 
-export enum ManageEventsType {
+export enum EManageEventsType {
   ADD = "ADD",
   REMOVE = "REMOVE",
 }
