@@ -20,7 +20,7 @@ export abstract class Component<
   private _state: TState
   private eventBus: () => EventBus
   private meta: IComponentMeta<TProps, TState>
-  private EEvents: TEvents = {}
+  private EEvents: TEvents
   private children: Record<string, Component> = {}
 
   constructor({ props, state }: { props: TProps; state: TState }) {
@@ -56,7 +56,7 @@ export abstract class Component<
     return this._props
   }
 
-  public setEEvents(event: TEEvents) {
+  public setEEvents(event: TEvents) {
     this.EEvents = Object.assign(this.EEvents || {}, event)
   }
 
