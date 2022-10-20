@@ -1,6 +1,4 @@
-import { v4 as makeUUID } from 'uuid'
 import { DataController } from './DataController'
-import { EventBus } from './eventBus'
 import { ISimpleObject } from './models'
 import { ElementController } from './ElementController'
 
@@ -8,8 +6,6 @@ export abstract class Component2<
   Data extends ISimpleObject = ISimpleObject,
   Events extends ISimpleObject = ISimpleObject
 > {
-  static readonly id: string = makeUUID()
-
   private _dataController: DataController<Data> = new DataController<Data>()
   private _elementController: ElementController<
     Data,
@@ -41,11 +37,10 @@ export abstract class Component2<
   }
 
   public build() {
-    const template = this.render()
-    this._elementController.compileElement(template, {
-      ...this.data,
-      ...(this._events || ({} as Events)),
+    this._elementController.build({
+      template: this.render(),
+      data: this.data,
+      events: this._events || ({} as Events),
     })
-    this._elementController.mount(this._events)
   }
 }
