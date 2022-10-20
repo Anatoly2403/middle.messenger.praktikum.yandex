@@ -7,5 +7,7 @@ export function Ev(
   propKey: string,
   descriptor: TypedPropertyDescriptor<(...args: any[]) => any>,
 ) {
-  target.setEvent(propKey, descriptor.value)
+  // console.log(target)
+  // console.log(descriptor)
+  // target.setEvent(propKey, descriptor.value)
 }

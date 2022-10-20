@@ -1,19 +1,23 @@
-import { Ev } from '../core'
 import { Component2 } from '../core/Component2'
-import { EEvents, TEvents } from '../core/models'
 
 type Props = {}
-type Data = {
+type Data = Props & {
   label: string
 }
+type Events = {
+  click: () => void
+}
 
-export class TestComponent extends Component2<Data & Props> {
+export class TestComponent extends Component2<Data, Events> {
   constructor(props?: Props) {
     super({ ...props, label: 'as;dkfhkjsahdf' })
+    this.registerEvents(this.events)
   }
 
-  @Ev click() {
-    console.log(this)
+  events: Events = {
+    click: () => {
+      this.data.label = 'sadfsdf'
+    },
   }
 
   render(): string {

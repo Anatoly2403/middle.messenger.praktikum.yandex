@@ -1,4 +1,4 @@
-export type TEventHandler = (event: Event) => void
+export type TEventHandler = (...args: unknown[]) => unknown
 
 export type TBindHelper = (fn: TEventHandler) => TEventHandler
 

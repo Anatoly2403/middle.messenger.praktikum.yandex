@@ -1,52 +1,51 @@
 import { v4 as makeUUID } from 'uuid'
 import { DataController } from './DataController'
 import { EventBus } from './eventBus'
-import { TEvents, ISimpleObject, TEventHandler } from './models'
-import { RenderController } from './RenderController'
+import { ISimpleObject } from './models'
+import { ElementController } from './ElementController'
 
-export abstract class Component2<Data extends ISimpleObject = ISimpleObject> {
+export abstract class Component2<
+  Data extends ISimpleObject = ISimpleObject,
+  Events extends ISimpleObject = ISimpleObject
+> {
   static readonly id: string = makeUUID()
+
   private _dataController: DataController<Data> = new DataController<Data>()
-  private _renderController: RenderController
+  private _elementController: ElementController<
+    Data,
+    Events
+  > = new ElementController<Data, Events>()
+
+  protected _events: Events | null = null
 
   constructor(props: Data) {
-    this._renderController = this._renderController || new RenderController()
-    this._renderController.setBindHelper(this._binderFunction.bind(this))
-    this._dataController.init(props)
-    this._compile()
+    this._dataController.init(props, () => this.build())
   }
 
   protected abstract render(): string
-  protected componentDidMount(props: Data): void {}
-  protected componentDidUpdate(prevProps: Data): void {}
 
-  private _binderFunction(fn: TEventHandler): TEventHandler {
-    console.log(this)
-    return fn.bind(this)
+  protected componentDidMount(data: Data): void {}
+
+  protected componentDidUpdate(prevData: Data): void {}
+
+  protected registerEvents(events: Events) {
+    this._events = events
   }
 
   protected get data() {
     return this._dataController.data
   }
 
-  public setEvent(name: string, handler?: TEventHandler) {
-    if (!this._renderController) this._renderController = new RenderController()
-    this._renderController.setEvent(name, handler)
-  }
-
-  private _compile() {
-    if (!this._renderController) return
-    const template = this.render()
-    this._renderController.compileElement(template)
-  }
-
   public setParentElement(elem: Element) {
-    if (!this._renderController) return
-    this._renderController.setParentElement(elem)
+    this._elementController.setParentElement(elem)
   }
 
   public build() {
-    if (!this._renderController) return
-    this._renderController.mount()
+    const template = this.render()
+    this._elementController.compileElement(template, {
+      ...this.data,
+      ...(this._events || ({} as Events)),
+    })
+    this._elementController.mount(this._events)
   }
 }
