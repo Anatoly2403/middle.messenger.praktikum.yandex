@@ -1,14 +1,8 @@
-import { Component } from "../Component";
-import { Component2 } from "../Component2";
-
-export interface IComponentMeta<P, S> {
-  props: P;
-  state: S;
-}
+import { Component } from '../Component'
 
 export interface ISimpleObject {
-  [key: string | symbol]: unknown;
+  [key: string | symbol]: unknown
 }
 export interface IClassComponent {
-  new (...args: ISimpleObject[]): Component2;
+  new (...args: ISimpleObject[]): Component
 }

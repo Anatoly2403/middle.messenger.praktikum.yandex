@@ -1,4 +1,4 @@
-import { Component2 } from '../core/Component2'
+import { Component } from '../core/Component'
 
 type Props = {}
 type Data = Props & {
@@ -8,7 +8,7 @@ type Events = {
   click: () => void
 }
 
-export class TestComponent extends Component2<Data, Events> {
+export class TestComponent extends Component<Data, Events> {
   constructor(props?: Props) {
     super({ ...props, label: 'as;dkfhkjsahdf' })
     this.registerEvents(this.events)

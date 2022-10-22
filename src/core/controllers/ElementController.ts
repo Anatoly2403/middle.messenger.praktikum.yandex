@@ -1,7 +1,7 @@
 import { compile } from 'handlebars'
-import { Component2 } from './Component2'
-import { EManageEventsType, ISimpleObject } from './models'
-import { isEventHandler, parseEvent } from './utils'
+import { Component } from '../Component'
+import { EManageEventsType, ISimpleObject } from '../models'
+import { isEventHandler, parseEvent } from '../utils'
 import { v4 as makeUUID } from 'uuid'
 
 export class ElementController<
@@ -11,7 +11,7 @@ export class ElementController<
   static readonly id: string = makeUUID()
   private _parentElement: Element | null = null
   private _element: Element | null = null
-  private _children: Record<string, Component2> = {}
+  private _children: Record<string, Component> = {}
 
   private _manageEvents(events: Events | null, type: EManageEventsType) {
     if (!this._parentElement || !events) return
@@ -60,7 +60,7 @@ export class ElementController<
     this._parentElement = elem
   }
 
-  public setChild(name: string, child: Component2) {
+  public setChild(name: string, child: Component) {
     this._children[name] = child
   }
 

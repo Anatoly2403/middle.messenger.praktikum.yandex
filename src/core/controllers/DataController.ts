@@ -1,5 +1,5 @@
-import { ISimpleObject } from "./models";
-import { createProxy } from "./utils";
+import { ISimpleObject } from "../models";
+import { createProxy } from "../utils";
 
 export class DataController<TData extends ISimpleObject = ISimpleObject> {
   private _data: TData = {} as TData;

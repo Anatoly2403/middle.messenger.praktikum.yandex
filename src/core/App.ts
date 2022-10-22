@@ -1,4 +1,4 @@
-import { Component2 } from "./Component2";
+import { Component2 } from "./Component";
 import { ClassComponent } from "./models";
 import { registerComponent } from "./utils/registerComponent";
 
