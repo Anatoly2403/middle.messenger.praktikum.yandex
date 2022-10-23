@@ -1,28 +1,31 @@
-import { Component } from '../core/Component'
+import { Component } from '../core/component'
 
-type Props = {}
-type Data = Props & {
+type Props = {
   label: string
 }
+type Data = Props & {}
 type Events = {
   click: () => void
 }
 
 export class TestComponent extends Component<Data, Events> {
-  constructor(props?: Props) {
-    super({ ...props, label: 'as;dkfhkjsahdf' })
-    this.registerEvents(this.events)
+  constructor(props: Props) {  
+    super({ ...props })
   }
 
-  events: Events = {
+  override events: Events = {
     click: () => {
       this.data.label = 'sadfsdf'
     },
   }
 
-  render(): string {
+  protected override render(): string {
     return `
-      <button data-event="click:click">${this.data.label}</button>
+    <div>
+      <button data-event="click:click">${this.data.label}</button> 
+      {{{Test2}}}
+    </div>
+      
     `
   }
 }

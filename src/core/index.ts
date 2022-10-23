@@ -1,2 +1,1 @@
-export * from "./Component";
-export * from "./decorators";
+export * from './App'
