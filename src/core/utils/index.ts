@@ -23,10 +23,6 @@ export function parseEvent(evString: string) {
   }
 }
 
-export function objIsEmpty<T extends ISimpleObject>(obj: T) {
-  return !!Object.keys(obj).length
-}
-
 export function getPathsObj(path: string) {
   return path
     .replace(/\[/g, '')
