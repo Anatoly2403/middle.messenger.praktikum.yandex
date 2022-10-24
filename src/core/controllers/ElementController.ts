@@ -23,14 +23,16 @@ export class ElementController<
     nodeList.forEach((node) => {
       const { dataset } = (node as unknown) as HTMLOrSVGElement
       if (!dataset.event) return
-      const { name, event } = parseEvent(dataset.event)
-      const handler = events[event]
-      if (!isEventHandler(handler)) return
-      if (type === EManageEventsType.ADD) {
-        node.addEventListener(name, handler)
-      } else {
-        node.removeEventListener(name, handler)
-      }
+      const eventsArray = parseEvent(dataset.event)
+      eventsArray.forEach(({ name, event }) => {
+        const handler = events[name]
+        if (!isEventHandler(handler)) return
+        if (type === EManageEventsType.ADD) {
+          node.addEventListener(event, handler)
+        } else {
+          node.removeEventListener(event, handler)
+        }
+      })
     })
   }
 

@@ -2,25 +2,28 @@ import { ISimpleObject } from '../models'
 
 export function createProxy<TData extends ISimpleObject>(
   data: TData,
-  prevData: TData,
-  callback?: () => void,
+  callback?: (prevData: TData) => void,
 ): TData {
   return new Proxy(data, {
     set(target: TData, key: keyof TData, val) {
-      prevData[key] = target[key]
+      const prev = { ...target }
       target[key] = val
-      if (callback) callback()
+      if (callback) callback(prev)
       return true
     },
   })
 }
 
 export function parseEvent(evString: string) {
-  const [event, name] = evString.split(':')
-  return {
-    event: event.trim(),
-    name: name.trim(),
-  }
+  const str = evString.replace(/\[/g, '').replace(/\]/g, '')
+
+  return str.split(',').map((item) => {
+    const [event, name] = item.split(':')
+    return {
+      event: event.trim(),
+      name: name.trim(),
+    }
+  })
 }
 
 export function getPathsObj(path: string) {

@@ -1,6 +1,7 @@
 import { v4 as makeUUID } from 'uuid'
 import { DataController, ElementController } from '../controllers'
-import { ISimpleObject } from '../models'
+import { EventBus } from '../eventBus'
+import { EEvents, ISimpleObject } from '../models'
 
 export abstract class Component<
   TData extends ISimpleObject = ISimpleObject,
@@ -15,9 +16,12 @@ export abstract class Component<
     TEvents
   > = new ElementController<TData, TEvents>(this.id)
 
+  private eventBus: EventBus<TData> = new EventBus<TData>()
+
   protected events: TEvents = {} as TEvents
 
   constructor(props: TData) {
+    this._registerEvents()
     this._dataController.init(props, this._afterUpdateCallback.bind(this))
   }
   protected componentDidMount(data: TData): void {}
@@ -28,9 +32,23 @@ export abstract class Component<
     return this._dataController.data
   }
 
-  private _afterUpdateCallback(): void {
+  private _afterUpdateCallback(prevData: TData): void {
+    this.eventBus.emit(EEvents.UPDATE, prevData)
+  }
+
+  private _updateCallback(prevData: TData): void {
     this._build()
-    this.componentDidUpdate(this._dataController.prevData)
+    this.componentDidUpdate(prevData)
+  }
+
+  private _mountCallback(data: TData): void {
+    this._build()
+    this.componentDidMount(data)
+  }
+
+  private _registerEvents(): void {
+    this.eventBus.on(EEvents.MOUNT, this._mountCallback.bind(this))
+    this.eventBus.on(EEvents.UPDATE, this._updateCallback.bind(this))
   }
 
   private _build(): void {
@@ -50,8 +68,7 @@ export abstract class Component<
   }
 
   public mount(): void {
-    this._build()
-    this.componentDidMount(this.data)
+    this.eventBus.emit(EEvents.MOUNT, this.data)
   }
 
   public destroy(): void {}

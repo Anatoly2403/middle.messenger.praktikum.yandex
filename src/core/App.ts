@@ -3,6 +3,7 @@ import { Component } from './component'
 import { IClassComponent, ISimpleObject } from './models'
 import { getPathsObj } from './utils'
 
+
 interface Props {
   imports: IClassComponent[]
 }
@@ -58,7 +59,7 @@ export class App {
     components.forEach((component) => this._hbRegister(component))
   }
 
-  public renderDOM(selector: string, component: Component): void {
+  public renderDOM(selector: string, component: Component<any>): void {
     const root = document.querySelector(selector)
     if (!(root instanceof HTMLElement)) return
     component.setParentElement(root)

@@ -1,10 +1,11 @@
 import { Component } from '../component/Component'
 
+export type AnyType = any
 export interface IClassComponent {
-  new (...args: any[]): Component
+  new (...args: AnyType[]): Component<AnyType>
 }
 
-export type ISimpleObject = Record<string | symbol, unknown>
+export type ISimpleObject = Record<string | symbol, AnyType>
 
 export enum EEvents {
   INIT = 'INIT',
