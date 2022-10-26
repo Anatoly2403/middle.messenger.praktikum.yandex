@@ -11,10 +11,7 @@ export abstract class Component<
 
   private _dataController: DataController<TData> = new DataController<TData>();
 
-  private _elementController: ElementController<TData, TEvents> = new ElementController<
-    TData,
-    TEvents
-  >(this.id);
+  private _elementController: ElementController<TData, TEvents> = new ElementController<TData, TEvents>(this.id);
 
   private eventBus: EventBus<TData> = new EventBus<TData>();
 

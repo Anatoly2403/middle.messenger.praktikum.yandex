@@ -69,11 +69,11 @@ export class ElementController<
 
   private _mount() {
     if (!this._parentElement || !this._element) return;
-    const children = this._parentElement.childNodes;
-    const oldChild = Array.from(children).find((node) => {
+    const parentChildNodes = this._parentElement.childNodes;
+    const oldChildNodes = Array.from(parentChildNodes).find((node) => {
       return ((node as unknown) as HTMLOrSVGElement).dataset?.id === this._id;
     });
-    if (oldChild) this._parentElement.replaceChild(this._element, oldChild);
+    if (oldChildNodes) this._parentElement.replaceChild(this._element, oldChildNodes);
     else this._parentElement.appendChild(this._element);
   }
 
