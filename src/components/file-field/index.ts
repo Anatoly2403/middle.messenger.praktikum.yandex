@@ -1,1 +1,1 @@
-export * from './file-field'
+export * from './file-field';

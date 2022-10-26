@@ -1,46 +1,43 @@
-import { Component } from '../../core/component'
-import './modal.scss'
-import { TData, TEvents, TProps, TStructure } from './types'
+import { Component } from '../../core/base/component';
+import './modal.scss';
+import { TData, TEvents, TProps, TStructure } from './types';
 
 export class Modal extends Component<TData, TEvents> {
   constructor(props: TProps) {
-    super({ ...props })
+    super({ ...props });
   }
 
   events: TEvents = {
     buttonClick: () => console.log('buttonClick'),
-    hideModal: () => {},
-  }
+    hideModal: () => console.log('buttonClick'),
+  };
 
   renderStructure(structure: TStructure[]) {
-    console.log()
     return structure.reduce<string>((acc, item) => {
       if (item.type === 'inputField') {
         acc = acc.concat(`
           {{{ 
             InputField label="${item.label}" name="${item.label}"
           }}}
-        `)
+        `);
       } else {
         acc = acc.concat(`
           {{{ 
             FileField label="${item.label}" name="${item.label}"
           }}}
-        `)
+        `);
       }
 
-      return acc
-    }, ``)
+      return acc;
+    }, ``);
   }
 
   protected render(): string {
-    const { hidden, label } = this.data
-    const structure = this.renderStructure(this.data.structure)
+    const { hidden, label } = this.data;
+    const structure = this.renderStructure(this.data.structure);
 
     return `
-      <div class="modal-wrapper" ${
-        hidden ? 'hidden' : ''
-      } data-event="click:hideModal">
+      <div class="modal-wrapper" ${hidden ? 'hidden' : ''} data-event="click:hideModal">
         <form class="modal">
           <div class="modal__title">${label}</div>
           <div class="modal__structure">
@@ -53,6 +50,6 @@ export class Modal extends Component<TData, TEvents> {
           </div>
         </form>
       </div>
-    `
+    `;
   }
 }

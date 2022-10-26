@@ -1,4 +1,4 @@
-import { ISimpleObject } from '../models'
+import { ISimpleObject } from '../models';
 
 export function createProxy<TData extends ISimpleObject>(
   data: TData,
@@ -6,24 +6,24 @@ export function createProxy<TData extends ISimpleObject>(
 ): TData {
   return new Proxy(data, {
     set(target: TData, key: keyof TData, val) {
-      const prev = { ...target }
-      target[key] = val
-      if (callback) callback(prev)
-      return true
+      const prev = { ...target };
+      target[key] = val;
+      if (callback) callback(prev);
+      return true;
     },
-  })
+  });
 }
 
 export function parseEvent(evString: string) {
-  const str = evString.replace(/\[/g, '').replace(/\]/g, '')
+  const str = evString.replace(/\[/g, '').replace(/\]/g, '');
 
   return str.split(',').map((item) => {
-    const [event, name] = item.split(':')
+    const [event, name] = item.split(':');
     return {
       event: event.trim(),
       name: name.trim(),
-    }
-  })
+    };
+  });
 }
 
 export function getPathsObj(path: string) {
@@ -32,5 +32,5 @@ export function getPathsObj(path: string) {
     .replace(/\]/g, '')
     .split('.')
     .filter((item) => item !== 'this')
-    .filter((item) => item !== 'data')
+    .filter((item) => item !== 'data');
 }

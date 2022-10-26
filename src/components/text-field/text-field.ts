@@ -1,33 +1,28 @@
-import { Component } from '../../core/component'
-import './text-field.scss'
-import { TData, TEvents, TProps } from './types'
+import { Component } from '../../core/base/component';
+import './text-field.scss';
+import { TData, TEvents, TProps } from './types';
 
 export class TextField extends Component<TData, TEvents> {
   constructor(props: TProps) {
-    super({ ...props })
+    super({ ...props });
   }
 
   events: TEvents = {
-    handleInput: this.handleInput.bind(this),
     handleBlur: this.handleBlur.bind(this),
-  }
-
-  handleInput(e: Event) {
-    console.log(e)
-  }
+  };
 
   handleBlur(e: Event) {
-    const field = e.target as HTMLInputElement
+    const field = e.target as HTMLInputElement;
     if (field.value) {
       this.setData({
         ...this.data,
         value: field.value,
-      })
+      });
     }
   }
 
   protected render(): string {
-    const { disabled, label, value } = this.data
+    const { disabled, label, value } = this.data;
 
     return `
       <div class="text-field">
@@ -39,6 +34,6 @@ export class TextField extends Component<TData, TEvents> {
           ${disabled ? 'disabled' : ''}
         />
       </div>
-    `
+    `;
   }
 }

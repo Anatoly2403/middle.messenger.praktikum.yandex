@@ -11,7 +11,9 @@
     "build": "parcel build src/pages/*.pug",
     "dev-server": "nodemon node src/server/app.js",
     "start": "npm run build && node src/server/app.js",
-    "start:component": "parcel src/index.html --open"
+    "start:component": "parcel src/index.html --open",
+    "lint": "eslint . --ext .ts",
+    "lint-fix": "eslint . --ext .ts --fix"
   },
   "repository": {
     "type": "git",
@@ -28,19 +30,24 @@
     "@parcel/transformer-typescript-tsc": "2.7.0",
     "@types/uuid": "8.3.4",
     "@typescript-eslint/eslint-plugin": "5.40.1",
-    "eslint": "8.26.0",
+    "@typescript-eslint/parser": "^5.41.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard-with-typescript": "23.0.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-n": "15.3.0",
+    "eslint-plugin-no-loops": "0.3.0",
     "eslint-plugin-promise": "6.1.1",
     "handlebars": "4.7.7",
     "nodemon": "2.0.19",
     "parcel": "2.7.0",
+    "prettier": "2.7.1",
     "pug": "3.0.2",
     "stylelint": "14.12.0",
     "stylelint-scss": "4.3.0",
     "ts-node": "10.9.1",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "eslint-plugin-prettier": "4.2.1"
   },
   "dependencies": {
     "express": "4.18.1",
