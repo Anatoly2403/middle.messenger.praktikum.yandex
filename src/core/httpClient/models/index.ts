@@ -1,12 +1,11 @@
+import { AnyType } from '../../shared/models';
+
 export enum EMethods {
   GET = 'GET',
   POTS = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyType = any;
 
 export type TSimpleObject = Record<string | symbol, AnyType>;
 

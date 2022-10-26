@@ -1,7 +1,6 @@
+import { AnyType } from '../../shared/models';
 import { Component } from '../component/Component';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyType = any;
 export interface IClassComponent {
   new (...args: AnyType[]): Component<AnyType>;
 }
