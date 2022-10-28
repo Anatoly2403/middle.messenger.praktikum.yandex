@@ -7,13 +7,12 @@
   "browserslist": "last 2 versions, not dead",
   "private": false,
   "scripts": {
-    "dev": "parcel watch src/pages/*.pug --no-cache",
-    "build": "parcel build src/pages/*.pug",
-    "dev-server": "nodemon node src/server/app.js",
+    "build": "",
     "start": "npm run build && node src/server/app.js",
-    "start:component": "parcel src/index.html --open",
+    "dev": "parcel src/index.html --open",
+    "dev:server": "nodemon node src/server/app.js",
     "lint": "eslint . --ext .ts",
-    "lint-fix": "eslint . --ext .ts --fix"
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "repository": {
     "type": "git",

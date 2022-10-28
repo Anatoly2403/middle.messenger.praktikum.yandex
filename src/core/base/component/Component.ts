@@ -1,75 +1,65 @@
 import { v4 as makeUUID } from 'uuid';
-import { DataController, ElementController } from '../controllers';
+import { ElementController } from '../elementController';
+import { DataObservable } from '../dataObservable';
 import { EventBus } from '../eventBus';
-import { EEvents, ISimpleObject } from '../models';
+import { ISimpleObject, TConfig, TDataObserverProps } from '../models';
+import { registerComponent } from '../utils';
 
-export abstract class Component<
-  TData extends ISimpleObject = ISimpleObject,
-  TEvents extends ISimpleObject = ISimpleObject
-> {
-  public readonly id: string = makeUUID();
+export class Component<TProps extends ISimpleObject = ISimpleObject, TState extends ISimpleObject = ISimpleObject> {
+  private _id: string;
+  private _state?: TState;
+  private _props: DataObservable<TProps>;
+  private _eventBus: EventBus = new EventBus();
+  private _elementController: ElementController<TProps>;
+  private _componentDidMount?: (props: TDataObserverProps<TProps>) => void;
+  private _componentDidUpdate?: (props: TDataObserverProps<TProps>) => void;
 
-  private _dataController: DataController<TData> = new DataController<TData>();
+  constructor(id: string, config: TConfig<TState>, props: TProps) {
+    this._id = id;
+    this._state = config.state;
+    this._props = new DataObservable<TProps>(props);
 
-  private _elementController: ElementController<TData, TEvents> = new ElementController<TData, TEvents>(this.id);
-
-  private eventBus: EventBus<TData> = new EventBus<TData>();
-
-  protected events: TEvents = {} as TEvents;
-
-  constructor(props: TData) {
-    this._registerEvents();
-    this._dataController.init(props, this._afterUpdateCallback.bind(this));
-  }
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  protected componentDidMount(data: TData): void {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  protected componentDidUpdate(prevData: TData): void {}
-  protected abstract render(): string;
-
-  protected get data(): TData {
-    return this._dataController.data;
-  }
-
-  private _afterUpdateCallback(prevData: TData): void {
-    this.eventBus.emit(EEvents.UPDATE, prevData);
-  }
-
-  private _updateCallback(prevData: TData): void {
-    this._build();
-    this.componentDidUpdate(prevData);
-  }
-
-  private _mountCallback(data: TData): void {
-    this._build();
-    this.componentDidMount(data);
-  }
-
-  private _registerEvents(): void {
-    this.eventBus.on(EEvents.MOUNT, this._mountCallback.bind(this));
-    this.eventBus.on(EEvents.UPDATE, this._updateCallback.bind(this));
-  }
-
-  private _build(): void {
-    this._elementController.build({
-      template: this.render(),
-      data: this.data,
-      events: this.events,
+    this._elementController = new ElementController<TProps>({
+      id: this._id,
+      hbsTmp: config.template,
+      events: config.events,
     });
   }
 
-  public setData(data: TData): void {
-    this._dataController.updateData(data);
+  public get id(): string {
+    return this._id;
   }
 
-  public setParentElement(elem: Element): void {
-    this._elementController.setParentElement(elem);
+  private updateComponent() {
+    this._elementController.compileTemplate(this._props.data);
+    this._elementController.mountTemplate();
+    if (this._componentDidUpdate)
+      this._componentDidUpdate.call(this, { prevData: this._props.prevData, data: this._props.data });
   }
 
-  public mount(): void {
-    this.eventBus.emit(EEvents.MOUNT, this.data);
+  public mountComponent() {
+    this._elementController.setParentElement();
+    this._elementController.compileTemplate(this._props.data);
+    this._elementController.mountTemplate();
+    if (this._componentDidMount)
+      this._componentDidMount.call(this, { prevData: this._props.prevData, data: this._props.data });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public destroy(): void {}
+  public resetTemplate() {
+    this._elementController.setParentElement();
+    this._elementController.mountTemplate();
+  }
+
+  public setNewProps(data: TProps) {
+    this._props.updateData(data);
+  }
+}
+
+export function createComponent<
+  TProps extends ISimpleObject = ISimpleObject,
+  TState extends ISimpleObject = ISimpleObject
+>(config: TConfig<TState>) {
+  const id = makeUUID();
+  registerComponent(id, config.name);
+  return (props: TProps) => new Component<TProps, TState>(id, config, props);
 }

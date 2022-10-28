@@ -1,18 +1,6 @@
-import { ISimpleObject } from '../models';
-
-export function createProxy<TData extends ISimpleObject>(
-  data: TData,
-  callback?: (prevData: TData) => void,
-): TData {
-  return new Proxy(data, {
-    set(target: TData, key: keyof TData, val) {
-      const prev = { ...target };
-      target[key] = val;
-      if (callback) callback(prev);
-      return true;
-    },
-  });
-}
+import Handlebars from 'handlebars';
+import { AnyType } from '../../shared/models';
+import { Component } from '../component';
 
 export function parseEvent(evString: string) {
   const str = evString.replace(/\[/g, '').replace(/\]/g, '');
@@ -33,4 +21,17 @@ export function getPathsObj(path: string) {
     .split('.')
     .filter((item) => item !== 'this')
     .filter((item) => item !== 'data');
+}
+
+export function registerComponent(id: string, name: string) {
+  Handlebars.registerHelper(name, () => {
+    return `<div data-child="${id}"></div>`;
+  });
+}
+
+export function renderDOM(selector: string, component: Component<AnyType, AnyType>) {
+  const parentElement = document.querySelector(selector);
+  if (!parentElement) throw new Error(`Ошибка. Элемент с селектором ${selector} - отсутствует`);
+  parentElement.innerHTML = `<div data-child="${component.id}"></div>`;
+  component.mountComponent();
 }
