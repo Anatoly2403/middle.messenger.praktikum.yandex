@@ -17,9 +17,5 @@ export const NotFoundPage = prepareComponent<TProps>({
   name: 'not-found-page',
   getTemplate,
   children: [Link],
-  events: {
-    handleClick(this: Component<TProps>) {
-      console.log(this);
-    },
-  },
+  events: {},
 });
