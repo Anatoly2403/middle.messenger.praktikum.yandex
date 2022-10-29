@@ -54,7 +54,6 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
   }
 
   public subscribe(subscriber: (props: TDataObserverProps<TData>) => void) {
-    subscriber({ data: this._data, prevData: this._prevData });
     this._subscribers.push(subscriber);
     return () => this._subscribers.filter((fn) => fn === subscriber);
   }

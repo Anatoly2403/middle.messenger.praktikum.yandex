@@ -1,11 +1,11 @@
 import { AnyType } from '../../shared/models';
-import { Component, createComponent } from '../component/Component';
+import { Component, prepareComponent } from '../component/Component';
 
 export interface IClassComponent {
   new (...args: AnyType[]): Component<AnyType>;
 }
 
-export type TEvents = Record<string, (e: Event) => void>;
+export type TEvents = Record<string, EventListener>;
 
 export type ISimpleObject = Record<string | symbol | number, AnyType>;
 
@@ -14,19 +14,26 @@ export type TDataObserverProps<TData> = {
   prevData: TData;
 };
 
-export type TElementControllerProps = {
+export type TElementControllerProps<THelpers extends ISimpleObject = ISimpleObject> = {
   id: string;
   hbsTmp: string;
   events?: TEvents;
+  helpers?: THelpers;
+  children?: TPreComponent[];
 };
 
-export type TPreComponent = ReturnType<typeof createComponent<AnyType>>;
-
-export type TConfig<TState extends ISimpleObject = ISimpleObject> = {
+export type TChildProps = {
   name: string;
-  template: string;
-  state?: TState;
+  props: ISimpleObject
+}
+
+export type TPreComponent = ReturnType<typeof prepareComponent<AnyType>>;
+
+export type TConfig<THelpers extends ISimpleObject = ISimpleObject> = {
+  name: string;
+  getTemplate: () => string;
   events?: TEvents;
+  helpers?: THelpers;
   children?: TPreComponent[];
 };
 
@@ -35,4 +42,9 @@ export enum EEvents {
   COMPILE = 'COMPILE',
   MOUNT = 'COMPONENT_DID_MOUNT',
   UPDATE = 'COMPONENT_DID_UPDATE',
+}
+
+export enum EManageEventsAction {
+  ADD = "ADD",
+  REMOVE = "REMOVE"
 }

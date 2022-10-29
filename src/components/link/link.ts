@@ -1,17 +1,14 @@
-import { Component } from '../../core/base/component';
+import { prepareComponent } from '../../core/base/component';
 import './link.scss';
-import { TData, TEvents, TProps } from './types';
 
-export class Link extends Component<TData, TEvents> {
-  constructor(props: TProps) {
-    super({ ...props });
-  }
+export type TProps = {
+  href: string;
+  label: string;
+};
 
-  events: TEvents = {};
-
-  protected render(): string {
-    return `
-      <a class="link" href="${this.data.href}">${this.data.label}</a>
-    `;
-  }
-}
+export const Link = prepareComponent<TProps>({
+  name: 'link',
+  getTemplate: () => `<a class="link" href="{{ props.href }}">{{ props.label }}</a>`,
+  children: [],
+  events: {},
+});
