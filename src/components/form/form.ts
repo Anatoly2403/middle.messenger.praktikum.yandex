@@ -19,7 +19,7 @@ function getTemplate(this: Component) {
       <div class="form__content">
         <div class="form__fields">
           {{#each props.fields}}        
-            {{{ input-field name=name label=label }}}
+            {{{ input-field key=@index name=name label=label }}}
           {{/each}}
           
         </div>

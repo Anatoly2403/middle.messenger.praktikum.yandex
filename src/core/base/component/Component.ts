@@ -7,6 +7,7 @@ import { registerComponent } from '../utils';
 
 export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers extends ISimpleObject = ISimpleObject> {
   private _id: string;
+  private _uniqueKey?: string;
   private _name: string;
   private _props: DataObservable<TProps>;
   private _unsubscribeProps: () => void;
@@ -40,6 +41,10 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers ex
     return this._name;
   }
 
+  public get uniqueKey() {
+    return this._uniqueKey;
+  }
+
   public get props() {
     return { ...this._props.data };
   }
@@ -55,6 +60,10 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers ex
   private _registerEvents() {
     this._eventBus.on(EEvents.MOUNT, this.mountComponent.bind(this));
     this._eventBus.on(EEvents.UPDATE, this.updateComponent.bind(this));
+  }
+
+  public setUniqueKey(key?: string) {
+    this._uniqueKey = key;
   }
 
   private updateComponent() {
@@ -96,7 +105,6 @@ export function prepareComponent<
   registerComponent(id, config.name);
 
   function createComponentWithProps(props: TProps) {
-    console.log(props);
     return new Component<TProps, TStatic>(id, config, props);
   }
   createComponentWithProps.prototype['name'] = config.name;

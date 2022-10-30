@@ -18,6 +18,12 @@ export function isPropEvent(propsValue: string) {
   return /^\[.+]$/.test(propsValue);
 }
 
+export function parsePropNameWithKey(propNameWithKey: string) {
+  const key = propNameWithKey.match(/\[.+]/)?.[0];
+  const name = propNameWithKey.replace(/\[.+]/, '');
+  return { key, name };
+}
+
 export function getPath(path: string) {
   const pathArray = path.replace(/\[/g, '').replace(/\]/g, '').split('.');
   return pathArray.filter((item) => item !== 'static');

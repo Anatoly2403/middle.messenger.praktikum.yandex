@@ -1,7 +1,7 @@
 import { AnyType } from '../../shared/models';
 import { Component } from '../component';
 import { ISimpleObject, TChildProps, TPreComponent } from '../models';
-import { getPath, isPropEvent } from '../utils';
+import { getPath, isPropEvent, parsePropNameWithKey } from '../utils';
 
 export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
   private _initialChildren: TPreComponent[] = [];
@@ -36,18 +36,27 @@ export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
 
   public resetChildren() {
     this._children.forEach((child) => child.resetTemplate());
-    this._children.forEach((child) => child.setNewProps(this._childrenProps[child.name]));
+    this._children.forEach((child) => {
+      const key = child.uniqueKey || '';
+      const props = this._childrenProps[`${child.name}${key}`];
+      child.setNewProps(props);
+    });
   }
 
   public setChildrenProps(childProps: TChildProps) {
-    this._childrenProps[childProps.name] = this._prepareProps(childProps.props);
+    const key = childProps.props.key === undefined ? [] : `[${childProps.props.key}]`;
+    this._childrenProps[`${childProps.name}${key}`] = this._prepareProps(childProps.props);
   }
 
   public initChildren() {
-    this._initialChildren.forEach((child, i) => {
-      const name = child.prototype['name'];
-      const props = this._childrenProps[name];
-      this._children[i] = child(props);
+    Object.keys(this._childrenProps).forEach((propNameWithKey) => {
+      const { key, name } = parsePropNameWithKey(propNameWithKey);
+      const initialChild = this._initialChildren.find((item) => item.prototype['name'] === name);
+      if (!initialChild) return;
+      const props = this._childrenProps[propNameWithKey];
+      const child = initialChild(props);
+      child.setUniqueKey(key);
+      this._children.push(child);
     });
   }
 
