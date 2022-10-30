@@ -1,19 +1,19 @@
-import { Component } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/base/component';
 import './button.scss';
-import { TEvents, TProps } from './types';
 
-export class Button extends Component<TProps, TEvents> {
-  constructor(props: TProps) {
-    super(props);
-  }
+export type TButtonProps = {
+  type: string;
+  label: string;
+  onClick?: () => void;
+};
 
-  events: TEvents = {
-    handleClick: () => this.data.click(),
-  };
-
-  protected render(): string {
-    return `
-      <button class="btn" type="${this.data.type}" data-event="[click:handleClick]" >${this.data.label}</button>
-    `;
-  }
-}
+export const Button = prepareComponent<TButtonProps>({
+  name: 'button',
+  getTemplate: () =>
+    '<button class="btn" type="{{ props.type }}" data-event="[click:handleSubmit]" >{{ props.label }}</button>',
+  events: {
+    handleSubmit(this: Component<TButtonProps>) {
+      if (this.props.onClick) this.props.onClick();
+    },
+  },
+});

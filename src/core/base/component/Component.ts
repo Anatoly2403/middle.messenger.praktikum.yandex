@@ -5,7 +5,7 @@ import { EventBus } from '../eventBus';
 import { EEvents, ISimpleObject, TConfig, TDataObserverProps, TEvents } from '../models';
 import { registerComponent } from '../utils';
 
-export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers extends ISimpleObject = ISimpleObject> {
+export class Component<TProps extends ISimpleObject = ISimpleObject, TStatic extends ISimpleObject = ISimpleObject> {
   private _id: string;
   private _uniqueKey?: string;
   private _name: string;
@@ -16,7 +16,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers ex
   private _componentDidMount?: (props: TDataObserverProps<TProps>) => void;
   private _componentDidUpdate?: (props: TDataObserverProps<TProps>) => void;
 
-  constructor(id: string, config: TConfig<THelpers>, props?: TProps) {
+  constructor(id: string, config: TConfig<TStatic>, props?: TProps) {
     this._id = id;
     this._name = config.name;
     this._props = new DataObservable<TProps>(props || ({} as TProps));
@@ -26,7 +26,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers ex
       hbsTmp: config.getTemplate(),
       events: this._bindContext(config.events),
       children: config.children,
-      static: config.static,
+      staticData: config.getStaticData?.bind(this)(),
     });
 
     this._registerEvents();
@@ -47,6 +47,10 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers ex
 
   public get props() {
     return { ...this._props.data };
+  }
+
+  public get children() {
+    return this._elementController.children;
   }
 
   private _bindContext(events?: TEvents) {

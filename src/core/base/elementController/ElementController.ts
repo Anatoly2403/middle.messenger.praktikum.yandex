@@ -19,8 +19,12 @@ export class ElementController<
     this._id = props.id;
     this._hbsTmp = props.hbsTmp;
     this._events = props.events || {};
-    this._staticData = props.static;
-    this._childrenController = new ChildrenController<TStatic>(props.children || [], props.static);
+    this._staticData = props.staticData;
+    this._childrenController = new ChildrenController<TStatic>(props.children || [], props.staticData);
+  }
+
+  public get children() {
+    return this._childrenController.children;
   }
 
   private _manageEvents(action: EManageEventsAction) {

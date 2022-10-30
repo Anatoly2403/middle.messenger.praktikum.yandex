@@ -7,12 +7,16 @@ export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
   private _initialChildren: TPreComponent[] = [];
   private _childrenProps: Record<string, ISimpleObject> = {};
   private _children: Component[] = [];
-  private _static: TStatic;
+  private _staticData: TStatic;
 
   constructor(children: TPreComponent[], helpers?: TStatic) {
     this._initialChildren = children;
-    this._static = helpers || ({} as TStatic);
+    this._staticData = helpers || ({} as TStatic);
     this.setChildrenProps = this.setChildrenProps.bind(this);
+  }
+
+  public get children() {
+    return this._children;
   }
 
   private _prepareProps(props: ISimpleObject) {
@@ -21,7 +25,7 @@ export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
         if (isPropEvent(props[key])) {
           const pathArray = getPath(props[key]);
           const value = pathArray.reduce<AnyType>((acc, item) => {
-            if (!acc) acc = this._static[item];
+            if (!acc) acc = this._staticData[item];
             else acc = acc[item];
             return acc;
           }, undefined);

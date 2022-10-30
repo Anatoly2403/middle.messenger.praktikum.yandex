@@ -38,6 +38,12 @@ export function registerComponent(id: string, name: string) {
   });
 }
 
+export function registerHbHelpers() {
+  Handlebars.registerHelper('if_eq', function (this: unknown, a, b, opts) {
+    return a == b ? opts.fn(this) : opts.inverse(this);
+  });
+}
+
 export function renderDOM(selector: string, component: Component<AnyType, AnyType>) {
   const parentElement = document.querySelector(selector);
   if (!parentElement) throw new Error(`Ошибка. Элемент с селектором ${selector} - отсутствует`);

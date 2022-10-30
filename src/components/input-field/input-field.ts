@@ -4,18 +4,33 @@ import './input-field.scss';
 export type TInputFieldProps = {
   name: string;
   label: string;
+  validators?: Array<(value: string) => boolean>;
 };
 
-function handleFocus(e: Event) {
+function handleFocus(this: Component<TInputFieldProps>, e: Event) {
   const field = e.target as HTMLInputElement;
   const label = field.previousElementSibling as Element;
   label.classList.remove(`input-field__label_low`);
+  if (field.value && this.props.validators) {
+    const isInValid = this.props.validators.some((validator) => !validator(field.value));
+    if (isInValid) field.classList.add(`input-field__input_invalid`);
+    else field.classList.remove(`input-field__input_invalid`);
+    return;
+  }
 }
 
-function handleBlur(e: Event) {
+function handleBlur(this: Component<TInputFieldProps>, e: Event) {
   const field = e.target as HTMLInputElement;
   const label = field.previousElementSibling as Element;
-  if (field.value) return;
+
+  if (field.value && this.props.validators) {
+    const isInvalid = this.props.validators.some((validator) => !validator(field.value));
+    if (isInvalid) field.classList.add(`input-field__input_invalid`);
+    else field.classList.remove(`input-field__input_invalid`);
+    return;
+  }
+
+  field.classList.remove(`input-field__input_invalid`);
   label.classList.add(`input-field__label_low`);
 }
 
