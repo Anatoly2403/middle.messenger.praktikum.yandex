@@ -1,24 +1,33 @@
-import { Component } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/base/component';
 import './text-button.scss';
-import { TData, TEvents, TProps } from './types';
 
-export class TextButton extends Component<TData, TEvents> {
-  constructor(props: TProps) {
-    super({ ...props });
-  }
-
-  events: TEvents = {
-    handleClick: () => console.log('click'),
-  };
-
-  protected render(): string {
-    const { type, label } = this.data;
-    const className = this.data.type ? `text-button text-button_${type}` : 'text-button';
-
-    return `
-      <button class="${className}" data-event="[click:handleClick]">
-        <span>${label}</span>
-      </button>
-    `;
-  }
+function getTemplate() {
+  return `
+    <button 
+      {{#if props.type}}       
+        class="text-button text-button_{{props.type}}" 
+        {{else}}
+        class="text-button" 
+      {{/if}}    
+      data-event="[click:handleClick]">
+      <span>{{props.label}}</span>
+    </button>
+  `;
 }
+
+export type TTextButtonProps = {
+  name: string;
+  type?: string;
+  label: string;
+  onTextBtnClick?: (name: string) => void;
+};
+
+export const TextButton = prepareComponent<TTextButtonProps>({
+  name: 'text-button',
+  getTemplate,
+  events: {
+    handleClick(this: Component<TTextButtonProps>) {
+      if (this.props.onTextBtnClick) this.props.onTextBtnClick(this.props.name);
+    },
+  },
+});

@@ -1,6 +1,7 @@
 import Handlebars, { HelperOptions } from 'handlebars';
 import { AnyType } from '../../shared/models';
 import { Component } from '../component';
+import { TPreComponent } from '../models';
 
 export function parseEvent(evString: string) {
   const str = evString.replace(/\[/g, '').replace(/\]/g, '');
@@ -15,7 +16,10 @@ export function parseEvent(evString: string) {
 }
 
 export function isPropEvent(propsValue: string) {
-  return /^\[.+]$/.test(propsValue);
+  if (typeof propsValue === 'string') {
+    return /^\[.+]$/.test(propsValue);
+  }
+  return false;
 }
 
 export function parsePropNameWithKey(propNameWithKey: string) {

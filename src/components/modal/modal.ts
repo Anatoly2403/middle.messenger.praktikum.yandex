@@ -1,55 +1,49 @@
-import { Component } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/base/component';
+import { TButtonProps } from '../button';
+import { Form } from '../form/form';
+import { TInputFieldProps } from '../input-field';
 import './modal.scss';
-import { TData, TEvents, TProps, TStructure } from './types';
 
-export class Modal extends Component<TData, TEvents> {
-  constructor(props: TProps) {
-    super({ ...props });
-  }
-
-  events: TEvents = {
-    buttonClick: () => console.log('buttonClick'),
-    hideModal: () => console.log('buttonClick'),
+export type TModalProps = {
+  show: boolean;
+  label: string;
+  formData: {
+    title: string;
+    fields: Array<TInputFieldProps>;
+    submit: TButtonProps;
   };
+  hideModal: () => void;
+  saveData: () => void;
+};
 
-  renderStructure(structure: TStructure[]) {
-    return structure.reduce<string>((acc, item) => {
-      if (item.type === 'inputField') {
-        acc = acc.concat(`
-          {{{ 
-            InputField label="${item.label}" name="${item.label}"
-          }}}
-        `);
-      } else {
-        acc = acc.concat(`
-          {{{ 
-            FileField label="${item.label}" name="${item.label}"
-          }}}
-        `);
-      }
-
-      return acc;
-    }, ``);
-  }
-
-  protected render(): string {
-    const { hidden, label } = this.data;
-    const structure = this.renderStructure(this.data.structure);
-
-    return `
-      <div class="modal-wrapper" ${hidden ? 'hidden' : ''} data-event="click:hideModal">
-        <form class="modal">
-          <div class="modal__title">${label}</div>
-          <div class="modal__structure">
-            ${structure}
-          </div>
-          <div class="modal__button">
+function getTemplate() {
+  return `
+    
+          <div class="modal-wrapper" data-event="[click:hideModal]">     
             {{{ 
-              Button type="button" label="Добавить" click="[buttonClick]"
-            }}}
+              form 
+                onSubmit=props.saveData
+                title=props.formData.title 
+                fields=props.formData.fields
+                submit=props.formData.submit
+            }}}         
           </div>
-        </form>
-      </div>
+ 
     `;
-  }
 }
+
+export const Modal = prepareComponent<TModalProps>({
+  name: 'modal',
+  getTemplate,
+  children: [Form],
+  events: {
+    buttonClick(this: Component<TModalProps>) {
+      if (this.props.saveData) this.props.saveData();
+    },
+    hideModal(this: Component<TModalProps>, e: Event) {
+      if ((e.target as Element).className === 'modal-wrapper') {
+        if (this.props.hideModal) this.props.hideModal();
+      }
+    },
+  },
+});

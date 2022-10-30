@@ -8,7 +8,7 @@ export class ElementController<
   TStatic extends ISimpleObject = ISimpleObject
 > {
   private _id: string;
-  private _staticData?: TStatic;
+  private _helpers?: TStatic;
   private _hbsTmp: string;
   private _events: TEvents;
   private _compiledTemplate: string | null = null;
@@ -19,8 +19,8 @@ export class ElementController<
     this._id = props.id;
     this._hbsTmp = props.hbsTmp;
     this._events = props.events || {};
-    this._staticData = props.staticData;
-    this._childrenController = new ChildrenController<TStatic>(props.children || [], props.staticData);
+    this._helpers = props.helpers;
+    this._childrenController = new ChildrenController<TStatic>(props.children || [], props.helpers);
   }
 
   public get children() {
@@ -52,7 +52,7 @@ export class ElementController<
     const elemWrapper = document.createElement('div');
     elemWrapper.innerHTML = compile(this._hbsTmp)({
       props: data,
-      static: this._staticData,
+      helpers: this._helpers,
       setChildProps: this._childrenController.setChildrenProps,
     });
     const elem = (elemWrapper.firstElementChild as unknown) as HTMLOrSVGElement;

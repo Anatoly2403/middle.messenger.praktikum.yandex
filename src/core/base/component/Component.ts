@@ -20,13 +20,15 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TStatic ext
     this._id = id;
     this._name = config.name;
     this._props = new DataObservable<TProps>(props || ({} as TProps));
+    this._componentDidMount = config.componentDidMount?.bind(this);
+    this._componentDidUpdate = config.componentDidUpdate?.bind(this);
 
     this._elementController = new ElementController<TProps>({
       id: this._id,
       hbsTmp: config.getTemplate(),
       events: this._bindContext(config.events),
       children: config.children,
-      staticData: config.getStaticData?.bind(this)(),
+      helpers: config.registerHelpers?.bind(this)(),
     });
 
     this._registerEvents();
@@ -75,7 +77,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TStatic ext
     this._elementController.mountTemplate();
     this._elementController.resetChildren();
     if (this._componentDidUpdate)
-      this._componentDidUpdate.call(this, { prevData: this._props.prevData, data: this._props.data });
+      this._componentDidUpdate.call(this, { prevData: this._props.prevData, data: { ...this._props.data } });
   }
 
   public mountComponent() {
@@ -84,7 +86,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TStatic ext
     this._elementController.mountTemplate();
     this._elementController.initChildren();
     if (this._componentDidMount)
-      this._componentDidMount.call(this, { prevData: this._props.prevData, data: this._props.data });
+      this._componentDidMount.call(this, { prevData: this._props.prevData, data: { ...this._props.data } });
   }
 
   public resetTemplate() {
@@ -104,10 +106,9 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TStatic ext
 export function prepareComponent<
   TProps extends ISimpleObject = ISimpleObject,
   TStatic extends ISimpleObject = ISimpleObject
->(config: TConfig<TStatic>) {
+>(config: TConfig<TProps, TStatic>) {
   const id = makeUUID();
   registerComponent(id, config.name);
-
   function createComponentWithProps(props: TProps) {
     return new Component<TProps, TStatic>(id, config, props);
   }

@@ -7,11 +7,11 @@ export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
   private _initialChildren: TPreComponent[] = [];
   private _childrenProps: Record<string, ISimpleObject> = {};
   private _children: Component[] = [];
-  private _staticData: TStatic;
+  private _helpers: TStatic;
 
   constructor(children: TPreComponent[], helpers?: TStatic) {
     this._initialChildren = children;
-    this._staticData = helpers || ({} as TStatic);
+    this._helpers = helpers || ({} as TStatic);
     this.setChildrenProps = this.setChildrenProps.bind(this);
   }
 
@@ -25,7 +25,7 @@ export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
         if (isPropEvent(props[key])) {
           const pathArray = getPath(props[key]);
           const value = pathArray.reduce<AnyType>((acc, item) => {
-            if (!acc) acc = this._staticData[item];
+            if (!acc) acc = this._helpers[item];
             else acc = acc[item];
             return acc;
           }, undefined);
@@ -39,11 +39,24 @@ export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
   }
 
   public resetChildren() {
-    this._children.forEach((child) => child.resetTemplate());
-    this._children.forEach((child) => {
-      const key = child.uniqueKey || '';
-      const props = this._childrenProps[`${child.name}${key}`];
-      child.setNewProps(props);
+    Object.keys(this._childrenProps).forEach((propNameWithKey) => {
+      const props = this._childrenProps[propNameWithKey];
+      const { key, name } = parsePropNameWithKey(propNameWithKey);
+      const child = this._children.find((child) =>
+        key ? child.name === name && key === child.uniqueKey : child.name === name,
+      );
+
+      if (!child) {
+        const initialChild = this._initialChildren.find((item) => item.prototype['name'] === name);
+        if (!initialChild) return;
+        const childFromInit = initialChild(props);
+        childFromInit.setUniqueKey(key);
+        this._children.push(childFromInit);
+        childFromInit.mount();
+      } else {
+        child.setNewProps(props);
+        child.resetTemplate();
+      }
     });
   }
 

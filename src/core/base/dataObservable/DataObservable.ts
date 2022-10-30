@@ -26,7 +26,6 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
       set(target: TData, key: keyof TData, val) {
         const prevTarget = { ...target };
         target[key] = val;
-
         if (!hasChange && target[key] !== prevTarget[key]) {
           hasChange = true;
         }

@@ -4,6 +4,7 @@ import './text-field.scss';
 export type TTextFieldProps = {
   name: string;
   label: string;
+  value: string;
 };
 
 function getTemplate(this: Component) {
@@ -11,9 +12,9 @@ function getTemplate(this: Component) {
     <div class="text-field">
       <span class="text-field__title">{{ props.label }}</span>
       <input 
+        class="text-field__value"
         name="{{ props.name }}"
-        class="text-field__value" 
-        value="asdasd" 
+        value="{{ props.value }}" 
         type="text" 
         disabled
       />

@@ -18,7 +18,7 @@ export type TElementControllerProps<THelpers extends ISimpleObject = ISimpleObje
   id: string;
   hbsTmp: string;
   events?: TEvents;
-  staticData?: THelpers;
+  helpers?: THelpers;
   children?: TPreComponent[];
 };
 
@@ -29,12 +29,17 @@ export type TChildProps = {
 
 export type TPreComponent = ReturnType<typeof prepareComponent<AnyType>>;
 
-export type TConfig<TStatic extends ISimpleObject = ISimpleObject> = {
+export type TConfig<
+  TProps extends ISimpleObject = ISimpleObject,
+  TStatic extends ISimpleObject = ISimpleObject,
+> = {
   name: string;
   getTemplate: () => string;
   events?: TEvents;
-  getStaticData?: () => TStatic;
+  registerHelpers?: () => TStatic;
   children?: TPreComponent[];
+  componentDidMount?: (props: TDataObserverProps<TProps>) => void
+  componentDidUpdate?: (props: TDataObserverProps<TProps>) => void
 };
 
 export enum EEvents {
