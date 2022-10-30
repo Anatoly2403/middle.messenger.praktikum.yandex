@@ -1,22 +1,26 @@
 import { Component, prepareComponent } from '../../core/base/component';
-import './login-page.scss';
+import './signin-page.scss';
 import { Form } from '../../components/form/form';
-import { validatePassword, validateLogin } from '../../utils';
+import { validatePassword, validateLogin, validateEmail, validateName, validatePhone } from '../../utils';
 
 function getStaticData(this: Component) {
   return {
     formMeta: {
       fields: [
+        { type: 'inputField', name: 'mail', label: 'Почта', validators: [validateEmail] },
         { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin] },
+        { type: 'inputField', name: 'name', label: 'Имя', validators: [validateName] },
+        { type: 'inputField', name: 'lastName', label: 'Фамилия', validators: [validateName] },
+        { type: 'inputField', name: 'phoneNumber', label: 'Телефон', validators: [validatePhone] },
         { type: 'inputField', name: 'password', label: 'Пароль', validators: [validatePassword] },
       ],
       submit: {
         type: 'submit',
-        label: 'Авторизоваться',
+        label: 'Зарегистрироваться',
       },
       link: {
-        href: '/signin',
-        label: 'Нет аккаунта?',
+        href: '/login',
+        label: 'Войти',
       },
       onSubmit: (data: { login: string; password: string }) => {
         alert(JSON.stringify(data));
@@ -27,12 +31,12 @@ function getStaticData(this: Component) {
 
 function getTemplate(this: Component) {
   return `
-    <div class="login">
-      <div class="login-form__wrapper">
+    <div class="signin">
+      <div class="signin-form__wrapper">
         {{{ 
             form 
               onSubmit="[static.formMeta.onSubmit]"
-              title="Вход" 
+              title="Регистрация" 
               fields="[static.formMeta.fields]" 
               submit="[static.formMeta.submit]"
               link="[static.formMeta.link]"
@@ -42,8 +46,8 @@ function getTemplate(this: Component) {
   `;
 }
 
-export const LoginPage = prepareComponent({
-  name: 'login-page',
+export const SigninPage = prepareComponent({
+  name: 'signin-page',
   getTemplate,
   getStaticData,
   children: [Form],

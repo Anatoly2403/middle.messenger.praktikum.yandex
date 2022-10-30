@@ -1,18 +1,17 @@
-import { Component } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/base/component';
 import './arrow-button.scss';
-import { TEvents, TProps } from './types';
 
-export class ArrowButton extends Component<TProps, TEvents> {
-  events: TEvents = {
-    // eslint-disable-next-line no-console
-    handleClick: () => console.log('click'),
-  };
+type TArrowBtnProps = {
+  onClick: () => void;
+};
 
-  protected render(): string {
-    return `
-      <button class="arrowBtn" data-event="[click:handleClick]">
-        <div class="arrowBtn__arrow"></div>
-      </button>
-    `;
-  }
-}
+export const ArrowButton = prepareComponent<TArrowBtnProps>({
+  name: 'arrow-button',
+  getTemplate: () =>
+    `<button class="arrowBtn" data-event="[click:handleClick]"><div class="arrowBtn__arrow"></div></button>`,
+  events: {
+    handleClick(this: Component<TArrowBtnProps>) {
+      this.props.onClick();
+    },
+  },
+});

@@ -50,12 +50,12 @@
     display: none;
   }
 
-  .text-field:last-child {
+  &__main-info-wrapper>div:last-child>.text-field {
     border-bottom: 1px solid transparent;
   }
 
   &__save-btns-wrapper {
     display: none;
     text-align: center;
-  }  
+  }
 }

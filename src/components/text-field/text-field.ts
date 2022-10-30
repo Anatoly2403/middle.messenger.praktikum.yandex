@@ -1,39 +1,28 @@
-import { Component } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/base/component';
 import './text-field.scss';
-import { TData, TEvents, TProps } from './types';
 
-export class TextField extends Component<TData, TEvents> {
-  constructor(props: TProps) {
-    super({ ...props });
-  }
+export type TTextFieldProps = {
+  name: string;
+  label: string;
+};
 
-  events: TEvents = {
-    handleBlur: this.handleBlur.bind(this),
-  };
-
-  handleBlur(e: Event) {
-    const field = e.target as HTMLInputElement;
-    if (field.value) {
-      this.setData({
-        ...this.data,
-        value: field.value,
-      });
-    }
-  }
-
-  protected render(): string {
-    const { disabled, label, value } = this.data;
-
-    return `
-      <div class="text-field">
-        <span class="text-field__title">${label}</span>
-        <input 
-          class="text-field__value" 
-          value="${value}" 
-          type="text" 
-          ${disabled ? 'disabled' : ''}
-        />
-      </div>
-    `;
-  }
+function getTemplate(this: Component) {
+  return `
+    <div class="text-field">
+      <span class="text-field__title">{{ props.label }}</span>
+      <input 
+        name="{{ props.name }}"
+        class="text-field__value" 
+        value="asdasd" 
+        type="text" 
+        disabled
+      />
+    </div>
+  `;
 }
+
+export const TextField = prepareComponent<TTextFieldProps>({
+  name: 'text-field',
+  getTemplate,
+  events: {},
+});

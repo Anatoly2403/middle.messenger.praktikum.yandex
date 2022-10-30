@@ -1,8 +1,8 @@
 import { registerHbHelpers, renderDOM } from './core/base/utils';
-import { LoginPage } from './pages/login-page/login-page';
+import { ProfilePage } from './pages/profile-page/profile-page';
 
 registerHbHelpers();
 
-const page = LoginPage({});
+const page = ProfilePage({});
 
 renderDOM('#app', page);
