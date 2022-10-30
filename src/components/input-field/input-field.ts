@@ -1,56 +1,40 @@
-import { Component } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/base/component';
 import './input-field.scss';
-import { TData, TEvents, TProps } from './types';
 
-export class InputField extends Component<TData, TEvents> {
-  constructor(props: TProps) {
-    super({ ...props, value: '' });
-  }
+export type TInputFieldProps = {
+  name: string;
+  label: string;
+};
 
-  events: TEvents = {
-    handleInput: this.handleInput.bind(this),
-    handleFocus: this.handleFocus.bind(this),
-    handleBlur: this.handleBlur.bind(this),
-  };
+function handleFocus(e: Event) {
+  const field = e.target as HTMLInputElement;
+  const label = field.previousElementSibling as Element;
+  label.classList.remove(`input-field__label_low`);
+}
 
-  handleInput(e: Event) {
-    // eslint-disable-next-line no-console
-    console.log(e);
-  }
+function handleBlur(e: Event) {
+  const field = e.target as HTMLInputElement;
+  const label = field.previousElementSibling as Element;
+  if (field.value) return;
+  label.classList.add(`input-field__label_low`);
+}
 
-  handleFocus(e: Event) {
-    const field = e.target as HTMLInputElement;
-    const label = field.previousElementSibling as Element;
-    label.classList.remove(`input-field__label_low`);
-  }
-
-  handleBlur(e: Event) {
-    const field = e.target as HTMLInputElement;
-    const label = field.previousElementSibling as Element;
-    if (field.value) {
-      this.setData({
-        ...this.data,
-        value: field.value,
-      });
-    }
-    label.classList.add(`input-field__label_low`);
-  }
-
-  protected render(): string {
-    const { label, name, value } = this.data;
-    const className = value ? '' : 'input-field__label_low';
-    return `
-      <div class="input-field">
-        <label class="input-field__label ${className}" for="${name}">${label}</label>
+function getTemplate(this: Component) {
+  return `
+    <div class="input-field">
+      <label class="input-field__label input-field__label_low" for="{{ props.name }}">{{ props.label }}</label>
         <input 
           class="input-field__input" type="text" 
-          name="${name}" 
-          data-event="[input:handleInput, focus:handleFocus, blur:handleBlur]"
-          value="${value}"
-          
+          name="{{ props.name }}" 
+          data-event="[focus:handleFocus, blur:handleBlur]"  
         />
-        <span class="input-field__error"></span>
-      </div>
-    `;
-  }
+      <span class="input-field__error"></span>
+    </div>
+  `;
 }
+
+export const InputField = prepareComponent<TInputFieldProps>({
+  name: 'input-field',
+  getTemplate,
+  events: { handleFocus, handleBlur },
+});

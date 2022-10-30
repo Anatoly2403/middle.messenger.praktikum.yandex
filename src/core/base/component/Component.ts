@@ -25,7 +25,9 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers ex
       hbsTmp: config.getTemplate(),
       events: this._bindContext(config.events),
       children: config.children,
+      static: config.static,
     });
+
     this._registerEvents();
     this._unsubscribeProps = this._props.subscribe(() => this._eventBus.emit(EEvents.UPDATE));
   }
@@ -88,13 +90,14 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, THelpers ex
 
 export function prepareComponent<
   TProps extends ISimpleObject = ISimpleObject,
-  TState extends ISimpleObject = ISimpleObject
->(config: TConfig<TState>) {
+  TStatic extends ISimpleObject = ISimpleObject
+>(config: TConfig<TStatic>) {
   const id = makeUUID();
   registerComponent(id, config.name);
 
   function createComponentWithProps(props: TProps) {
-    return new Component<TProps, TState>(id, config, props);
+    console.log(props);
+    return new Component<TProps, TStatic>(id, config, props);
   }
   createComponentWithProps.prototype['name'] = config.name;
 

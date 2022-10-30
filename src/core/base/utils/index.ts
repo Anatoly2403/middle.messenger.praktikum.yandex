@@ -18,9 +18,9 @@ export function isPropEvent(propsValue: string) {
   return /^\[.+]$/.test(propsValue);
 }
 
-export function getEventNameFromPath(path: string) {
+export function getPath(path: string) {
   const pathArray = path.replace(/\[/g, '').replace(/\]/g, '').split('.');
-  return pathArray[pathArray.length - 1];
+  return pathArray.filter((item) => item !== 'static');
 }
 
 export function registerComponent(id: string, name: string) {

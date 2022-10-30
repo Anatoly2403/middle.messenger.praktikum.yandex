@@ -1,16 +1,17 @@
+import { AnyType } from '../../shared/models';
 import { Component } from '../component';
 import { ISimpleObject, TChildProps, TPreComponent } from '../models';
-import { getEventNameFromPath, isPropEvent } from '../utils';
+import { getPath, isPropEvent } from '../utils';
 
-export class ChildrenController<THelpers extends ISimpleObject = ISimpleObject> {
+export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
   private _initialChildren: TPreComponent[] = [];
   private _childrenProps: Record<string, ISimpleObject> = {};
   private _children: Component[] = [];
-  private _helpers: THelpers;
+  private _static: TStatic;
 
-  constructor(children: TPreComponent[], helpers?: THelpers) {
+  constructor(children: TPreComponent[], helpers?: TStatic) {
     this._initialChildren = children;
-    this._helpers = helpers || ({} as THelpers);
+    this._static = helpers || ({} as TStatic);
     this.setChildrenProps = this.setChildrenProps.bind(this);
   }
 
@@ -18,9 +19,14 @@ export class ChildrenController<THelpers extends ISimpleObject = ISimpleObject> 
     return Object.keys(props).reduce<ISimpleObject>(
       (acc, key) => {
         if (isPropEvent(props[key])) {
-          const eventName = getEventNameFromPath(props[key]);
-          const event = this._helpers[eventName];
-          acc[key] = event;
+          const pathArray = getPath(props[key]);
+          const value = pathArray.reduce<AnyType>((acc, item) => {
+            if (!acc) acc = this._static[item];
+            else acc = acc[item];
+            return acc;
+          }, undefined);
+
+          acc[key] = value;
         }
         return acc;
       },

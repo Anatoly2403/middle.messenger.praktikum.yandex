@@ -18,7 +18,7 @@ export type TElementControllerProps<THelpers extends ISimpleObject = ISimpleObje
   id: string;
   hbsTmp: string;
   events?: TEvents;
-  helpers?: THelpers;
+  static?: THelpers;
   children?: TPreComponent[];
 };
 
@@ -29,11 +29,11 @@ export type TChildProps = {
 
 export type TPreComponent = ReturnType<typeof prepareComponent<AnyType>>;
 
-export type TConfig<THelpers extends ISimpleObject = ISimpleObject> = {
+export type TConfig<TStatic extends ISimpleObject = ISimpleObject> = {
   name: string;
   getTemplate: () => string;
   events?: TEvents;
-  helpers?: THelpers;
+  static?: TStatic;
   children?: TPreComponent[];
 };
 
