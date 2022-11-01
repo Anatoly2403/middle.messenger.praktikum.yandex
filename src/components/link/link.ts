@@ -8,5 +8,5 @@ export type TLinkProps = {
 
 export const Link = prepareComponent<TLinkProps>({
   name: 'link',
-  getTemplate: () => `<a class="link" href="{{ props.href }}">{{ props.label }}</a>`,
+  template: `<a class="link" href="{{ props.href }}">{{ props.label }}</a>`,
 });

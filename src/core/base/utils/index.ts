@@ -33,24 +33,16 @@ export function getPath(path: string) {
   return pathArray.filter((item) => item !== 'static');
 }
 
-export function registerComponent(id: string, name: string) {
-  Handlebars.registerHelper(name, ({ hash, data }: HelperOptions) => {
-    const { setChildProps } = data.root;
-    setChildProps({ name, props: hash });
-
-    return `<div data-child="${id}"></div>`;
-  });
-}
-
 export function registerHbHelpers() {
   Handlebars.registerHelper('if_eq', function (this: unknown, a, b, opts) {
     return a == b ? opts.fn(this) : opts.inverse(this);
   });
 }
 
-export function renderDOM(selector: string, component: Component<AnyType, AnyType>) {
+export function renderDOM(selector: string, component: Component<AnyType>) {
+  registerHbHelpers();
   const parentElement = document.querySelector(selector);
   if (!parentElement) throw new Error(`Ошибка. Элемент с селектором ${selector} - отсутствует`);
-  parentElement.innerHTML = `<div data-child="${component.id}"></div>`;
+  component.setParentElement(parentElement);
   component.mount();
 }

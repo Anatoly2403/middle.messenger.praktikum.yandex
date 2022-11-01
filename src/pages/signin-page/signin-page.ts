@@ -2,53 +2,62 @@ import { Component, prepareComponent } from '../../core/base/component';
 import './signin-page.scss';
 import { Form } from '../../components/form/form';
 import { validatePassword, validateLogin, validateEmail, validateName, validatePhone } from '../../utils';
+import { TInputFieldProps } from '../../components/input-field';
+import { TButtonProps } from '../../components/button';
+import { TLinkProps } from '../../components/link';
+import { TDataObserverProps } from '../../core/base/models';
 
-function getStaticData(this: Component) {
-  return {
-    formMeta: {
-      fields: [
-        { type: 'inputField', name: 'mail', label: 'Почта', validators: [validateEmail] },
-        { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin] },
-        { type: 'inputField', name: 'name', label: 'Имя', validators: [validateName] },
-        { type: 'inputField', name: 'lastName', label: 'Фамилия', validators: [validateName] },
-        { type: 'inputField', name: 'phoneNumber', label: 'Телефон', validators: [validatePhone] },
-        { type: 'inputField', name: 'password', label: 'Пароль', validators: [validatePassword] },
-      ],
-      submit: {
-        type: 'submit',
-        label: 'Зарегистрироваться',
-      },
-      link: {
-        href: '/login',
-        label: 'Войти',
-      },
-      onSubmit: (data: { login: string; password: string }) => {
-        alert(JSON.stringify(data));
-      },
+type TSigninPageProps = {
+  fields: TInputFieldProps[];
+  button: TButtonProps;
+  link: TLinkProps;
+};
+
+function componentDidMount(this: Component<TSigninPageProps>, props: TDataObserverProps<TSigninPageProps>) {
+  this.setProps({
+    ...props.data,
+    fields: [
+      { type: 'inputField', name: 'mail', label: 'Почта', validators: [validateEmail] },
+      { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin] },
+      { type: 'inputField', name: 'name', label: 'Имя', validators: [validateName] },
+      { type: 'inputField', name: 'lastName', label: 'Фамилия', validators: [validateName] },
+      { type: 'inputField', name: 'phoneNumber', label: 'Телефон', validators: [validatePhone] },
+      { type: 'inputField', name: 'password', label: 'Пароль', validators: [validatePassword] },
+    ],
+    button: {
+      type: 'submit',
+      label: 'Зарегистрироваться',
     },
-  };
+    link: {
+      href: '/login',
+      label: 'Войти',
+    },
+  });
 }
 
-function getTemplate(this: Component) {
-  return `
+function onSubmit(data: { login: string; password: string }) {
+  alert(JSON.stringify(data));
+}
+
+const template = `
     <div class="signin">
       <div class="signin-form__wrapper">
         {{{ 
-            form 
-              onSubmit="[static.formMeta.onSubmit]"
-              title="Регистрация" 
-              fields="[static.formMeta.fields]" 
-              submit="[static.formMeta.submit]"
-              link="[static.formMeta.link]"
+          form 
+            onSubmit=helpers.onSubmit
+            title="Вход" 
+            fields=props.fields 
+            button=props.button
+            link=props.link
         }}}
       </div>  
     </div>
   `;
-}
 
-export const SigninPage = prepareComponent({
+export const SigninPage = prepareComponent<TSigninPageProps>({
   name: 'signin-page',
-  getTemplate,
-  getStaticData,
+  template,
+  componentDidMount,
   children: [Form],
+  helpers: { onSubmit },
 });

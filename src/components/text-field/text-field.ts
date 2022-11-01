@@ -1,4 +1,4 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { prepareComponent } from '../../core/base/component';
 import './text-field.scss';
 
 export type TTextFieldProps = {
@@ -7,8 +7,7 @@ export type TTextFieldProps = {
   value: string;
 };
 
-function getTemplate(this: Component) {
-  return `
+const template = `
     <div class="text-field">
       <span class="text-field__title">{{ props.label }}</span>
       <input 
@@ -20,10 +19,8 @@ function getTemplate(this: Component) {
       />
     </div>
   `;
-}
 
 export const TextField = prepareComponent<TTextFieldProps>({
   name: 'text-field',
-  getTemplate,
-  events: {},
+  template,
 });

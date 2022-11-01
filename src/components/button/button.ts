@@ -9,8 +9,7 @@ export type TButtonProps = {
 
 export const Button = prepareComponent<TButtonProps>({
   name: 'button',
-  getTemplate: () =>
-    '<button class="btn" type="{{ props.type }}" data-event="[click:handleSubmit]" >{{ props.label }}</button>',
+  template: '<button class="btn" type="{{ props.type }}" data-event="[click:handleSubmit]" >{{ props.label }}</button>',
   events: {
     handleSubmit(this: Component<TButtonProps>) {
       if (this.props.onClick) this.props.onClick();

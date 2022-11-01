@@ -1,11 +1,9 @@
 import { AnyType } from '../../shared/models';
-import { Component, prepareComponent } from '../component/Component';
-
-export interface IClassComponent {
-  new (...args: AnyType[]): Component<AnyType>;
-}
+import { prepareComponent } from '../component/Component';
 
 export type TEvents = Record<string, EventListener>;
+
+export type THelpers = Record<string, (...arg: AnyType[]) => AnyType>;
 
 export type ISimpleObject = Record<string | symbol | number, AnyType>;
 
@@ -14,12 +12,11 @@ export type TDataObserverProps<TData> = {
   prevData: TData;
 };
 
-export type TElementControllerProps<THelpers extends ISimpleObject = ISimpleObject> = {
+export type TElementControllerProps = {
   id: string;
   hbsTmp: string;
   events?: TEvents;
   helpers?: THelpers;
-  children?: TPreComponent[];
 };
 
 export type TChildProps = {
@@ -31,12 +28,11 @@ export type TPreComponent = ReturnType<typeof prepareComponent<AnyType>>;
 
 export type TConfig<
   TProps extends ISimpleObject = ISimpleObject,
-  TStatic extends ISimpleObject = ISimpleObject,
 > = {
   name: string;
-  getTemplate: () => string;
+  template: string;
   events?: TEvents;
-  registerHelpers?: () => TStatic;
+  helpers?: THelpers;
   children?: TPreComponent[];
   componentDidMount?: (props: TDataObserverProps<TProps>) => void
   componentDidUpdate?: (props: TDataObserverProps<TProps>) => void

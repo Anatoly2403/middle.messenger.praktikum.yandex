@@ -20,14 +20,14 @@ export class EventBus<TData extends ISimpleObject = ISimpleObject> {
       throw new Error(`Нет события: ${event}`);
     }
 
-    this.listeners[event] = this.listeners[event].filter(listener => listener !== callback);
+    this.listeners[event] = this.listeners[event].filter((listener) => listener !== callback);
   }
 
   emit(event: EEvents, ...args: Array<TData>) {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
-    this.listeners[event].forEach(listener => {
+    this.listeners[event].forEach((listener) => {
       listener(...args);
     });
   }

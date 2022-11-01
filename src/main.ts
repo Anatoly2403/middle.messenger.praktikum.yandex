@@ -1,16 +1,16 @@
-import { registerHbHelpers, renderDOM } from './core/base/utils';
-import { ProfilePage } from './pages/profile-page/profile-page';
+import { renderDOM } from './core/base/utils';
+import { SigninPage } from './pages/signin-page/signin-page';
 
-registerHbHelpers();
-
-const page = ProfilePage({
-  info: [],
-  avatar: {
-    src: '',
+const page = SigninPage({
+  fields: [],
+  button: {
+    type: '',
+    label: '',
+    onClick: undefined,
   },
-  buttons: [],
-  modal: {
-    show: false,
+  link: {
+    href: '',
+    label: '',
   },
 });
 

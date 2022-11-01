@@ -31,12 +31,12 @@ type TProfilePageProps = {
     formData?: {
       title: string;
       fields: Array<TInputFieldProps>;
-      submit: TButtonProps;
+      button: TButtonProps;
     };
   };
 };
 
-const formData = {
+const userDataFormMeta = {
   title: 'Обновите данные',
   fields: [
     { type: 'inputField', name: 'mail', label: 'Почта', validators: [validateEmail] },
@@ -46,57 +46,29 @@ const formData = {
     { type: 'inputField', name: 'phoneNumber', label: 'Телефон', validators: [validatePhone] },
     { type: 'inputField', name: 'password', label: 'Пароль', validators: [validatePassword] },
   ],
-  submit: {
+  button: {
     type: 'submit',
     label: 'Обновить',
   },
 };
 
-function registerHelpers(this: Component) {
-  return {
-    arrowBtnClick: () => (window.location.href = '/main'),
-    avatarClick: () => console.log('avatarClick'),
-    textButtonClick: (name: string) => {
-      if (name === 'changeData') {
-        this.setNewProps({
-          ...this.props,
-          modal: { show: true, formData: formData },
-        });
-        console.log(this.props);
-      } else {
-        console.log();
-      }
-    },
-    hideModal: () => {
-      this.setNewProps({
-        ...this.props,
-        modal: { show: false, formData: formData },
-      });
-    },
-    saveData: (data: any) => {
-      console.log(data);
-    },
-  };
-}
-
-function getTemplate(this: Component) {
-  return `
+const template = `
     <div class="profile">
       {{#if props.modal.show}}  
-        {{{          
+        {{{
           modal
             show=props.modal.show
-            hideModal="[helpers.hideModal]"
-            saveData="[helpers.saveData]"
+            hideModal=helpers.hideModal
+            saveData=helpers.saveData
             formData=props.modal.formData
-        }}} 
-      {{/if}}        
+        }}}    
+      {{/if}}    
       <div class="profile__block_left">
-        {{{ arrow-button onClick="[arrowBtnClick]"}}}
+        {{{ arrow-button onClick=helpers.arrowBtnClick}}}
       </div>
       <div class="profile__block_right">
         <div class="profile__avatar">
-          {{{ avatar avatarSrc=props.avatar.src avatarClick="[avatarClick]"}}}
+          {{{ avatar avatarSrc=props.avatar.src avatarClick=helpers.avatarClick}}}
         </div>
         <div class="profile__user-data">
           <div class="profile__main-info-wrapper">     
@@ -107,14 +79,14 @@ function getTemplate(this: Component) {
         </div>
         <div class="profile__control">
           <div class="profile__main-btns-wrapper">
-            {{#each props.buttons}}
+            {{#each props.buttons}}           
               {{{ 
                 text-button 
                   key=@index 
                   name=name  
                   label=label 
                   type=type 
-                  onTextBtnClick="[textButtonClick]" 
+                  onTextBtnClick=../helpers.textButtonClick
               }}}   
             {{/each}} 
           </div>
@@ -122,35 +94,60 @@ function getTemplate(this: Component) {
       </div>
     </div>
   `;
+
+function componentDidMount(this: Component<TProfilePageProps>, props: TDataObserverProps<TProfilePageProps>) {
+  this.setProps({
+    ...props.data,
+    info: [
+      { name: 'mail', label: 'Почта', value: '' },
+      { name: 'login', label: 'Логин', value: '' },
+      { name: 'name', label: 'Имя', value: '' },
+      { name: 'lastName', label: 'Фамилия', value: '' },
+      { name: 'phoneNumber', label: 'Телефон', value: '' },
+      { name: 'password', label: 'Пароль', value: '' },
+    ],
+    avatar: {
+      src: avatarSrc,
+    },
+    buttons: [
+      { name: 'changeData', label: 'Изменить данные' },
+      { name: 'logout', label: 'Выйти', type: 'danger' },
+    ],
+    modal: {
+      show: false,
+    },
+  });
+}
+
+function arrowBtnClick() {
+  window.location.href = '/main';
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+function avatarClick() {}
+
+function textButtonClick(this: Component<TProfilePageProps>, name: string) {
+  if (name === 'changeData') {
+    this.setProps((props) => ({ ...props, modal: { show: true, formData: userDataFormMeta } }));
+  }
+}
+
+function hideModal(this: Component<TProfilePageProps>) {
+  this.setProps((props) => ({ ...props, modal: { show: false } }));
+}
+
+function saveData(this: Component<TProfilePageProps>, data: Record<string, string>) {
+  this.setProps((props) => ({
+    ...props,
+    info: props.info.map((item) => ({ ...item, value: data[item.name] })),
+    modal: { show: false },
+  }));
 }
 
 export const ProfilePage = prepareComponent<TProfilePageProps>({
   name: 'profile-page',
-  getTemplate,
-  registerHelpers,
+  template,
+  componentDidMount,
   children: [Form, ArrowButton, Avatar, TextField, TextButton, Modal],
-  componentDidMount(this: Component<TProfilePageProps>, props: TDataObserverProps<TProfilePageProps>) {
-    this.setNewProps({
-      ...props.data,
-      info: [
-        { name: 'mail', label: 'Почта', value: '' },
-        { name: 'login', label: 'Логин', value: '' },
-        { name: 'name', label: 'Имя', value: '' },
-        { name: 'lastName', label: 'Фамилия', value: '' },
-        { name: 'phoneNumber', label: 'Телефон', value: '' },
-        { name: 'password', label: 'Пароль', value: '' },
-      ],
-      avatar: {
-        src: avatarSrc,
-      },
-      buttons: [
-        { name: 'changeData', label: 'Изменить данные' },
-        { name: 'logout', label: 'Выйти', type: 'danger' },
-      ],
-      modal: {
-        show: false,
-        formData: formData,
-      },
-    });
-  },
+  helpers: { arrowBtnClick, avatarClick, textButtonClick, hideModal, saveData },
 });

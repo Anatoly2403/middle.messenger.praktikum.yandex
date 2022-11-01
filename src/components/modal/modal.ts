@@ -16,34 +16,34 @@ export type TModalProps = {
   saveData: () => void;
 };
 
-function getTemplate() {
-  return `
-    
-          <div class="modal-wrapper" data-event="[click:hideModal]">     
-            {{{ 
-              form 
-                onSubmit=props.saveData
-                title=props.formData.title 
-                fields=props.formData.fields
-                submit=props.formData.submit
-            }}}         
-          </div>
- 
-    `;
+const template = `    
+    <div class="modal-wrapper" data-event="[click:hideModal]"> 
+      <div class="form__wrapper">
+        {{{ 
+          form 
+            onSubmit=props.saveData
+            title=props.formData.title 
+            fields=props.formData.fields
+            button=props.formData.button
+            onSubmit=props.formData.saveData
+        }}}
+      </div>           
+    </div> 
+  `;
+
+function buttonClick(this: Component<TModalProps>) {
+  if (this.props.saveData) this.props.saveData();
+}
+
+function hideModal(this: Component<TModalProps>, e: Event) {
+  if ((e.target as Element).className === 'modal-wrapper') {
+    if (this.props.hideModal) this.props.hideModal();
+  }
 }
 
 export const Modal = prepareComponent<TModalProps>({
   name: 'modal',
-  getTemplate,
+  template,
   children: [Form],
-  events: {
-    buttonClick(this: Component<TModalProps>) {
-      if (this.props.saveData) this.props.saveData();
-    },
-    hideModal(this: Component<TModalProps>, e: Event) {
-      if ((e.target as Element).className === 'modal-wrapper') {
-        if (this.props.hideModal) this.props.hideModal();
-      }
-    },
-  },
+  events: { buttonClick, hideModal },
 });

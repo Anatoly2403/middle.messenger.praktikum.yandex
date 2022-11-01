@@ -8,13 +8,12 @@ import { ISimpleObject } from '../../core/base/models';
 export type TFormProps = {
   title: string;
   fields: Array<TInputFieldProps>;
-  submit: TButtonProps;
+  button: TButtonProps;
   link?: TLinkProps;
   onSubmit: (data: ISimpleObject) => void;
 };
 
-function getTemplate(this: Component) {
-  return `
+const template = `
     <form class="form" data-event="[submit:onSubmit]">
       <div class="form__title">
         <h3>{{ props.title }}</h3>
@@ -29,7 +28,7 @@ function getTemplate(this: Component) {
         </div>
       </div>
       <div class="form__submit">
-        {{{ button type=props.submit.type label=props.submit.label }}}
+        {{{ button type=props.button.type label=props.button.label }}}
       </div>
       {{#if props.link }}
         <div class="form__link">
@@ -38,31 +37,30 @@ function getTemplate(this: Component) {
       {{/if}}           
     </form>
   `;
+
+function onSubmit(this: Component<TFormProps>, e: Event) {
+  e.preventDefault();
+  const inputs = (e.target as HTMLElement).querySelectorAll('input');
+  const formIsInvalid = this.props.fields.some((item) => {
+    const field = Array.from(inputs).find((input) => input.name === item.name);
+    return item.validators && field && field.value
+      ? item.validators.some((validator) => !validator(field.value))
+      : true;
+  });
+
+  if (formIsInvalid) return;
+
+  const data = Array.from(inputs).reduce<ISimpleObject>((acc, item) => {
+    acc[item.name] = item.value;
+    return acc;
+  }, {});
+
+  this.props.onSubmit(data);
 }
 
 export const Form = prepareComponent<TFormProps>({
   name: 'form',
-  getTemplate,
+  template,
   children: [Link, InputField, Button],
-  events: {
-    onSubmit(this: Component<TFormProps>, e: Event) {
-      e.preventDefault();
-      const inputs = (e.target as HTMLElement).querySelectorAll('input');
-      const formIsInvalid = this.props.fields.some((item) => {
-        const field = Array.from(inputs).find((input) => input.name === item.name);
-        return item.validators && field && field.value
-          ? item.validators.some((validator) => !validator(field.value))
-          : true;
-      });
-
-      if (formIsInvalid) return;
-
-      const data = Array.from(inputs).reduce<ISimpleObject>((acc, item) => {
-        acc[item.name] = item.value;
-        return acc;
-      }, {});
-
-      this.props.onSubmit(data);
-    },
-  },
+  events: { onSubmit },
 });

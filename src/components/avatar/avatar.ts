@@ -6,16 +6,15 @@ export type TAvatarProps = {
   avatarClick?: () => void;
 };
 
+function handleAvatarClick(this: Component<TAvatarProps>) {
+  if (this.props.avatarClick) this.props.avatarClick();
+}
+
 export const Avatar = prepareComponent<TAvatarProps>({
   name: 'avatar',
-  getTemplate: () =>
-    `<div class="avatar" data-event="[click:handleAvatarClick]">
-        <img class="profile-avatar__avatar" src="{{ props.avatarSrc }}" alt="avatar"/>
-      </div>
-    `,
-  events: {
-    handleAvatarClick(this: Component<TAvatarProps>) {
-      if (this.props.avatarClick) this.props.avatarClick();
-    },
-  },
+  template: `<div class="avatar" data-event="[click:handleAvatarClick]">
+                <img class="profile-avatar__avatar" src="{{ props.avatarSrc }}" alt="avatar"/>
+            </div>
+  `,
+  events: { handleAvatarClick },
 });

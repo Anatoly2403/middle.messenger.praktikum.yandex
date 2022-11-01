@@ -29,11 +29,7 @@
 
     &_invalid {
       border-bottom: 1px solid $red;
+      color: $red;
     }
-  }
-
-  &__error {
-    font-size: 8px;
-    color: $red;
   }
 }

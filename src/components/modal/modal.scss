@@ -8,29 +8,16 @@
   left: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   background: $background-black-opacity4;
   z-index: 999;
 }
 
-.modal {
-  margin: 0 auto;
-  padding: 40px 30px 0px;
-  width: 340px;
-  min-height: 237px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 6px $background-black-opacity8;
+
+.form__wrapper {
+  min-height: 360px;
+  background-color: $white;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
   border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 45px;
-
-  &__button {
-    width: 100%;
-  }
-
-  &__structure {
-    width: 100%;
-  }
-
+  width: 360px;
 }

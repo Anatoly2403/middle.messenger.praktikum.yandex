@@ -3,36 +3,37 @@ import { ElementController } from '../elementController';
 import { DataObservable } from '../dataObservable';
 import { EventBus } from '../eventBus';
 import { EEvents, ISimpleObject, TConfig, TDataObserverProps, TEvents } from '../models';
-import { registerComponent } from '../utils';
+import { ChildrenController } from '../childrenController';
 
-export class Component<TProps extends ISimpleObject = ISimpleObject, TStatic extends ISimpleObject = ISimpleObject> {
+export class Component<TProps extends ISimpleObject = ISimpleObject> {
   private _id: string;
-  private _uniqueKey?: string;
   private _name: string;
   private _props: DataObservable<TProps>;
   private _unsubscribeProps: () => void;
-  private _eventBus: EventBus = new EventBus();
+  private _eventBus: EventBus<TProps> = new EventBus<TProps>();
   private _elementController: ElementController<TProps>;
+  private _childrenController: ChildrenController;
   private _componentDidMount?: (props: TDataObserverProps<TProps>) => void;
   private _componentDidUpdate?: (props: TDataObserverProps<TProps>) => void;
 
-  constructor(id: string, config: TConfig<TStatic>, props?: TProps) {
+  constructor(id: string, config: TConfig, props?: TProps) {
     this._id = id;
     this._name = config.name;
     this._props = new DataObservable<TProps>(props || ({} as TProps));
     this._componentDidMount = config.componentDidMount?.bind(this);
     this._componentDidUpdate = config.componentDidUpdate?.bind(this);
-
+    this._childrenController = new ChildrenController(config.children || []);
     this._elementController = new ElementController<TProps>({
       id: this._id,
-      hbsTmp: config.getTemplate(),
+      hbsTmp: config.template,
       events: this._bindContext(config.events),
-      children: config.children,
-      helpers: config.registerHelpers?.bind(this)(),
+      helpers: this._bindContext(config.helpers),
     });
 
     this._registerEvents();
-    this._unsubscribeProps = this._props.subscribe(() => this._eventBus.emit(EEvents.UPDATE));
+    this._unsubscribeProps = this._props.subscribe(({ prevData, data }) =>
+      this._eventBus.emit(EEvents.UPDATE, prevData, data),
+    );
   }
 
   public get id(): string {
@@ -43,16 +44,8 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TStatic ext
     return this._name;
   }
 
-  public get uniqueKey() {
-    return this._uniqueKey;
-  }
-
   public get props() {
     return { ...this._props.data };
-  }
-
-  public get children() {
-    return this._elementController.children;
   }
 
   private _bindContext(events?: TEvents) {
@@ -68,51 +61,43 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TStatic ext
     this._eventBus.on(EEvents.UPDATE, this.updateComponent.bind(this));
   }
 
-  public setUniqueKey(key?: string) {
-    this._uniqueKey = key;
-  }
-
-  private updateComponent() {
+  private updateComponent(prevData: TProps, data: TProps) {
     this._elementController.compileTemplate(this._props.data);
     this._elementController.mountTemplate();
-    this._elementController.resetChildren();
-    if (this._componentDidUpdate)
-      this._componentDidUpdate.call(this, { prevData: this._props.prevData, data: { ...this._props.data } });
+    if (this._componentDidUpdate) this._componentDidUpdate.call(this, { prevData, data: { ...data } });
+    this._childrenController.updateChildren();
   }
 
-  public mountComponent() {
-    this._elementController.setParentElement();
+  private mountComponent() {
     this._elementController.compileTemplate(this._props.data);
     this._elementController.mountTemplate();
-    this._elementController.initChildren();
     if (this._componentDidMount)
       this._componentDidMount.call(this, { prevData: this._props.prevData, data: { ...this._props.data } });
+    this._childrenController.mountChildren();
   }
 
-  public resetTemplate() {
-    this._elementController.setParentElement();
-    this._elementController.mountTemplate();
-  }
-
-  public setNewProps(data: TProps) {
-    this._props.updateData(data);
+  public setProps(data: TProps | ((data: TProps) => TProps)) {
+    if (typeof data === 'function') this._props.updateData(data({ ...this._props.data }));
+    else this._props.updateData(data);
   }
 
   public mount() {
     this._eventBus.emit(EEvents.MOUNT);
   }
+
+  public setParentElement(element: Element) {
+    this._elementController.setParentElement(element);
+    this._elementController.mountTemplate();
+  }
 }
 
-export function prepareComponent<
-  TProps extends ISimpleObject = ISimpleObject,
-  TStatic extends ISimpleObject = ISimpleObject
->(config: TConfig<TProps, TStatic>) {
+export function prepareComponent<TProps extends ISimpleObject = ISimpleObject>(config: TConfig<TProps>) {
   const id = makeUUID();
-  registerComponent(id, config.name);
-  function createComponentWithProps(props: TProps) {
-    return new Component<TProps, TStatic>(id, config, props);
+  function createComponent(props: TProps) {
+    return new Component<TProps>(id, config, props);
   }
-  createComponentWithProps.prototype['name'] = config.name;
+  createComponent.prototype['name'] = config.name;
+  createComponent.prototype['id'] = id;
 
-  return createComponentWithProps;
+  return createComponent;
 }

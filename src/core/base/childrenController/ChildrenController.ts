@@ -1,83 +1,126 @@
-import { AnyType } from '../../shared/models';
+import Handlebars, { HelperOptions } from 'handlebars';
 import { Component } from '../component';
-import { ISimpleObject, TChildProps, TPreComponent } from '../models';
-import { getPath, isPropEvent, parsePropNameWithKey } from '../utils';
+import { ISimpleObject, TPreComponent } from '../models';
 
-export class ChildrenController<TStatic extends ISimpleObject = ISimpleObject> {
+export class ChildrenController {
   private _initialChildren: TPreComponent[] = [];
-  private _childrenProps: Record<string, ISimpleObject> = {};
-  private _children: Component[] = [];
-  private _helpers: TStatic;
+  private _children: Record<string, Component | Component[]> = {};
+  private _childProps: Record<string, ISimpleObject | ISimpleObject[]> = {};
 
-  constructor(children: TPreComponent[], helpers?: TStatic) {
+  constructor(children: TPreComponent[]) {
     this._initialChildren = children;
-    this._helpers = helpers || ({} as TStatic);
-    this.setChildrenProps = this.setChildrenProps.bind(this);
+    this._registerChildren(children, this._setProps.bind(this));
   }
 
-  public get children() {
-    return this._children;
+  private _setProps(id: string, hash: ISimpleObject) {
+    const { key, ...props } = hash;
+    const record = this._childProps[id];
+    if (key === undefined) {
+      this._childProps[id] = props;
+    } else {
+      let childPropsArray: ISimpleObject[] = [];
+      if (Array.isArray(record)) childPropsArray = record;
+      this._childProps[id] = [...childPropsArray.slice(0, key), props, ...childPropsArray.slice(key + 1)];
+    }
   }
 
-  private _prepareProps(props: ISimpleObject) {
-    return Object.keys(props).reduce<ISimpleObject>(
-      (acc, key) => {
-        if (isPropEvent(props[key])) {
-          const pathArray = getPath(props[key]);
-          const value = pathArray.reduce<AnyType>((acc, item) => {
-            if (!acc) acc = this._helpers[item];
-            else acc = acc[item];
-            return acc;
-          }, undefined);
-
-          acc[key] = value;
-        }
-        return acc;
-      },
-      { ...props },
-    );
+  private _setChildren(child: Component, id: string, key?: number) {
+    const record = this._children[id];
+    if (key === undefined) {
+      this._children[id] = child;
+    } else {
+      let childArray: Component[] = [];
+      if (Array.isArray(record)) childArray = record;
+      this._children[id] = [...childArray.slice(0, key), child, ...childArray.slice(key + 1)];
+    }
   }
 
-  public resetChildren() {
-    Object.keys(this._childrenProps).forEach((propNameWithKey) => {
-      const props = this._childrenProps[propNameWithKey];
-      const { key, name } = parsePropNameWithKey(propNameWithKey);
-      const child = this._children.find((child) =>
-        key ? child.name === name && key === child.uniqueKey : child.name === name,
-      );
-
-      if (!child) {
-        const initialChild = this._initialChildren.find((item) => item.prototype['name'] === name);
-        if (!initialChild) return;
-        const childFromInit = initialChild(props);
-        childFromInit.setUniqueKey(key);
-        this._children.push(childFromInit);
-        childFromInit.mount();
-      } else {
-        child.setNewProps(props);
-        child.resetTemplate();
-      }
-    });
+  private _getChildParentArray(id: string) {
+    return document.querySelectorAll(`[data-child="${id}"]`);
   }
 
-  public setChildrenProps(childProps: TChildProps) {
-    const key = childProps.props.key === undefined ? [] : `[${childProps.props.key}]`;
-    this._childrenProps[`${childProps.name}${key}`] = this._prepareProps(childProps.props);
-  }
-
-  public initChildren() {
-    Object.keys(this._childrenProps).forEach((propNameWithKey) => {
-      const { key, name } = parsePropNameWithKey(propNameWithKey);
-      const initialChild = this._initialChildren.find((item) => item.prototype['name'] === name);
-      if (!initialChild) return;
-      const props = this._childrenProps[propNameWithKey];
-      const child = initialChild(props);
-      child.setUniqueKey(key);
-      this._children.push(child);
+  private _registerChildren(children: TPreComponent[], callback: (id: string, hash: ISimpleObject) => void) {
+    children.forEach((child) => {
+      Handlebars.registerHelper(child.prototype.name, ({ hash }: HelperOptions) => {
+        callback(child.prototype.id, hash);
+        return `<div data-child="${child.prototype.id}"></div>`;
+      });
     });
   }
 
   public mountChildren() {
-    this._children.forEach((child) => child.mount());
+    Object.keys(this._childProps).forEach((key) => {
+      const parents = this._getChildParentArray(key);
+      const initChild = this._initialChildren.find((item) => item.prototype.id === key);
+      if (!initChild) return;
+      const props = this._childProps[key];
+      if (Array.isArray(props)) {
+        props.forEach((props, idx) => {
+          const child = initChild(props);
+          child.setParentElement(parents[idx]);
+          child.mount();
+          this._setChildren(child, key, idx);
+        });
+      } else {
+        const child = initChild(props);
+        child.setParentElement(parents[0]);
+        child.mount();
+        this._setChildren(child, key);
+      }
+    });
+  }
+
+  public updateChildren() {
+    Object.keys(this._childProps).forEach((key) => {
+      const propsRecord = this._childProps[key];
+      const childRecord = this._children[key];
+      const parents = this._getChildParentArray(key);
+      const initChild = this._initialChildren.find((item) => item.prototype.id === key);
+      if (Array.isArray(propsRecord) && Array.isArray(childRecord)) {
+        propsRecord.forEach((props, idx) => {
+          const child = childRecord[idx];
+          if (child) {
+            child.setParentElement(parents[idx]);
+            child.setProps(props);
+          } else {
+            if (!initChild) return;
+            const newChild = initChild(props);
+            newChild.setParentElement(parents[idx]);
+            newChild.mount();
+            this._setChildren(newChild, key, idx);
+          }
+        });
+      } else {
+        if (childRecord instanceof Component) {
+          childRecord.setParentElement(parents[0]);
+          childRecord.setProps(propsRecord);
+        } else {
+          if (!initChild) return;
+          const newChild = initChild(propsRecord);
+          newChild.setParentElement(parents[0]);
+          newChild.mount();
+          this._setChildren(newChild, key);
+        }
+      }
+
+      // const initChild = this._initialChildren.find((item) => item.prototype.id === key);
+      // if (!initChild) return;
+      // const props = this._childProps[key];
+      // if (Array.isArray(props)) {
+      //   props.forEach((props, idx) => {
+      //     const child = initChild(props);
+      //     const parents = this._getChildParentArray(child.id);
+      //     child.setParentElement(parents[idx]);
+      //     child.mount();
+      //     this._setChildren(child, key, idx);
+      //   });
+      // } else {
+      //   const child = initChild(props);
+      //   const parents = this._getChildParentArray(child.id);
+      //   child.setParentElement(parents[0]);
+      //   child.mount();
+      //   this._setChildren(child, key);
+      // }
+    });
   }
 }

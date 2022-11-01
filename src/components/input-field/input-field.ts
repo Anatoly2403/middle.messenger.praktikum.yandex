@@ -2,6 +2,7 @@ import { Component, prepareComponent } from '../../core/base/component';
 import './input-field.scss';
 
 export type TInputFieldProps = {
+  type: string;
   name: string;
   label: string;
   validators?: Array<(value: string) => boolean>;
@@ -34,8 +35,7 @@ function handleBlur(this: Component<TInputFieldProps>, e: Event) {
   label.classList.add(`input-field__label_low`);
 }
 
-function getTemplate(this: Component) {
-  return `
+const template = `
     <div class="input-field">
       <label class="input-field__label input-field__label_low" for="{{ props.name }}">{{ props.label }}</label>
         <input 
@@ -43,13 +43,11 @@ function getTemplate(this: Component) {
           name="{{ props.name }}" 
           data-event="[focus:handleFocus, blur:handleBlur]"  
         />
-      <span class="input-field__error"></span>
     </div>
   `;
-}
 
 export const InputField = prepareComponent<TInputFieldProps>({
   name: 'input-field',
-  getTemplate,
+  template,
   events: { handleFocus, handleBlur },
 });

@@ -1,30 +1,20 @@
 import { compile } from 'handlebars';
-import { EManageEventsAction, ISimpleObject, TElementControllerProps, TEvents } from '../models';
+import { EManageEventsAction, ISimpleObject, TElementControllerProps, TEvents, THelpers } from '../models';
 import { parseEvent } from '../utils';
-import { ChildrenController } from '../childrenController';
 
-export class ElementController<
-  TData extends ISimpleObject = ISimpleObject,
-  TStatic extends ISimpleObject = ISimpleObject
-> {
+export class ElementController<TData extends ISimpleObject = ISimpleObject> {
   private _id: string;
-  private _helpers?: TStatic;
+  private _helpers?: THelpers;
   private _hbsTmp: string;
   private _events: TEvents;
   private _compiledTemplate: string | null = null;
   private _parentElement: Element | null = null;
-  private _childrenController: ChildrenController;
 
-  constructor(props: TElementControllerProps<TStatic>) {
+  constructor(props: TElementControllerProps) {
     this._id = props.id;
     this._hbsTmp = props.hbsTmp;
     this._events = props.events || {};
     this._helpers = props.helpers;
-    this._childrenController = new ChildrenController<TStatic>(props.children || [], props.helpers);
-  }
-
-  public get children() {
-    return this._childrenController.children;
   }
 
   private _manageEvents(action: EManageEventsAction) {
@@ -40,20 +30,11 @@ export class ElementController<
     });
   }
 
-  public setParentElement() {
-    const elementWithId = document.querySelector(`[data-child="${this._id}"]`);
-    if (!elementWithId) return;
-    elementWithId.removeAttribute('data-child');
-    this._parentElement = elementWithId;
-  }
-
   public compileTemplate(data: TData) {
-    this._manageEvents(EManageEventsAction.REMOVE);
     const elemWrapper = document.createElement('div');
     elemWrapper.innerHTML = compile(this._hbsTmp)({
       props: data,
       helpers: this._helpers,
-      setChildProps: this._childrenController.setChildrenProps,
     });
     const elem = (elemWrapper.firstElementChild as unknown) as HTMLOrSVGElement;
     elem.dataset.id = this._id;
@@ -61,17 +42,13 @@ export class ElementController<
   }
 
   public mountTemplate() {
+    this._manageEvents(EManageEventsAction.REMOVE);
     if (!this._parentElement || !this._compiledTemplate) return;
     this._parentElement.innerHTML = this._compiledTemplate;
     this._manageEvents(EManageEventsAction.ADD);
   }
 
-  public initChildren() {
-    this._childrenController.initChildren();
-    this._childrenController.mountChildren();
-  }
-
-  public resetChildren() {
-    this._childrenController.resetChildren();
+  public setParentElement(parent: Element) {
+    this._parentElement = parent;
   }
 }
