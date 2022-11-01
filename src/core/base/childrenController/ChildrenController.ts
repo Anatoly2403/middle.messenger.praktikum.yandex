@@ -102,25 +102,6 @@ export class ChildrenController {
           this._setChildren(newChild, key);
         }
       }
-
-      // const initChild = this._initialChildren.find((item) => item.prototype.id === key);
-      // if (!initChild) return;
-      // const props = this._childProps[key];
-      // if (Array.isArray(props)) {
-      //   props.forEach((props, idx) => {
-      //     const child = initChild(props);
-      //     const parents = this._getChildParentArray(child.id);
-      //     child.setParentElement(parents[idx]);
-      //     child.mount();
-      //     this._setChildren(child, key, idx);
-      //   });
-      // } else {
-      //   const child = initChild(props);
-      //   const parents = this._getChildParentArray(child.id);
-      //   child.setParentElement(parents[0]);
-      //   child.mount();
-      //   this._setChildren(child, key);
-      // }
     });
   }
 }

@@ -3,6 +3,7 @@ import './input-field.scss';
 
 export type TInputFieldProps = {
   type: string;
+  fieldType?: string;
   name: string;
   label: string;
   validators?: Array<(value: string) => boolean>;
@@ -39,7 +40,8 @@ const template = `
     <div class="input-field">
       <label class="input-field__label input-field__label_low" for="{{ props.name }}">{{ props.label }}</label>
         <input 
-          class="input-field__input" type="text" 
+          class="input-field__input" 
+          type={{#if props.fieldType}} {{props.fieldType}} {{else}}'text'{{/if}}
           name="{{ props.name }}" 
           data-event="[focus:handleFocus, blur:handleBlur]"  
         />

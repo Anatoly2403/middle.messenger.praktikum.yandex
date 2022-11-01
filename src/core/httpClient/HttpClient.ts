@@ -50,7 +50,7 @@ export class HttpClient {
       xhr.ontimeout = reject;
 
       if (headers) {
-        Object.keys(headers).forEach(key => {
+        Object.keys(headers).forEach((key) => {
           xhr.setRequestHeader(key, headers[key]);
         });
       }

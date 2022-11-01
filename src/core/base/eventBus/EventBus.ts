@@ -1,6 +1,5 @@
 import { EEvents, ISimpleObject } from '../models';
 
-// реализация EventBus понятна, не стал использовать его в компоненте так как можно обойтись без него.
 export class EventBus<TData extends ISimpleObject = ISimpleObject> {
   private listeners: Record<string, Array<(...args: Array<TData>) => void>>;
 

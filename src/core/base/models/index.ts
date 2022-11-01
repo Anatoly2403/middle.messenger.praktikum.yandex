@@ -19,16 +19,9 @@ export type TElementControllerProps = {
   helpers?: THelpers;
 };
 
-export type TChildProps = {
-  name: string;
-  props: ISimpleObject
-}
-
 export type TPreComponent = ReturnType<typeof prepareComponent<AnyType>>;
 
-export type TConfig<
-  TProps extends ISimpleObject = ISimpleObject,
-> = {
+export type TConfig<TProps extends ISimpleObject = ISimpleObject> = {
   name: string;
   template: string;
   events?: TEvents;

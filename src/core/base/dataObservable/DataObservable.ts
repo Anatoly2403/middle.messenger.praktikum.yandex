@@ -4,7 +4,6 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
   private _data: TData;
   private _prevData: TData;
   private _subscribers: Array<(props: TDataObserverProps<TData>) => void> = [];
-  private _hasDataChange = false;
 
   constructor(data: TData) {
     this._data = this.makeAsProxy(data, this._callSubscribers.bind(this));
@@ -18,10 +17,6 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
 
   public get prevData(): TData {
     return this._prevData;
-  }
-
-  public hasDataChange() {
-    return this._hasDataChange;
   }
 
   private makeAsProxy(data: TData, callback: (props: TDataObserverProps<TData>) => void) {
@@ -43,13 +38,11 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
   }
 
   private _callSubscribers(props: TDataObserverProps<TData>) {
-    this._hasDataChange = true;
     this._prevData = props.prevData;
     this._subscribers.forEach((fn) => fn(props));
   }
 
   public updateData(data: TData) {
-    this._hasDataChange = false;
     Object.assign(this._data, data);
   }
 

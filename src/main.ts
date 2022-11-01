@@ -1,16 +1,15 @@
 import { renderDOM } from './core/base/utils';
-import { SigninPage } from './pages/signin-page/signin-page';
+import { ProfilePage } from './pages/profile-page/profile-page';
 
-const page = SigninPage({
-  fields: [],
-  button: {
-    type: '',
-    label: '',
-    onClick: undefined,
+const page = ProfilePage({
+  avatar: {
+    src: '',
   },
-  link: {
-    href: '',
-    label: '',
+  info: [],
+  buttons: [],
+  modal: {
+    show: false,
+    formData: undefined,
   },
 });
 

@@ -11,6 +11,7 @@ import { TextButton } from '../../components/text-button/text-button';
 import { Modal } from '../../components/modal/modal';
 import { TInputFieldProps } from '../../components/input-field';
 import { TButtonProps } from '../../components/button';
+import { TFileFieldProps } from '../../components/file-field';
 
 type TProfilePageProps = {
   avatar: {
@@ -30,7 +31,7 @@ type TProfilePageProps = {
     show: boolean;
     formData?: {
       title: string;
-      fields: Array<TInputFieldProps>;
+      fields: Array<TInputFieldProps | TFileFieldProps>;
       button: TButtonProps;
     };
   };
@@ -44,11 +45,20 @@ const userDataFormMeta = {
     { type: 'inputField', name: 'name', label: 'Имя', validators: [validateName] },
     { type: 'inputField', name: 'lastName', label: 'Фамилия', validators: [validateName] },
     { type: 'inputField', name: 'phoneNumber', label: 'Телефон', validators: [validatePhone] },
-    { type: 'inputField', name: 'password', label: 'Пароль', validators: [validatePassword] },
+    { type: 'inputField', name: 'password', label: 'Пароль', fieldType: 'password', validators: [validatePassword] },
   ],
   button: {
     type: 'submit',
     label: 'Обновить',
+  },
+};
+
+const avatarFormMeta = {
+  title: 'Загрузите файл',
+  fields: [{ type: 'fileField', name: 'file', label: 'Выбрать файл на компьютере', required: true }],
+  button: {
+    type: 'submit',
+    label: 'Поменять',
   },
 };
 
@@ -123,25 +133,27 @@ function arrowBtnClick() {
   window.location.href = '/main';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-function avatarClick() {}
+function avatarClick(this: Component<TProfilePageProps>) {
+  this.setProps((props) => ({ ...props, modal: { show: true, formData: { ...avatarFormMeta } } }));
+}
 
 function textButtonClick(this: Component<TProfilePageProps>, name: string) {
   if (name === 'changeData') {
-    this.setProps((props) => ({ ...props, modal: { show: true, formData: userDataFormMeta } }));
+    this.setProps((props) => ({ ...props, modal: { show: true, formData: { ...userDataFormMeta } } }));
   }
 }
 
 function hideModal(this: Component<TProfilePageProps>) {
-  this.setProps((props) => ({ ...props, modal: { show: false } }));
+  this.setProps((props) => ({ ...props, modal: { show: false, formData: undefined } }));
 }
 
 function saveData(this: Component<TProfilePageProps>, data: Record<string, string>) {
   this.setProps((props) => ({
     ...props,
     info: props.info.map((item) => ({ ...item, value: data[item.name] })),
-    modal: { show: false },
+    modal: { ...props.modal, show: false },
   }));
+  alert(JSON.stringify(data));
 }
 
 export const ProfilePage = prepareComponent<TProfilePageProps>({
