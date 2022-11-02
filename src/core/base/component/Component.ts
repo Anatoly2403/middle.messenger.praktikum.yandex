@@ -87,7 +87,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject> {
 
   public setParentElement(element: Element) {
     this._elementController.setParentElement(element);
-    this._elementController.mountTemplate();
+    this._childrenController.setParent(element);
   }
 }
 

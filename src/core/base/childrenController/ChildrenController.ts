@@ -6,6 +6,7 @@ export class ChildrenController {
   private _initialChildren: TPreComponent[] = [];
   private _children: Record<string, Component | Component[]> = {};
   private _childProps: Record<string, ISimpleObject | ISimpleObject[]> = {};
+  private _parent: Element | null = null;
 
   constructor(children: TPreComponent[]) {
     this._initialChildren = children;
@@ -36,7 +37,8 @@ export class ChildrenController {
   }
 
   private _getChildParentArray(id: string) {
-    return document.querySelectorAll(`[data-child="${id}"]`);
+    if (!this._parent) return;
+    return this._parent.querySelectorAll(`[data-child="${id}"]`);
   }
 
   private _registerChildren(children: TPreComponent[], callback: (id: string, hash: ISimpleObject) => void) {
@@ -51,6 +53,7 @@ export class ChildrenController {
   public mountChildren() {
     Object.keys(this._childProps).forEach((key) => {
       const parents = this._getChildParentArray(key);
+      if (!parents) return;
       const initChild = this._initialChildren.find((item) => item.prototype.id === key);
       if (!initChild) return;
       const props = this._childProps[key];
@@ -75,6 +78,7 @@ export class ChildrenController {
       const propsRecord = this._childProps[key];
       const childRecord = this._children[key];
       const parents = this._getChildParentArray(key);
+      if (!parents) return;
       const initChild = this._initialChildren.find((item) => item.prototype.id === key);
       if (Array.isArray(propsRecord) && Array.isArray(childRecord)) {
         propsRecord.forEach((props, idx) => {
@@ -103,5 +107,9 @@ export class ChildrenController {
         }
       }
     });
+  }
+
+  public setParent(elem: Element) {
+    this._parent = elem;
   }
 }

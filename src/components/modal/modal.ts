@@ -5,7 +5,6 @@ import { TInputFieldProps } from '../input-field';
 import './modal.scss';
 
 export type TModalProps = {
-  show: boolean;
   label: string;
   formData: {
     title: string;
