@@ -1,15 +1,39 @@
 @import 'src/styles/global.scss';
+@import 'src/styles/colors.scss';
 
 .root {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 310px 100%;
+  grid-template-rows: auto;
   font-weight: 500;
 
-  &__message {
-    font-size: 20px;
-    margin-bottom: 69px;
+
+  .chat {
+    background: $background2;
+    border-right: 1px solid $white2;
+    padding: 20px 10px 0;
+
+
+    &__header {
+      height: 102px;
+      border-bottom: 1px solid $white2;
+    }
+
+
+    &__header-link {
+      text-align: end;
+    }
   }
+
+  .message-board {
+    padding: 10px 20px;
+
+    &__header {
+      height: 54px;
+      border-bottom: 1px solid $white2;
+    }
+  }
+
+
 }
