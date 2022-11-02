@@ -9,38 +9,34 @@ export type TInputFieldProps = {
   validators?: Array<(value: string) => boolean>;
 };
 
+export function inputValidator(input: HTMLInputElement, validators?: Array<(value: string) => boolean>) {
+  const { value } = input;
+  if (!validators || !validators.length) return true;
+  const isInValid = validators.some((validator) => !validator(value));
+  if (isInValid) input.classList.add(`input-field__input_invalid`);
+  else input.classList.remove(`input-field__input_invalid`);
+  return isInValid;
+}
+
 function handleFocus(this: Component<TInputFieldProps>, e: Event) {
   const field = e.target as HTMLInputElement;
   const label = field.previousElementSibling as Element;
   label.classList.remove(`input-field__label_low`);
-  if (field.value && this.props.validators) {
-    const isInValid = this.props.validators.some((validator) => !validator(field.value));
-    if (isInValid) field.classList.add(`input-field__input_invalid`);
-    else field.classList.remove(`input-field__input_invalid`);
-    return;
-  }
+  inputValidator(field, this.props.validators);
 }
 
 function handleBlur(this: Component<TInputFieldProps>, e: Event) {
   const field = e.target as HTMLInputElement;
   const label = field.previousElementSibling as Element;
-
-  if (field.value && this.props.validators) {
-    const isInvalid = this.props.validators.some((validator) => !validator(field.value));
-    if (isInvalid) field.classList.add(`input-field__input_invalid`);
-    else field.classList.remove(`input-field__input_invalid`);
-    return;
-  }
-
-  field.classList.remove(`input-field__input_invalid`);
-  label.classList.add(`input-field__label_low`);
+  if (!field.value) label.classList.add(`input-field__label_low`);
+  inputValidator(field, this.props.validators);
 }
 
 const template = `
     <div class="input-field">
       <label class="input-field__label input-field__label_low" for="{{ props.name }}">{{ props.label }}</label>
         <input 
-          class="input-field__input" 
+          class="input-field__input {{#if props.invalid}}input-field__input_invalid{{/if}}" 
           type={{#if props.fieldType}} {{props.fieldType}} {{else}}'text'{{/if}}
           name="{{ props.name }}" 
           data-event="[focus:handleFocus, blur:handleBlur]"  

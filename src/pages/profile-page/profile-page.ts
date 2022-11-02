@@ -2,65 +2,15 @@ import { Component, prepareComponent } from '../../core/base/component';
 import './profile-page.scss';
 import avatarSrc from '../../assets/icons/defaultAvatar.svg';
 import { Form } from '../../components/form/form';
-import { validatePassword, validateLogin, validateEmail, validateName, validatePhone } from '../../utils';
+import { parseImg } from '../../utils';
 import { ArrowButton } from '../../components/arrow-button';
 import { Avatar } from '../../components/avatar';
 import { TextField } from '../../components/text-field/text-field';
 import { TDataObserverProps } from '../../core/base/models';
 import { TextButton } from '../../components/text-button/text-button';
 import { Modal } from '../../components/modal/modal';
-import { TInputFieldProps } from '../../components/input-field';
-import { TButtonProps } from '../../components/button';
-import { TFileFieldProps } from '../../components/file-field';
-
-type TProfilePageProps = {
-  avatar: {
-    src: string;
-  };
-  info: Array<{
-    name: string;
-    label: string;
-    value: string;
-  }>;
-  buttons: Array<{
-    name: string;
-    type?: string;
-    label: string;
-  }>;
-  modal: {
-    show: boolean;
-    formData?: {
-      title: string;
-      fields: Array<TInputFieldProps | TFileFieldProps>;
-      button: TButtonProps;
-    };
-  };
-};
-
-const userDataFormMeta = {
-  title: 'Обновите данные',
-  fields: [
-    { type: 'inputField', name: 'mail', label: 'Почта', validators: [validateEmail] },
-    { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin] },
-    { type: 'inputField', name: 'name', label: 'Имя', validators: [validateName] },
-    { type: 'inputField', name: 'lastName', label: 'Фамилия', validators: [validateName] },
-    { type: 'inputField', name: 'phoneNumber', label: 'Телефон', validators: [validatePhone] },
-    { type: 'inputField', name: 'password', label: 'Пароль', fieldType: 'password', validators: [validatePassword] },
-  ],
-  button: {
-    type: 'submit',
-    label: 'Обновить',
-  },
-};
-
-const avatarFormMeta = {
-  title: 'Загрузите файл',
-  fields: [{ type: 'fileField', name: 'file', label: 'Выбрать файл на компьютере', required: true }],
-  button: {
-    type: 'submit',
-    label: 'Поменять',
-  },
-};
+import { isAvatarData, TAvatarData, TProfilePageProps, TUserData } from './types';
+import { avatarFormMeta, userDataFormMeta } from './constants';
 
 const template = `
     <div class="profile">
@@ -134,26 +84,37 @@ function arrowBtnClick() {
 }
 
 function avatarClick(this: Component<TProfilePageProps>) {
-  this.setProps((props) => ({ ...props, modal: { show: true, formData: { ...avatarFormMeta } } }));
+  this.setProps((props) => ({ ...props, modal: { name: 'avatar', show: true, formData: avatarFormMeta } }));
 }
 
 function textButtonClick(this: Component<TProfilePageProps>, name: string) {
   if (name === 'changeData') {
-    this.setProps((props) => ({ ...props, modal: { show: true, formData: { ...userDataFormMeta } } }));
+    this.setProps((props) => ({ ...props, modal: { name: 'formData', show: true, formData: userDataFormMeta } }));
+  } else {
+    window.location.href = '/login';
   }
 }
 
 function hideModal(this: Component<TProfilePageProps>) {
-  this.setProps((props) => ({ ...props, modal: { show: false, formData: undefined } }));
+  this.setProps((props) => ({ ...props, modal: { show: false, formData: undefined, name: undefined } }));
 }
 
-function saveData(this: Component<TProfilePageProps>, data: Record<string, string>) {
+async function saveData(this: Component<TProfilePageProps>, data: TAvatarData | TUserData) {
+  if (isAvatarData(data)) {
+    const avatar = await parseImg(data.avatar);
+    this.setProps((props) => ({
+      ...props,
+      avatar: { src: avatar },
+      modal: { ...props.modal, show: false },
+    }));
+    return;
+  }
   this.setProps((props) => ({
     ...props,
     info: props.info.map((item) => ({ ...item, value: data[item.name] })),
     modal: { ...props.modal, show: false },
   }));
-  alert(JSON.stringify(data));
+  console.log(data);
 }
 
 export const ProfilePage = prepareComponent<TProfilePageProps>({

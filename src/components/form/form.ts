@@ -1,7 +1,7 @@
 import { Component, prepareComponent } from '../../core/base/component';
 import './form.scss';
 import { Link, TLinkProps } from '../../components/link';
-import { InputField, TInputFieldProps } from '../input-field';
+import { InputField, inputValidator, TInputFieldProps } from '../input-field';
 import { Button, TButtonProps } from '../button';
 import { ISimpleObject } from '../../core/base/models';
 import { FileField, TFileFieldProps } from '../file-field';
@@ -46,28 +46,40 @@ const template = `
     </form>
   `;
 
+function validateForm(propsData: Array<TInputFieldProps | TFileFieldProps>, fields?: NodeListOf<HTMLInputElement>) {
+  if (!fields) return true;
+  return propsData.reduce<boolean>((acc, item) => {
+    const field = Array.from(fields).find((input) => input.name === item.name);
+    if (isInputFieldProps(item) && field) {
+      const isValid = inputValidator(field, item.validators);
+      if (!acc) acc = isValid;
+    }
+    if ('required' in item && field) {
+      const isValid = item.required ? !!field?.files?.length : true;
+      if (!acc) acc = isValid;
+    }
+    return acc;
+  }, false);
+}
+
+function prepareProps(fields: NodeListOf<HTMLInputElement>) {
+  return Array.from(fields).reduce<{ [key: string]: string | File }>((acc, item) => {
+    if (item.type === 'file' && item.files) {
+      acc[item.name] = item.files[0];
+    } else {
+      acc[item.name] = item.value;
+    }
+    return acc;
+  }, {});
+}
+
 function onSubmit(this: Component<TFormProps>, e: Event) {
   e.preventDefault();
   const form = e.target as HTMLElement;
   const inputs = form.querySelectorAll('input');
-  const formIsInvalid = this.props.fields.some((item) => {
-    const field = Array.from(inputs).find((input) => input.name === item.name);
-    if (isInputFieldProps(item)) {
-      return item.validators && field && field.value
-        ? item.validators.some((validator) => !validator(field.value))
-        : true;
-    } else {
-      return item.required ? !!field?.files?.length : true;
-    }
-  });
-
-  if (formIsInvalid) return;
-
-  const data = Array.from(inputs).reduce<ISimpleObject>((acc, item) => {
-    acc[item.name] = item.value;
-    return acc;
-  }, {});
-
+  const formIsValid = validateForm(this.props.fields, inputs);
+  if (!formIsValid) return;
+  const data = prepareProps(inputs);
   this.props.onSubmit(data);
 }
 
