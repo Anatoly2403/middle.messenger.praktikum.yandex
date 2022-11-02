@@ -107,14 +107,15 @@ async function saveData(this: Component<TProfilePageProps>, data: TAvatarData | 
       avatar: { src: avatar },
       modal: { ...props.modal, show: false },
     }));
-    return;
+    console.log({ avatar: avatar });
+  } else {
+    this.setProps((props) => ({
+      ...props,
+      info: props.info.map((item) => ({ ...item, value: data[item.name] })),
+      modal: { ...props.modal, show: false },
+    }));
+    console.log(data);
   }
-  this.setProps((props) => ({
-    ...props,
-    info: props.info.map((item) => ({ ...item, value: data[item.name] })),
-    modal: { ...props.modal, show: false },
-  }));
-  console.log(data);
 }
 
 export const ProfilePage = prepareComponent<TProfilePageProps>({
