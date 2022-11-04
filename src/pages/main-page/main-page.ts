@@ -39,6 +39,7 @@ const template = `
 `;
 
 function searchInputHandler(this: Component, searchValue: string) {
+  // eslint-disable-next-line no-console
   console.log(searchValue);
 }
 

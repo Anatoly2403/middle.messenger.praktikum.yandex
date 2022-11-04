@@ -1,12 +1,8 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { prepareComponent } from '../../core/base/component';
 import { IContact } from '../../models';
-import { ArrowButton } from '../../ui-kit/arrow-button';
-import { MessageField } from '../../ui-kit/message-field';
 import { ActionMenu } from '../action-menu';
 import { MessageForm } from '../message-form';
 import './chat.scss';
-
-// {{#if_eq message.type "in"}}chat__message_in{{else}}chat__message_out{{/if_eq}}
 
 type TChatProps = {
   contact: IContact;
@@ -26,10 +22,12 @@ const state: TChatState = {
 };
 
 function manageContact(actionName: string | null) {
+  // eslint-disable-next-line no-console
   console.log({ actionName });
 }
 
 function sendMessage(message: string) {
+  // eslint-disable-next-line no-console
   console.log({ message });
 }
 

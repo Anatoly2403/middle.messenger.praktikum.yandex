@@ -107,6 +107,7 @@ async function saveData(this: Component<TProfilePageProps>, data: TAvatarData | 
       avatar: { src: avatar },
       modal: { ...props.modal, show: false },
     }));
+    // eslint-disable-next-line no-console
     console.log({ avatar: avatar });
   } else {
     this.setProps((props) => ({
@@ -114,6 +115,7 @@ async function saveData(this: Component<TProfilePageProps>, data: TAvatarData | 
       info: props.info.map((item) => ({ ...item, value: data[item.name] })),
       modal: { ...props.modal, show: false },
     }));
+    // eslint-disable-next-line no-console
     console.log(data);
   }
 }
