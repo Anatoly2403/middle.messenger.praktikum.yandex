@@ -2,11 +2,11 @@ import { Component, prepareComponent } from '../../core/base/component';
 import './arrow-button.scss';
 
 type TArrowBtnProps = {
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 function handleClick(this: Component<TArrowBtnProps>) {
-  this.props.onClick();
+  if (this.props.onClick) this.props.onClick();
 }
 
 export const ArrowButton = prepareComponent<TArrowBtnProps>({

@@ -1,6 +1,9 @@
-import { prepareComponent } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/base/component';
 import { IContact } from '../../models';
+import { ArrowButton } from '../../ui-kit/arrow-button';
+import { MessageField } from '../../ui-kit/message-field';
 import { ActionMenu } from '../action-menu';
+import { MessageForm } from '../message-form';
 import './chat.scss';
 
 // {{#if_eq message.type "in"}}chat__message_in{{else}}chat__message_out{{/if_eq}}
@@ -11,6 +14,7 @@ type TChatProps = {
 
 type TChatState = {
   menuItems: { name: string; value: string }[];
+  message: string;
 };
 
 const state: TChatState = {
@@ -18,10 +22,15 @@ const state: TChatState = {
     { name: 'add', value: 'Добавить пользователя' },
     { name: 'remove', value: 'Удалить пользователя' },
   ],
+  message: '',
 };
 
 function manageContact(actionName: string | null) {
   console.log({ actionName });
+}
+
+function sendMessage(message: string) {
+  console.log({ message });
 }
 
 const template = `
@@ -45,63 +54,13 @@ const template = `
       </div>
       <div class="chat__message chat__message_out">
         <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>      
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out"> 
-        <div>Исходящее</div>
-      </div>      
+      </div>          
     </div>
-    <div class="chat__footer"></div>
+    <div class="chat__footer">
+      <div class="chat__footer-clip"></div>
+      <div class="chat__footer-message">
+      {{{ message-form onSubmit=helpers.sendMessage }}}
+      </div>
   </div>
 `;
 
@@ -109,6 +68,6 @@ export const Chat = prepareComponent<TChatProps, TChatState>({
   name: 'chat',
   template,
   state,
-  children: [ActionMenu],
-  helpers: { manageContact },
+  children: [ActionMenu, MessageForm],
+  helpers: { manageContact, sendMessage },
 });
