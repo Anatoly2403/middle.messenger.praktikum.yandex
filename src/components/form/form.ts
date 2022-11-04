@@ -1,10 +1,10 @@
 import { Component, prepareComponent } from '../../core/base/component';
 import './form.scss';
-import { Link, TLinkProps } from '../../components/link';
-import { InputField, inputValidator, TInputFieldProps } from '../input-field';
-import { Button, TButtonProps } from '../button';
+import { Link, TLinkProps } from '../../ui-kit/link';
+import { InputField, inputValidator, TInputFieldProps } from '../../ui-kit/input-field';
+import { Button, TButtonProps } from '../../ui-kit/button';
 import { ISimpleObject } from '../../core/base/models';
-import { FileField, TFileFieldProps } from '../file-field';
+import { FileField, TFileFieldProps } from '../../ui-kit/file-field';
 
 function isInputFieldProps(item: TInputFieldProps | TFileFieldProps): item is TInputFieldProps {
   return 'type' in item && item.type === 'inputField';

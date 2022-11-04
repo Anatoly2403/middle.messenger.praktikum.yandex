@@ -1,7 +1,7 @@
 import { Component, prepareComponent } from '../../core/base/component';
-import { TButtonProps } from '../button';
+import { TButtonProps } from '../../ui-kit/button';
 import { Form } from '../form/form';
-import { TInputFieldProps } from '../input-field';
+import { TInputFieldProps } from '../../ui-kit/input-field';
 import './modal.scss';
 
 export type TModalProps = {

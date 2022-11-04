@@ -2,7 +2,10 @@ import { compile } from 'handlebars';
 import { EManageEventsAction, ISimpleObject, TElementControllerProps, TEvents, THelpers } from '../models';
 import { parseEvent } from '../utils';
 
-export class ElementController<TData extends ISimpleObject = ISimpleObject> {
+export class ElementController<
+  TProps extends ISimpleObject = ISimpleObject,
+  TState extends ISimpleObject = ISimpleObject
+> {
   private _id: string;
   private _helpers?: THelpers;
   private _hbsTmp: string;
@@ -15,6 +18,10 @@ export class ElementController<TData extends ISimpleObject = ISimpleObject> {
     this._hbsTmp = props.hbsTmp;
     this._events = props.events || {};
     this._helpers = props.helpers;
+  }
+
+  public get parent() {
+    return this._parentElement;
   }
 
   private _manageEvents(action: EManageEventsAction) {
@@ -30,10 +37,11 @@ export class ElementController<TData extends ISimpleObject = ISimpleObject> {
     });
   }
 
-  public compileTemplate(data: TData) {
+  public compileTemplate(props: TProps, state: TState) {
     const elemWrapper = document.createElement('div');
     elemWrapper.innerHTML = compile(this._hbsTmp)({
-      props: data,
+      props,
+      state,
       helpers: this._helpers,
     });
     const elem = (elemWrapper.firstElementChild as unknown) as HTMLOrSVGElement;

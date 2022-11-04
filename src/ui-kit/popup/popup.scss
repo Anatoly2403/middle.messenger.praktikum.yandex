@@ -1,0 +1,38 @@
+@import 'src/styles/colors.scss';
+
+.popup {
+  position: absolute;
+  padding: 15px 0;
+  background: $white;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 12px;
+
+  min-width: 60px;
+
+  &_under {
+    top: 50px;
+    right: 0;
+  }
+
+
+  &_over {
+    bottom: 50px;
+    left: 0;
+  }
+
+
+  &__item {
+    padding: 0 15px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+
+    &:hover {
+      background: $backgroundBlue;
+    }
+  }
+}

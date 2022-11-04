@@ -5,10 +5,26 @@ import { EventBus } from '../eventBus';
 import { EEvents, ISimpleObject, TConfig, TDataObserverProps, TEvents } from '../models';
 import { ChildrenController } from '../childrenController';
 
-export class Component<TProps extends ISimpleObject = ISimpleObject> {
+export function prepareComponent<
+  TProps extends ISimpleObject = ISimpleObject,
+  TState extends ISimpleObject = ISimpleObject
+>(config: TConfig<TProps, TState>) {
+  const id = makeUUID();
+
+  function createComponent(props: TProps) {
+    return new Component<TProps>(id, config, props);
+  }
+  createComponent.prototype['name'] = config.name;
+  createComponent.prototype['id'] = id;
+
+  return createComponent;
+}
+
+export class Component<TProps extends ISimpleObject = ISimpleObject, TState extends ISimpleObject = ISimpleObject> {
   private _id: string;
   private _name: string;
   private _props: DataObservable<TProps>;
+  private _state: DataObservable<TState>;
   private _unsubscribeProps: () => void;
   private _eventBus: EventBus<TProps> = new EventBus<TProps>();
   private _elementController: ElementController<TProps>;
@@ -20,6 +36,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject> {
     this._id = id;
     this._name = config.name;
     this._props = new DataObservable<TProps>(props || ({} as TProps));
+    this._state = new DataObservable<TProps>(config.state || ({} as TProps));
     this._componentDidMount = config.componentDidMount?.bind(this);
     this._componentDidUpdate = config.componentDidUpdate?.bind(this);
     this._childrenController = new ChildrenController(config.children || []);
@@ -34,6 +51,11 @@ export class Component<TProps extends ISimpleObject = ISimpleObject> {
     this._unsubscribeProps = this._props.subscribe(({ prevData, data }) =>
       this._eventBus.emit(EEvents.UPDATE, prevData, data),
     );
+    if (config.state) {
+      this._unsubscribeProps = this._state.subscribe(({ prevData, data }) =>
+        this._eventBus.emit(EEvents.UPDATE, prevData, data),
+      );
+    }
   }
 
   public get id(): string {
@@ -62,14 +84,15 @@ export class Component<TProps extends ISimpleObject = ISimpleObject> {
   }
 
   private updateComponent(prevData: TProps, data: TProps) {
-    this._elementController.compileTemplate(this._props.data);
+    this._elementController.compileTemplate(this._props.data, this._state.data);
     this._elementController.mountTemplate();
     if (this._componentDidUpdate) this._componentDidUpdate.call(this, { prevData, data: { ...data } });
+    this._childrenController.setParent(this._elementController.parent);
     this._childrenController.updateChildren();
   }
 
   private mountComponent() {
-    this._elementController.compileTemplate(this._props.data);
+    this._elementController.compileTemplate(this._props.data, this._state.data);
     this._elementController.mountTemplate();
     if (this._componentDidMount)
       this._componentDidMount.call(this, { prevData: this._props.prevData, data: { ...this._props.data } });
@@ -81,6 +104,11 @@ export class Component<TProps extends ISimpleObject = ISimpleObject> {
     else this._props.updateData(data);
   }
 
+  public setState(data: TState | ((data: TState) => TState)) {
+    if (typeof data === 'function') this._state.updateData(data({ ...this._state.data }));
+    else this._state.updateData(data);
+  }
+
   public mount() {
     this._eventBus.emit(EEvents.MOUNT);
   }
@@ -89,15 +117,4 @@ export class Component<TProps extends ISimpleObject = ISimpleObject> {
     this._elementController.setParentElement(element);
     this._childrenController.setParent(element);
   }
-}
-
-export function prepareComponent<TProps extends ISimpleObject = ISimpleObject>(config: TConfig<TProps>) {
-  const id = makeUUID();
-  function createComponent(props: TProps) {
-    return new Component<TProps>(id, config, props);
-  }
-  createComponent.prototype['name'] = config.name;
-  createComponent.prototype['id'] = id;
-
-  return createComponent;
 }

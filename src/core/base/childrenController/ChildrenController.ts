@@ -3,25 +3,25 @@ import { Component } from '../component';
 import { ISimpleObject, TPreComponent } from '../models';
 
 export class ChildrenController {
-  private _initialChildren: Record<string, TPreComponent> = {};
-  private _children: Record<string, Component | Component[]> = {};
-  private _childProps: Record<string, ISimpleObject | ISimpleObject[]> = {};
   private _parent: Element | null = null;
+  private _children: Record<string, TPreComponent> = {};
+  private _childTree: Record<string, Component | Component[]> = {};
+  private _childPropsTree: Record<string, ISimpleObject | ISimpleObject[]> = {};
 
   constructor(children: TPreComponent[]) {
-    this._initialChildren = this._parseChildArray(children);
+    this._children = this._parseChildArray(children);
     this._registerChildren(children, this._setProps.bind(this));
   }
 
   private _setProps(id: string, hash: ISimpleObject) {
     const { key, ...props } = hash;
-    const record = this._childProps[id];
+    const record = this._childPropsTree[id];
     if (key === undefined) {
-      this._childProps[id] = props;
+      this._childPropsTree[id] = props;
     } else {
       let childPropsArray: ISimpleObject[] = [];
       if (Array.isArray(record)) childPropsArray = record;
-      this._childProps[id] = [...childPropsArray.slice(0, key), props, ...childPropsArray.slice(key + 1)];
+      this._childPropsTree[id] = [...childPropsArray.slice(0, key), props, ...childPropsArray.slice(key + 1)];
     }
   }
 
@@ -52,7 +52,7 @@ export class ChildrenController {
       child.setProps(props);
       return child;
     }
-    const newChild = this._initialChildren[id](props);
+    const newChild = this._children[id](props);
     newChild.setParentElement(parent);
     newChild.mount();
     return newChild;
@@ -71,10 +71,14 @@ export class ChildrenController {
     }, []);
   }
 
+  public setParent(elem: Element | null) {
+    this._parent = elem;
+  }
+
   public mountChildren() {
-    this._children = Object.keys(this._childProps).reduce<Record<string, Component | Component[]>>((acc, key) => {
+    this._childTree = Object.keys(this._childPropsTree).reduce<Record<string, Component | Component[]>>((acc, key) => {
       const parents = this._getChildParentArray(key);
-      const propsRecord = this._childProps[key];
+      const propsRecord = this._childPropsTree[key];
       if (!parents) return acc;
       if (Array.isArray(propsRecord)) {
         acc[key] = this._updateChildArray(key, parents, propsRecord, []);
@@ -86,9 +90,9 @@ export class ChildrenController {
   }
 
   public updateChildren() {
-    this._children = Object.keys(this._childProps).reduce<Record<string, Component | Component[]>>((acc, key) => {
-      const propsRecord = this._childProps[key];
-      const childRecord = this._children[key];
+    this._childTree = Object.keys(this._childPropsTree).reduce<Record<string, Component | Component[]>>((acc, key) => {
+      const propsRecord = this._childPropsTree[key];
+      const childRecord = this._childTree[key];
       const parents = this._getChildParentArray(key);
       if (parents) {
         if (Array.isArray(propsRecord) && Array.isArray(childRecord)) {
@@ -100,9 +104,5 @@ export class ChildrenController {
       }
       return acc;
     }, {});
-  }
-
-  public setParent(elem: Element) {
-    this._parent = elem;
   }
 }

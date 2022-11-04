@@ -2,10 +2,10 @@ import { Component, prepareComponent } from '../../core/base/component';
 import './login-page.scss';
 import { Form } from '../../components/form/form';
 import { validatePassword, validateLogin } from '../../utils';
-import { TInputFieldProps } from '../../components/input-field';
+import { TInputFieldProps } from '../../ui-kit/input-field';
 import { TDataObserverProps } from '../../core/base/models';
-import { TButtonProps } from '../../components/button';
-import { TLinkProps } from '../../components/link';
+import { TButtonProps } from '../../ui-kit/button';
+import { TLinkProps } from '../../ui-kit/link';
 
 type TLoginPageProps = {
   fields: TInputFieldProps[];
