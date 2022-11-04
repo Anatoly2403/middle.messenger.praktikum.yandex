@@ -7,10 +7,10 @@
   "browserslist": "last 2 versions, not dead",
   "private": false,
   "scripts": {
-    "build": "",
-    "start": "npm run build && node src/server/app.js",
+    "build": "parcel build src/index.html --no-optimize",
+    "start": "npm run build && node src/server/app.ts",
     "dev": "parcel src/index.html --open",
-    "dev:server": "nodemon node src/server/app.js",
+    "dev:server": "nodemon node src/server/app.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix"
   },
@@ -23,7 +23,7 @@
     "url": "https://github.com/Anatoly2403/middle.messenger.praktikum.yandex/issues"
   },
   "homepage": "https://github.com/Anatoly2403/middle.messenger.praktikum.yandex#readme",
-  "devDependencies": {    
+  "devDependencies": {
     "@parcel/transformer-sass": "2.7.0",
     "@parcel/transformer-typescript-tsc": "2.7.0",
     "@types/express": "^4.17.14",
