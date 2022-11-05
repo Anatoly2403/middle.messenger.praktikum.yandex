@@ -5,7 +5,7 @@ import './not-found-page.scss';
 const template = `
     <div class="root">
       <h1 class="root__code">404</h1>
-      <h3 class="root__message">Не туда попали</h3>
+      <p class="root__message">Не туда попали</p>
       {{{ link href="/main" label="Назад к чатам" }}}
     </div>
   `;

@@ -5,7 +5,7 @@ import './error-page.scss';
 const template = `
   <div class="root">
     <h1 class="root__code">500</h1>
-    <h3 class="root__message">Мы уже фиксим</h3>
+    <p class="root__message">Мы уже фиксим</p>
     {{{ link href="/main" label="Назад к чатам" }}}
   </div>
 `;

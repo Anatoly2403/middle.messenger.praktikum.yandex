@@ -37,7 +37,7 @@ const template = `
       <div class="chat__contact">
         <div class="chat__contact-avatar">
           {{#if props.contact.avatar}}
-            <img src={{props.contact.avatar}}/>
+            <img src={{props.contact.avatar}} alt="contact avatar" />
           {{/if}}
         </div>
         <div class="chat__contact-name">{{props.contact.name}}</div>

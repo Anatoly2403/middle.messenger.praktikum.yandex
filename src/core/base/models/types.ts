@@ -1,6 +1,12 @@
 import { AnyType } from '../../shared/models';
 import { prepareComponent } from '../component/Component';
 
+export type TComponentProps<TProps> = {
+  id: string,
+  config: TConfig,
+  props?: TProps
+}
+
 export type TEvents = Record<string, EventListener>;
 
 export type THelpers = Record<string, (...arg: AnyType[]) => AnyType>;

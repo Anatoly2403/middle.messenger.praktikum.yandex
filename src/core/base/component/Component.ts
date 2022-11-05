@@ -1,4 +1,5 @@
 import { v4 as makeUUID } from 'uuid';
+import { TComponentProps } from './../models/types';
 import { ElementController } from '../elementController';
 import { DataObservable } from '../dataObservable';
 import { EventBus } from '../eventBus';
@@ -12,7 +13,7 @@ export function prepareComponent<
   const id = makeUUID();
 
   function createComponent(props: TProps) {
-    return new Component<TProps>(id, config, props);
+    return new Component<TProps>({ id, config, props });
   }
   createComponent.prototype['name'] = config.name;
   createComponent.prototype['id'] = id;
@@ -32,7 +33,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
   private _componentDidMount?: (props: TDataObserverProps<TProps>) => void;
   private _componentDidUpdate?: (props: TDataObserverProps<TProps>) => void;
 
-  constructor(id: string, config: TConfig, props?: TProps) {
+  constructor({ id, config, props }: TComponentProps<TProps>) {
     this._id = id;
     this._name = config.name;
     this._props = new DataObservable<TProps>(props || ({} as TProps));

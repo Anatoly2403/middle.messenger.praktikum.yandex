@@ -63,7 +63,7 @@ function validateForm(propsData: Array<TInputFieldProps | TFileFieldProps>, fiel
 }
 
 function prepareProps(fields: NodeListOf<HTMLInputElement>) {
-  return Array.from(fields).reduce<{ [key: string]: string | File }>((acc, item) => {
+  return Array.from(fields).reduce<Record<string, string | File>>((acc, item) => {
     if (item.type === 'file' && item.files) {
       acc[item.name] = item.files[0];
     } else {
