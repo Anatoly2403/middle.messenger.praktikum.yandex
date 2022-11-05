@@ -1,0 +1,19 @@
+.message-form {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &>div {
+    width: 100%;
+  }
+
+  &__submit {
+    outline: none;
+    border: none;
+    background: none;
+    width: 28px;
+    height: 28px;
+    transform: rotate(180deg);
+  }
+}

@@ -1,0 +1,65 @@
+@import 'src/styles/global.scss';
+@import 'src/styles/colors.scss';
+
+.profile {
+  display: flex;
+  height: 100vh;
+
+  &__block {
+    &_left {
+      width: 64px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-right: 1px solid $white2;
+      background: $white;
+    }
+
+    &_right {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px;
+      gap: 60px;
+
+      &>div {
+        width: 510px;
+      }
+    }
+  }
+
+  &__avatar {
+    height: 191px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 21px;
+    font-size: 16px;
+    font-weight: 600;
+
+  }
+
+  &__user-data {
+    height: 198px;
+  }
+
+  &__password-wrapper {
+    display: none;
+  }
+
+  &__main-info-wrapper>div:last-child>.text-field {
+    border-bottom: 1px solid transparent;
+  }
+
+  &__main-btns-wrapper>div:last-child>.text-button {
+    border-bottom: 1px solid transparent;
+  }
+
+  &__save-btns-wrapper {
+    display: none;
+    text-align: center;
+  }
+}
