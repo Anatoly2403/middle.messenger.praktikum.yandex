@@ -4,6 +4,10 @@ import { SearchInput } from '../../ui-kit/search-input';
 import { Component, prepareComponent } from '../../core/base/component';
 import './main-page.scss';
 import { Chat } from '../../components/chat';
+import { contacts } from '../../mock/contact';
+import { ISimpleObject } from '../../core/base/models';
+
+type TMainPageState = typeof state;
 
 const template = `
   <div class="root">
@@ -17,19 +21,19 @@ const template = `
         </div>
       </div>
       <div class="contact-block__list">
-        {{{ contact key=0 }}}
-        {{{ contact key=1 }}}
-        {{{ contact key=2 }}}
-        {{{ contact key=3 }}}
-        {{{ contact key=4 }}}
-        {{{ contact key=5 }}}
-        {{{ contact key=6 }}}
-        {{{ contact key=7 }}}
-        {{{ contact key=8 }}}
-        {{{ contact key=9 }}}
-        {{{ contact key=10 }}}
-        {{{ contact key=11 }}}
-        {{{ contact key=12 }}}
+        {{#each state.contacts}}   
+          {{{ contact 
+                key=@index 
+                id=id
+                name=name
+                avatar=avatar
+                lastName=lastName
+                phone=phone
+                messages=messages
+                onClickContact=../helpers.onClickContact
+                isActive=isActive
+          }}}
+        {{/each}} 
       </div>
     </div>  
     <div class="message-block">
@@ -38,14 +42,30 @@ const template = `
   </div>
 `;
 
-function searchInputHandler(this: Component, searchValue: string) {
-  // eslint-disable-next-line no-console
-  console.log(searchValue);
+const state = {
+  contacts,
+};
+
+function onClickContact(this: Component<ISimpleObject, TMainPageState>, id: string) {
+  this.setState((state) => ({
+    ...state,
+    contacts: state.contacts.map((item) => ({ ...item, isActive: item.id === id })),
+  }));
 }
 
-export const MainPage = prepareComponent({
+function searchInputHandler(this: Component<ISimpleObject, TMainPageState>, searchValue: string) {
+  // eslint-disable-next-line no-console
+  console.log(searchValue);
+  this.setState((state) => ({
+    ...state,
+    contacts: state.contacts.filter((item) => item.name.includes(searchValue)),
+  }));
+}
+
+export const MainPage = prepareComponent<ISimpleObject, TMainPageState>({
   name: 'main-page',
   template,
+  state,
   children: [Link, SearchInput, Contact, Chat],
-  helpers: { searchInputHandler },
+  helpers: { searchInputHandler, onClickContact },
 });

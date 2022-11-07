@@ -26,7 +26,6 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
   private _name: string;
   private _props: DataObservable<TProps>;
   private _state: DataObservable<TState>;
-  private _unsubscribeProps: () => void;
   private _eventBus: EventBus<TProps> = new EventBus<TProps>();
   private _elementController: ElementController<TProps>;
   private _childrenController: ChildrenController;
@@ -36,8 +35,8 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
   constructor({ id, config, props }: TComponentProps<TProps>) {
     this._id = id;
     this._name = config.name;
-    this._props = new DataObservable<TProps>(props || ({} as TProps));
-    this._state = new DataObservable<TProps>(config.state || ({} as TProps));
+    this._props = new DataObservable<TProps>({ ...props } as TProps);
+    this._state = new DataObservable<TState>({ ...config.state } as TState);
     this._componentDidMount = config.componentDidMount?.bind(this);
     this._componentDidUpdate = config.componentDidUpdate?.bind(this);
     this._childrenController = new ChildrenController(config.children || []);
@@ -49,13 +48,9 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     });
 
     this._registerEvents();
-    this._unsubscribeProps = this._props.subscribe(({ prevData, data }) =>
-      this._eventBus.emit(EEvents.UPDATE, prevData, data),
-    );
+    this._props.subscribe(({ prevData, data }) => this._eventBus.emit(EEvents.UPDATE, prevData, data));
     if (config.state) {
-      this._unsubscribeProps = this._state.subscribe(({ prevData, data }) =>
-        this._eventBus.emit(EEvents.UPDATE, prevData, data),
-      );
+      this._state.subscribe(({ prevData, data }) => this._eventBus.emit(EEvents.UPDATE, prevData, data));
     }
   }
 
@@ -85,9 +80,10 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
   }
 
   private updateComponent(prevData: TProps, data: TProps) {
-    this._elementController.compileTemplate(this._props.data, this._state.data);
+    this._elementController.compileTemplate({ ...this._props.data }, { ...this._state.data });
     this._elementController.mountTemplate();
     if (this._componentDidUpdate) this._componentDidUpdate.call(this, { prevData, data: { ...data } });
+
     this._childrenController.setParent(this._elementController.parent);
     this._childrenController.updateChildren();
   }
