@@ -16,7 +16,11 @@ export class Router {
   private constructor() {}
 
   private _getRoute(pathname: string) {
-    return this.routes.find((route) => route.match(pathname));
+    const route = this.routes.find((route) => route.match(pathname));
+    if (!route) {
+      return this.routes.find((route) => route.match('/*'));
+    }
+    return route;
   }
 
   private _onRoute(pathname: string) {

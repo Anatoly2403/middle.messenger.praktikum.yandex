@@ -11,8 +11,8 @@ const router = Router.getInstance();
 router.registerRoutes([
   { path: '/login', view: LoginPage, props: { rootQuery: '#app' } },
   { path: '/signin', view: SigninPage, props: { rootQuery: '#app' } },
-  { path: '/404', view: NotFoundPage, props: { rootQuery: '#app' } },
-  { path: '/*', view: ErrorPage, props: { rootQuery: '#app' } },
+  { path: '/*', view: NotFoundPage, props: { rootQuery: '#app' } },
+  { path: '/500', view: ErrorPage, props: { rootQuery: '#app' } },
   { path: '/profile', view: ProfilePage, props: { rootQuery: '#app' } },
   { path: '/', view: MainPage, props: { rootQuery: '#app' } },
 ]);
