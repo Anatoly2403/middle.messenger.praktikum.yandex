@@ -2,7 +2,7 @@ import { TButtonProps } from '../../ui-kit/button';
 import { TFileFieldProps } from '../../ui-kit/file-field';
 import { TInputFieldProps } from '../../ui-kit/input-field';
 
-export type TProfilePageProps = {
+export type TProfilePageState = {
   avatar: {
     src: string;
   };

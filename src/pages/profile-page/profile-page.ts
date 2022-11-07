@@ -6,40 +6,41 @@ import { parseImg } from '../../utils';
 import { ArrowButton } from '../../ui-kit/arrow-button';
 import { Avatar } from '../../components/avatar';
 import { TextField } from '../../ui-kit/text-field/text-field';
-import { TDataObserverProps } from '../../core/base/models';
+import { ISimpleObject } from '../../core/base/models';
 import { TextButton } from '../../ui-kit/text-button/text-button';
 import { Modal } from '../../components/modal/modal';
-import { isAvatarData, TAvatarData, TProfilePageProps, TUserData } from './types';
+import { isAvatarData, TAvatarData, TProfilePageState, TUserData } from './types';
 import { avatarFormMeta, userDataFormMeta } from './constants';
+import { redirect } from '../../core/router';
 
 const template = `
-    <div class="profile">
-      {{#if props.modal.show}}  
+    <div class="profile-page">
+      {{#if state.modal.show}}  
         {{{
           modal
-            show=props.modal.show
+            show=state.modal.show
             hideModal=helpers.hideModal
             saveData=helpers.saveData
-            formData=props.modal.formData
+            formData=state.modal.formData
         }}}    
       {{/if}}    
-      <div class="profile__block_left">
+      <div class="profile-page__block_left">
         {{{ arrow-button onClick=helpers.arrowBtnClick}}}
       </div>
-      <div class="profile__block_right">
-        <div class="profile__avatar">
-          {{{ avatar avatarSrc=props.avatar.src avatarClick=helpers.avatarClick}}}
+      <div class="profile-page__block_right">
+        <div class="profile-page__avatar">
+          {{{ avatar avatarSrc=state.avatar.src avatarClick=helpers.avatarClick}}}
         </div>
-        <div class="profile__user-data">
-          <div class="profile__main-info-wrapper">     
-            {{#each props.info}}
+        <div class="profile-page__user-data">
+          <div class="profile-page__main-info-wrapper">     
+            {{#each state.info}}
               {{{ text-field key=@index name=name label=label value=value }}}   
             {{/each}}                   
           </div>
         </div>
-        <div class="profile__control">
-          <div class="profile__main-btns-wrapper">
-            {{#each props.buttons}}           
+        <div class="profile-page__control">
+          <div class="profile-page__main-btns-wrapper"></div>
+            {{#each state.buttons}}           
               {{{ 
                 text-button 
                   key=@index 
@@ -55,9 +56,53 @@ const template = `
     </div>
   `;
 
-function componentDidMount(this: Component<TProfilePageProps>, props: TDataObserverProps<TProfilePageProps>) {
-  this.setProps({
-    ...props.data,
+function arrowBtnClick() {
+  redirect('/');
+}
+
+function avatarClick(this: Component<ISimpleObject, TProfilePageState>) {
+  this.setState((state) => ({ ...state, modal: { name: 'avatar', show: true, formData: avatarFormMeta } }));
+}
+
+function textButtonClick(this: Component<ISimpleObject, TProfilePageState>, name: string) {
+  if (name === 'changeData') {
+    this.setState((state) => ({ ...state, modal: { name: 'formData', show: true, formData: userDataFormMeta } }));
+  } else {
+    redirect('/login');
+  }
+}
+
+function hideModal(this: Component<ISimpleObject, TProfilePageState>) {
+  this.setState((state) => ({ ...state, modal: { show: false, formData: undefined, name: undefined } }));
+}
+
+async function saveData(this: Component<ISimpleObject, TProfilePageState>, data: TAvatarData | TUserData) {
+  if (isAvatarData(data)) {
+    const avatar = await parseImg(data.avatar);
+    this.setState((state) => ({
+      ...state,
+      avatar: { src: avatar },
+      modal: { ...state.modal, show: false },
+    }));
+    // eslint-disable-next-line no-console
+    console.log({ avatar: avatar });
+  } else {
+    this.setState((state) => ({
+      ...state,
+      info: state.info.map((item) => ({ ...item, value: data[item.name] })),
+      modal: { ...state.modal, show: false },
+    }));
+    // eslint-disable-next-line no-console
+    console.log(data);
+  }
+}
+
+export const ProfilePage = prepareComponent<ISimpleObject, TProfilePageState>({
+  name: 'profile-page',
+  template,
+  children: [Form, ArrowButton, Avatar, TextField, TextButton, Modal],
+  helpers: { arrowBtnClick, avatarClick, textButtonClick, hideModal, saveData },
+  state: {
     info: [
       { name: 'mail', label: 'Почта', value: '' },
       { name: 'login', label: 'Логин', value: '' },
@@ -76,54 +121,5 @@ function componentDidMount(this: Component<TProfilePageProps>, props: TDataObser
     modal: {
       show: false,
     },
-  });
-}
-
-function arrowBtnClick() {
-  window.location.href = '/main';
-}
-
-function avatarClick(this: Component<TProfilePageProps>) {
-  this.setProps((props) => ({ ...props, modal: { name: 'avatar', show: true, formData: avatarFormMeta } }));
-}
-
-function textButtonClick(this: Component<TProfilePageProps>, name: string) {
-  if (name === 'changeData') {
-    this.setProps((props) => ({ ...props, modal: { name: 'formData', show: true, formData: userDataFormMeta } }));
-  } else {
-    window.location.href = '/login';
-  }
-}
-
-function hideModal(this: Component<TProfilePageProps>) {
-  this.setProps((props) => ({ ...props, modal: { show: false, formData: undefined, name: undefined } }));
-}
-
-async function saveData(this: Component<TProfilePageProps>, data: TAvatarData | TUserData) {
-  if (isAvatarData(data)) {
-    const avatar = await parseImg(data.avatar);
-    this.setProps((props) => ({
-      ...props,
-      avatar: { src: avatar },
-      modal: { ...props.modal, show: false },
-    }));
-    // eslint-disable-next-line no-console
-    console.log({ avatar: avatar });
-  } else {
-    this.setProps((props) => ({
-      ...props,
-      info: props.info.map((item) => ({ ...item, value: data[item.name] })),
-      modal: { ...props.modal, show: false },
-    }));
-    // eslint-disable-next-line no-console
-    console.log(data);
-  }
-}
-
-export const ProfilePage = prepareComponent<TProfilePageProps>({
-  name: 'profile-page',
-  template,
-  componentDidMount,
-  children: [Form, ArrowButton, Avatar, TextField, TextButton, Modal],
-  helpers: { arrowBtnClick, avatarClick, textButtonClick, hideModal, saveData },
+  },
 });

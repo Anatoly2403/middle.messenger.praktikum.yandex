@@ -16,7 +16,6 @@ export function parseEvent(evString: string) {
 
 export function registerHbHelpers() {
   Handlebars.registerHelper('if_eq', function (this: unknown, a, b, opts) {
-    console.log(a, b);
     return a == b ? opts.fn(this) : opts.inverse(this);
   });
 }

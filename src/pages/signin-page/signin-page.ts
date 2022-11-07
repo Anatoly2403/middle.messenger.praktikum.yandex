@@ -1,21 +1,43 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { prepareComponent } from '../../core/base/component';
 import './signin-page.scss';
 import { Form } from '../../components/form/form';
 import { validatePassword, validateLogin, validateEmail, validateName, validatePhone } from '../../utils';
 import { TInputFieldProps } from '../../ui-kit/input-field';
 import { TButtonProps } from '../../ui-kit/button';
 import { TLinkProps } from '../../ui-kit/link';
-import { TDataObserverProps } from '../../core/base/models';
+import { ISimpleObject } from '../../core/base/models';
 
-type TSigninPageProps = {
+type TSigninPageState = {
   fields: TInputFieldProps[];
   button: TButtonProps;
   link: TLinkProps;
 };
 
-function componentDidMount(this: Component<TSigninPageProps>, props: TDataObserverProps<TSigninPageProps>) {
-  this.setProps({
-    ...props.data,
+function onSubmit(data: { login: string; password: string }) {
+  alert(JSON.stringify(data));
+}
+
+const template = `
+    <div class="signin-page">
+      <div class="signin-page-form__wrapper">
+        {{{ 
+          form 
+            onSubmit=helpers.onSubmit
+            title="Вход" 
+            fields=state.fields 
+            button=state.button
+            link=state.link
+        }}}
+      </div>  
+    </div>
+  `;
+
+export const SigninPage = prepareComponent<ISimpleObject, TSigninPageState>({
+  name: 'signin-page',
+  template,
+  children: [Form],
+  helpers: { onSubmit },
+  state: {
     fields: [
       { type: 'inputField', name: 'mail', label: 'Почта', validators: [validateEmail] },
       { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin] },
@@ -32,32 +54,5 @@ function componentDidMount(this: Component<TSigninPageProps>, props: TDataObserv
       href: '/login',
       label: 'Войти',
     },
-  });
-}
-
-function onSubmit(data: { login: string; password: string }) {
-  alert(JSON.stringify(data));
-}
-
-const template = `
-    <div class="signin">
-      <div class="signin-form__wrapper">
-        {{{ 
-          form 
-            onSubmit=helpers.onSubmit
-            title="Вход" 
-            fields=props.fields 
-            button=props.button
-            link=props.link
-        }}}
-      </div>  
-    </div>
-  `;
-
-export const SigninPage = prepareComponent<TSigninPageProps>({
-  name: 'signin-page',
-  template,
-  componentDidMount,
-  children: [Form],
-  helpers: { onSubmit },
+  },
 });

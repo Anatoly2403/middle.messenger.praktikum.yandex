@@ -10,7 +10,7 @@ import { ISimpleObject } from '../../core/base/models';
 type TMainPageState = typeof state;
 
 const template = `
-  <div class="root">
+  <div class="main-page">
     <div class="contact-block">
       <div class="contact-block__header">
         <div class="contact-block__header-link">
