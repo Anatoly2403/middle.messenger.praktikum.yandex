@@ -77,8 +77,8 @@ function onSubmit(this: Component<TFormProps>, e: Event) {
   e.preventDefault();
   const form = e.target as HTMLElement;
   const inputs = form.querySelectorAll('input');
-  const formIsValid = validateForm(this.props.fields, inputs);
-  if (!formIsValid) return;
+  const formInValid = validateForm(this.props.fields, inputs);
+  if (formInValid) return;
   const data = prepareProps(inputs);
   this.props.onSubmit(data);
 }
