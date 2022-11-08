@@ -1,4 +1,4 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/component';
 import './popup.scss';
 
 type TPopupProps = {

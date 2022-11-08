@@ -1,4 +1,4 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/component';
 import './arrow-button.scss';
 
 type TArrowBtnProps = {

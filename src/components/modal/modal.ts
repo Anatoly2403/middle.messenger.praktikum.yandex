@@ -1,4 +1,4 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/component';
 import { TButtonProps } from '../../ui-kit/button';
 import { Form } from '../form/form';
 import { TInputFieldProps } from '../../ui-kit/input-field';

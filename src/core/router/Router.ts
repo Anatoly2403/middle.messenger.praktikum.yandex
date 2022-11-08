@@ -1,4 +1,4 @@
-import { TPreComponent } from '../base/models/types';
+import { TPreComponent } from '../component/models';
 import { EventTargetWithLocation } from './models/types';
 import { Route } from './route/Route';
 

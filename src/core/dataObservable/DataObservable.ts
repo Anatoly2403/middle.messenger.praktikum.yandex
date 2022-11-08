@@ -1,4 +1,9 @@
-import { ISimpleObject, TDataObserverProps } from '../models';
+import { ISimpleObject } from '../models';
+
+export type TDataObserverProps<TData> = {
+  data: TData;
+  prevData: TData;
+};
 
 export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
   private _data: TData;

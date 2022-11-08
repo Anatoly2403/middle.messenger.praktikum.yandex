@@ -1,6 +1,7 @@
 import Handlebars, { HelperOptions } from 'handlebars';
-import { Component } from '../component';
-import { ISimpleObject, TPreComponent } from '../models';
+import { ISimpleObject } from '../../../models';
+import { Component } from '../../Component';
+import { TPreComponent } from '../../models';
 
 export class ChildrenController {
   private _parent: Element | null = null;

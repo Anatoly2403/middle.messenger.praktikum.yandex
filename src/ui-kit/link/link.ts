@@ -1,4 +1,4 @@
-import { prepareComponent } from '../../core/base/component';
+import { prepareComponent } from '../../core/component';
 import './link.scss';
 
 export type TLinkProps = {

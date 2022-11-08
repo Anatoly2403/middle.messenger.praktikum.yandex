@@ -1,4 +1,11 @@
-import { EEvents, ISimpleObject } from '../models';
+import { ISimpleObject } from '../models';
+
+export enum EEvents {
+  INIT = 'INIT',
+  COMPILE = 'COMPILE',
+  MOUNT = 'COMPONENT_DID_MOUNT',
+  UPDATE = 'COMPONENT_DID_UPDATE',
+}
 
 export class EventBus<TData extends ISimpleObject = ISimpleObject> {
   private listeners: Record<string, Array<(...args: Array<TData>) => void>>;

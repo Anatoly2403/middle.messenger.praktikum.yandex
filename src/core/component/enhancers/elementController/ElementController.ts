@@ -1,6 +1,7 @@
 import { compile } from 'handlebars';
-import { EManageEventsAction, ISimpleObject, TElementControllerProps, TEvents, THelpers } from '../models';
-import { parseEvent } from '../utils';
+import { ISimpleObject } from '../../../models';
+import { EManageEventsAction, TElementControllerProps, TEvents, THelpers } from '../../models';
+import { parseEvent } from '../../utils';
 
 export class ElementController<
   TProps extends ISimpleObject = ISimpleObject,

@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars';
-import { AnyType } from '../../shared/models';
-import { Component } from '../component';
+import { AnyType } from '../../models';
+import { Component } from '../Component';
 
 export function parseEvent(evString: string) {
   const str = evString.replace(/\[/g, '').replace(/\]/g, '');

@@ -1,4 +1,4 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/component';
 import { Popup } from '../../ui-kit/popup';
 import './action-menu.scss';
 

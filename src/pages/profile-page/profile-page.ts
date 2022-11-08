@@ -1,4 +1,3 @@
-import { Component, prepareComponent } from '../../core/base/component';
 import './profile-page.scss';
 import avatarSrc from '../../assets/icons/defaultAvatar.svg';
 import { Form } from '../../components/form/form';
@@ -6,12 +5,13 @@ import { parseImg } from '../../utils';
 import { ArrowButton } from '../../ui-kit/arrow-button';
 import { Avatar } from '../../components/avatar';
 import { TextField } from '../../ui-kit/text-field/text-field';
-import { ISimpleObject } from '../../core/base/models';
 import { TextButton } from '../../ui-kit/text-button/text-button';
 import { Modal } from '../../components/modal/modal';
 import { isAvatarData, TAvatarData, TProfilePageState, TUserData } from './types';
 import { avatarFormMeta, userDataFormMeta } from './constants';
 import { redirect } from '../../core/router';
+import { Component, prepareComponent } from '../../core/component';
+import { ISimpleObject } from '../../core/models';
 
 const template = `
     <div class="profile-page">

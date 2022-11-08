@@ -1,4 +1,4 @@
-import { prepareComponent } from '../../core/base/component';
+import { prepareComponent } from '../../core/component';
 import { IContact } from '../../models';
 import { ActionMenu } from '../action-menu';
 import { MessageForm } from '../message-form';

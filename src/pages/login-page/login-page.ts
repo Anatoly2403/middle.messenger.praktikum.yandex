@@ -1,11 +1,11 @@
-import { prepareComponent } from '../../core/base/component';
 import './login-page.scss';
 import { Form } from '../../components/form/form';
 import { validatePassword, validateLogin } from '../../utils';
 import { TInputFieldProps } from '../../ui-kit/input-field';
 import { TButtonProps } from '../../ui-kit/button';
 import { TLinkProps } from '../../ui-kit/link';
-import { ISimpleObject } from '../../core/base/models';
+import { prepareComponent } from '../../core/component';
+import { ISimpleObject } from '../../core/models';
 
 type TLoginPageState = {
   fields: TInputFieldProps[];

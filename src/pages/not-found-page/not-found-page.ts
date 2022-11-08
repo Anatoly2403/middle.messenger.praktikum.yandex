@@ -1,4 +1,4 @@
-import { prepareComponent } from '../../core/base/component';
+import { prepareComponent } from '../../core/component';
 import { Link } from '../../ui-kit/link';
 import './not-found-page.scss';
 

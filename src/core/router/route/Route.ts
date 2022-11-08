@@ -1,6 +1,5 @@
-import { Component } from '../../base/component';
-import { TPreComponent } from '../../base/models';
-import { renderDOM } from '../../base/utils';
+import { Component, renderDOM } from '../../component';
+import { TPreComponent } from '../../component/models';
 import { redirect } from '../helpers/helpers';
 import { ElementWithPathname } from '../models/types';
 

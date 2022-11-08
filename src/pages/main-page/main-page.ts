@@ -1,11 +1,11 @@
 import { Contact } from '../../components/contact';
 import { Link } from '../../ui-kit/link';
 import { SearchInput } from '../../ui-kit/search-input';
-import { Component, prepareComponent } from '../../core/base/component';
 import './main-page.scss';
 import { Chat } from '../../components/chat';
 import { contacts } from '../../mock/contact';
-import { ISimpleObject } from '../../core/base/models';
+import { Component, prepareComponent } from '../../core/component';
+import { ISimpleObject } from '../../core/models';
 
 type TMainPageState = typeof state;
 

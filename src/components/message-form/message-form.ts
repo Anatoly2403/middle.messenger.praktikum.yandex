@@ -1,4 +1,4 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/component';
 import './message-form.scss';
 import { ArrowButton } from '../../ui-kit/arrow-button';
 import { MessageField } from '../../ui-kit/message-field';

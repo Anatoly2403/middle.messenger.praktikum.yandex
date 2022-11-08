@@ -1,10 +1,9 @@
 import { v4 as makeUUID } from 'uuid';
-import { TComponentProps } from './../models/types';
-import { ElementController } from '../elementController';
-import { DataObservable } from '../dataObservable';
-import { EventBus } from '../eventBus';
-import { EEvents, ISimpleObject, TConfig, TDataObserverProps, TEvents } from '../models';
-import { ChildrenController } from '../childrenController';
+import { DataObservable, TDataObserverProps } from '../dataObservable';
+import { EEvents, EventBus } from '../eventBus';
+import { ISimpleObject } from '../models';
+import { ChildrenController, ElementController } from './enhancers';
+import { TComponentProps, TConfig, TEvents } from './models';
 
 export function prepareComponent<
   TProps extends ISimpleObject = ISimpleObject,

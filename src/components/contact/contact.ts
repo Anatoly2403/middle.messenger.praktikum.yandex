@@ -1,5 +1,5 @@
-import { Component, prepareComponent } from '../../core/base/component';
-import { TDataObserverProps } from '../../core/base/models';
+import { Component, prepareComponent } from '../../core/component';
+import { TDataObserverProps } from '../../core/dataObservable';
 import { EMessageContentType, EMessageStatus, IMessage } from '../../models';
 import { inThisMonth, isToday } from '../../utils';
 import './contact.scss';
