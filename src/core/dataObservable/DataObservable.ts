@@ -5,6 +5,8 @@ export type TDataObserverProps<TData> = {
   prevData: TData;
 };
 
+export type TSubscriber<TData> = (props: TDataObserverProps<TData>) => void;
+
 export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
   private _data: TData;
   private _prevData: TData;
@@ -51,7 +53,7 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
     Object.assign(this._data, data);
   }
 
-  public subscribe(subscriber: (props: TDataObserverProps<TData>) => void) {
+  public subscribe(subscriber: TSubscriber<TData>) {
     this._subscribers.push(subscriber);
     return () => this._subscribers.filter((fn) => fn === subscriber);
   }
