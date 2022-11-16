@@ -2,7 +2,8 @@ import { v4 as makeUUID } from 'uuid';
 import { DataObservable, TDataObserverProps } from '../dataObservable';
 import { EEvents, EventBus } from '../eventBus';
 import { ISimpleObject } from '../models';
-import { ChildrenController, ElementController } from './enhancers';
+import { ChildrenController } from './childrenController';
+import { ElementController } from './elementController';
 import { TComponentProps, TConfig, TEvents } from './models';
 
 export function prepareComponent<

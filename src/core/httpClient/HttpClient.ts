@@ -60,7 +60,7 @@ export class HttpClient {
       }
 
       if (method !== EMethods.GET && data) {
-        xhr.send(data);
+        xhr.send(JSON.stringify(data));
       }
       if (method === EMethods.GET) {
         xhr.send();

@@ -1,5 +1,5 @@
 import { prepareComponent } from '../../core/component';
-import { Link } from '../../ui-kit/link';
+import { Link } from '../../core/router/components/link';
 import './not-found-page.scss';
 
 const template = `

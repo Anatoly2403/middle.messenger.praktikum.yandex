@@ -1,11 +1,14 @@
 import './login-page.scss';
+import { ISigninData } from './../../api/AuthApi/interfaces';
 import { Form } from '../../components/form/form';
 import { validatePassword, validateLogin } from '../../utils';
 import { TInputFieldProps } from '../../ui-kit/input-field';
 import { TButtonProps } from '../../ui-kit/button';
-import { TLinkProps } from '../../ui-kit/link';
+import { TLinkProps } from '../../core/router/components/link';
 import { prepareComponent } from '../../core/component';
 import { ISimpleObject } from '../../core/models';
+import { authApi } from '../../api/AuthApi';
+import { redirect } from '../../core/router';
 
 type TLoginPageState = {
   fields: TInputFieldProps[];
@@ -28,8 +31,11 @@ const template = `
     </div>
   `;
 
-function onSubmit(data: { login: string; password: string }) {
-  alert(JSON.stringify(data));
+function onSubmit(data: ISigninData) {
+  authApi
+    .signin(data)
+    .then(() => redirect('/'))
+    .catch((err) => alert(err.message));
 }
 
 export const LoginPage = prepareComponent<ISimpleObject, TLoginPageState>({
@@ -47,7 +53,7 @@ export const LoginPage = prepareComponent<ISimpleObject, TLoginPageState>({
       label: 'Авторизоваться',
     },
     link: {
-      href: '/signin',
+      href: '/signup',
       label: 'Нет аккаунта?',
     },
   },

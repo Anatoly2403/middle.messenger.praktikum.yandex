@@ -7,7 +7,7 @@ export function isToday(date: Date) {
   );
 }
 
-export function inThisMonth(date: Date) {
+export function inCurrentMonth(date: Date) {
   const current = new Date();
   return (
     date.getDate() !== current.getDate() &&

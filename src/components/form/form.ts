@@ -1,6 +1,6 @@
 import { Component, prepareComponent } from '../../core/component';
 import './form.scss';
-import { Link, TLinkProps } from '../../ui-kit/link';
+import { Link, TLinkProps } from '../../core/router/components/link';
 import { InputField, inputValidator, TInputFieldProps } from '../../ui-kit/input-field';
 import { Button, TButtonProps } from '../../ui-kit/button';
 import { FileField, TFileFieldProps } from '../../ui-kit/file-field';

@@ -1,7 +1,5 @@
 import { Component, renderDOM } from '../../component';
 import { TPreComponent } from '../../component/models';
-import { redirect } from '../helpers/helpers';
-import { ElementWithPathname } from '../models/types';
 
 export class Route {
   private pathname: string;
@@ -15,30 +13,12 @@ export class Route {
     this.props = props;
   }
 
-  private _listener(e: MouseEvent) {
-    e.preventDefault();
-    const { pathname } = e.target as ElementWithPathname;
-    redirect(pathname);
-  }
-
-  private _addListener() {
-    const links = document.querySelectorAll('a');
-    links.forEach((link) => link.addEventListener('click', this._listener.bind(this)));
-  }
-
-  private _removeListener() {
-    const links = document.querySelectorAll('a');
-    links.forEach((link) => link.removeEventListener('click', this._listener.bind(this)));
-  }
-
   public match(pathname: string) {
     return pathname === this.pathname;
   }
 
   public render() {
-    this._removeListener();
     this.component = this.view({});
     renderDOM(this.props?.rootQuery || '#app', this.component);
-    this._addListener();
   }
 }

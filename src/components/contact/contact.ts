@@ -1,7 +1,7 @@
 import { Component, prepareComponent } from '../../core/component';
 import { TDataObserverProps } from '../../core/dataObservable';
 import { EMessageContentType, EMessageStatus, IMessage } from '../../models';
-import { inThisMonth, isToday } from '../../utils';
+import { inCurrentMonth, isToday } from '../../utils';
 import './contact.scss';
 
 type TContactProps = {
@@ -69,7 +69,7 @@ function getMessageTime(message: IMessage) {
   if (isToday(messageTime)) {
     return `${messageTime.getHours()}:${messageTime.getMinutes()}`;
   }
-  if (inThisMonth(messageTime)) {
+  if (inCurrentMonth(messageTime)) {
     return `${messageTime.getDate()}.${messageTime.getMonth() + 1}`;
   }
   return `${messageTime.getMonth() + 1}.${messageTime.getFullYear()}`;
