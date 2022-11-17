@@ -44,18 +44,18 @@
 
   &__user-data {
     height: 198px;
+
+    &>div:last-child .text-field {
+      border-bottom: 1px solid transparent;
+    }
+  }
+
+  &__control>div:last-child .text-button {
+    border-bottom: 1px solid transparent;
   }
 
   &__password-wrapper {
     display: none;
-  }
-
-  &__main-info-wrapper>div:last-child>.text-field {
-    border-bottom: 1px solid transparent;
-  }
-
-  &__main-btns-wrapper>div:last-child>.text-button {
-    border-bottom: 1px solid transparent;
   }
 
   &__save-btns-wrapper {

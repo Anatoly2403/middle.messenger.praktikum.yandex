@@ -12,9 +12,15 @@ function handleAvatarClick(this: Component<TAvatarProps>) {
 
 export const Avatar = prepareComponent<TAvatarProps>({
   name: 'avatar',
-  template: `<div class="avatar" data-event="[click:handleAvatarClick]">
-                <img class="profile-avatar__avatar" src="{{ props.avatarSrc }}" alt="avatar"/>
-            </div>
+  template: `
+              <div 
+                class="avatar {{#if props.avatarSrc}}{{else}}avatar_default{{/if}}" 
+                data-event="[click:handleAvatarClick]"
+              >
+                  {{#if props.avatarSrc}}
+                    <img class="profile-avatar__avatar" src="{{ props.avatarSrc }}" alt="avatar"/>
+                  {{/if}}
+              </div>
   `,
   events: { handleAvatarClick },
 });

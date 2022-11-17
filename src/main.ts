@@ -15,7 +15,6 @@ router.registerRoutes([
   { path: '/profile', view: ProfilePage, props: { rootQuery: '#app' } },
   { path: '/500', view: ErrorPage, props: { rootQuery: '#app' } },
   { path: '/*', view: NotFoundPage, props: { rootQuery: '#app' } },
-  
 ]);
 
 router.start();

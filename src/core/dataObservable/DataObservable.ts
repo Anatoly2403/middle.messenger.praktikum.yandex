@@ -33,7 +33,7 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
         const prevTarget = { ...target };
         target[key] = val;
 
-        if (dataLength) {
+        if (dataLength > 0) {
           dataLength--;
         } else {
           callback({ data: target, prevData: prevTarget });

@@ -1,11 +1,10 @@
 import { prepareComponent } from '../../core/component';
-import { IContact } from '../../models';
 import { ActionMenu } from '../action-menu';
 import { MessageForm } from '../message-form';
 import './chat.scss';
 
 type TChatProps = {
-  contact: IContact;
+  contact: [];
 };
 
 type TChatState = {

@@ -4,7 +4,8 @@ export enum EEvents {
   INIT = 'INIT',
   COMPILE = 'COMPILE',
   MOUNT = 'COMPONENT_DID_MOUNT',
-  UPDATE = 'COMPONENT_DID_UPDATE',
+  UPDATE_PROPS = 'UPDATE_PROPS',
+  UPDATE_STATE = 'UPDATE_STATE',
 }
 
 export class EventBus<TData extends ISimpleObject = ISimpleObject> {
@@ -33,6 +34,7 @@ export class EventBus<TData extends ISimpleObject = ISimpleObject> {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
+
     this.listeners[event].forEach((listener) => {
       listener(...args);
     });

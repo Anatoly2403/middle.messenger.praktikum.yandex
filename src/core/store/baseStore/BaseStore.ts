@@ -1,9 +1,8 @@
 import { DataObservable, TSubscriber } from '../../dataObservable';
 import { ISimpleObject } from '../../models';
 
-export abstract class Store<TState extends ISimpleObject = ISimpleObject> {
+class BaseStore<TState extends ISimpleObject = ISimpleObject> {
   private state: DataObservable<TState>;
-  private subscribers: Record<string, () => void> = {};
 
   constructor(initState: TState) {
     this.state = new DataObservable<TState>(initState);
@@ -17,13 +16,11 @@ export abstract class Store<TState extends ISimpleObject = ISimpleObject> {
     this.state.updateData({ ...this.getState(), ...nextValue });
   }
 
-  public subscribe(id: string, subscriber: TSubscriber<TState>) {
-    const unsubscribe = this.state.subscribe(subscriber);
-    this.subscribers[id] = unsubscribe;
+  public subscribe(subscriber: TSubscriber<TState>) {
+    return this.state.subscribe(subscriber);
   }
+}
 
-  public unsubscribe(id: string) {
-    if (!this.subscribers[id]) return;
-    this.subscribers[id]();
-  }
+export function createStore<TInitState extends ISimpleObject = ISimpleObject>(initState: TInitState) {
+  return new BaseStore<TInitState>(initState);
 }

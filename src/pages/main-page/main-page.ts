@@ -1,11 +1,9 @@
 import { Component, prepareComponent } from '../../core/component';
 import './main-page.scss';
 import { Contact } from '../../components/contact';
-import { withStore } from './../../core/store/hoc/withStore';
 import { Link } from '../../core/router/components/link';
 import { SearchInput } from '../../ui-kit/search-input';
 import { Chat } from '../../components/chat';
-import { contacts } from '../../mock/contact';
 
 import { ISimpleObject } from '../../core/models';
 
@@ -45,14 +43,11 @@ const template = `
 `;
 
 const state = {
-  contacts,
+  contacts: [],
 };
 
 function onClickContact(this: Component<ISimpleObject, TMainPageState>, id: string) {
-  this.setState((state) => ({
-    ...state,
-    contacts: state.contacts.map((item) => ({ ...item, isActive: item.id === id })),
-  }));
+  console.log(id);
 }
 
 function searchInputHandler(this: Component<ISimpleObject, TMainPageState>, searchValue: string) {
@@ -60,16 +55,14 @@ function searchInputHandler(this: Component<ISimpleObject, TMainPageState>, sear
   console.log(searchValue);
   this.setState((state) => ({
     ...state,
-    contacts: state.contacts.filter((item) => item.name.includes(searchValue)),
+    contacts: [],
   }));
 }
 
-export const MainPage = withStore(
-  prepareComponent<ISimpleObject, TMainPageState>({
-    name: 'main-page',
-    template,
-    state,
-    children: [Link, SearchInput, Contact, Chat],
-    helpers: { searchInputHandler, onClickContact },
-  }),
-);
+export const MainPage = prepareComponent<ISimpleObject, TMainPageState>({
+  name: 'main-page',
+  template,
+  state,
+  children: [Link, SearchInput, Contact, Chat],
+  helpers: { searchInputHandler, onClickContact },
+});

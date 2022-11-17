@@ -1,7 +1,7 @@
 import { Component, prepareComponent } from '../../core/component';
+import { AnyType } from './../../core/models/index';
 import { TDataObserverProps } from '../../core/dataObservable';
-import { EMessageContentType, EMessageStatus, IMessage } from '../../models';
-import { inCurrentMonth, isToday } from '../../utils';
+// import { inCurrentMonth, isToday } from '../../utils';
 import './contact.scss';
 
 type TContactProps = {
@@ -10,7 +10,7 @@ type TContactProps = {
   avatar?: string;
   lastName: string;
   phone: string;
-  messages: IMessage[];
+  messages: AnyType[];
   onClickContact: (id: string) => void;
   isActive?: boolean;
 };
@@ -44,49 +44,40 @@ const template = `
   </div>
 `;
 
-function getLastMessageContent(message: IMessage) {
-  if (message.contentType === EMessageContentType.FILE) {
-    return 'File';
-  }
-  if (message.contentType === EMessageContentType.IMAGE) {
-    return 'Image';
-  }
-  if (message.contentType === EMessageContentType.LOCATION) {
-    return 'Location';
-  }
+// function getLastMessageContent(message: AnyType) {
+//   return message?.content;
+// }
 
-  return message?.content;
-}
+// function getUnreadMessageCount(messages: AnyType[]) {
+//   // const unreadMessages = messages.filter((message) => message.status === EMessageStatus.UNREAD);
+//   // return unreadMessages.length;
+//   console.log(messages);
+// }
 
-function getUnreadMessageCount(messages: IMessage[]) {
-  const unreadMessages = messages.filter((message) => message.status === EMessageStatus.UNREAD);
-  return unreadMessages.length;
-}
+// function getMessageTime(message: AnyType) {
+//   const messageTime = message.createdAt;
 
-function getMessageTime(message: IMessage) {
-  const messageTime = message.createdAt;
+//   if (isToday(messageTime)) {
+//     return `${messageTime.getHours()}:${messageTime.getMinutes()}`;
+//   }
+//   if (inCurrentMonth(messageTime)) {
+//     return `${messageTime.getDate()}.${messageTime.getMonth() + 1}`;
+//   }
+//   return `${messageTime.getMonth() + 1}.${messageTime.getFullYear()}`;
+// }
 
-  if (isToday(messageTime)) {
-    return `${messageTime.getHours()}:${messageTime.getMinutes()}`;
-  }
-  if (inCurrentMonth(messageTime)) {
-    return `${messageTime.getDate()}.${messageTime.getMonth() + 1}`;
-  }
-  return `${messageTime.getMonth() + 1}.${messageTime.getFullYear()}`;
-}
-
-function getDataForRender(props: TContactProps) {
-  const lastMessage = props.messages[props.messages.length - 1];
-  return {
-    lastMessageContent: lastMessage ? getLastMessageContent(lastMessage) : '',
-    lastMessageTime: lastMessage ? getMessageTime(lastMessage) : '',
-    unreadMessagesCount: lastMessage ? getUnreadMessageCount(props.messages) : undefined,
-  };
-}
+// function getDataForRender(props: TContactProps) {
+//   const lastMessage = props.messages[props.messages.length - 1];
+//   return {
+//     lastMessageContent: lastMessage ? getLastMessageContent(lastMessage) : '',
+//     lastMessageTime: lastMessage ? getMessageTime(lastMessage) : '',
+//     unreadMessagesCount: lastMessage ? getUnreadMessageCount(props.messages) : undefined,
+//   };
+// }
 
 function componentDidMount(this: Component<TContactProps, TContactState>, props: TDataObserverProps<TContactProps>) {
   if (props.data.messages.length) {
-    this.setState({ ...getDataForRender(props.data) });
+    // this.setState({ ...getDataForRender(props.data) });
   }
 }
 

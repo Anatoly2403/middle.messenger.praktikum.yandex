@@ -1,5 +1,5 @@
 import './signup-page.scss';
-import { ISignupData } from '../../api/AuthApi/interfaces';
+import { ISignupData } from '../../models/interfaces';
 import { Form } from '../../components/form/form';
 import { validatePassword, validateLogin, validateEmail, validateName, validatePhone } from '../../utils';
 import { TInputFieldProps } from '../../ui-kit/input-field';
@@ -7,8 +7,7 @@ import { TButtonProps } from '../../ui-kit/button';
 import { TLinkProps } from '../../core/router/components/link';
 import { prepareComponent } from '../../core/component';
 import { ISimpleObject } from '../../core/models';
-import { authApi } from '../../api/AuthApi';
-import { redirect } from '../../core/router';
+import { userService } from '../../services/user-service';
 
 type TSignupPageState = {
   fields: TInputFieldProps[];
@@ -17,13 +16,7 @@ type TSignupPageState = {
 };
 
 function onSubmit(data: ISignupData) {
-  authApi
-    .signup(data)
-    .then((res) => {
-      console.log(res);
-      redirect('/');
-    })
-    .catch((err) => alert(err.message));
+  userService.signup(data);
 }
 
 const template = `

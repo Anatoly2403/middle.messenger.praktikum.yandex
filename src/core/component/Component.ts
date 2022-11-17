@@ -31,6 +31,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
   private _childrenController: ChildrenController;
   private _componentDidMount?: (props: TDataObserverProps<TProps>) => void;
   private _componentDidUpdate?: (props: TDataObserverProps<TProps>) => void;
+  private _unsubscribeFuncs: Array<() => void> = [];
 
   constructor({ id, config, props }: TComponentProps<TProps>) {
     this._id = id;
@@ -48,9 +49,11 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     });
 
     this._registerEvents();
-    this._props.subscribe(({ prevData, data }) => this._eventBus.emit(EEvents.UPDATE, prevData, data));
+    this._props.subscribe(({ prevData, data }) => {
+      this._eventBus.emit(EEvents.UPDATE_PROPS, prevData, data);
+    });
     if (config.state) {
-      this._state.subscribe(({ prevData, data }) => this._eventBus.emit(EEvents.UPDATE, prevData, data));
+      this._state.subscribe(({ prevData, data }) => this._eventBus.emit(EEvents.UPDATE_STATE, prevData, data));
     }
   }
 
@@ -76,7 +79,8 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
 
   private _registerEvents() {
     this._eventBus.on(EEvents.MOUNT, this.mountComponent.bind(this));
-    this._eventBus.on(EEvents.UPDATE, this.updateComponent.bind(this));
+    this._eventBus.on(EEvents.UPDATE_PROPS, this.updateComponent.bind(this));
+    this._eventBus.on(EEvents.UPDATE_STATE, this.updateComponent.bind(this));
   }
 
   private updateComponent(prevData: TProps, data: TProps) {
@@ -113,5 +117,13 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
   public setParentElement(element: Element) {
     this._elementController.setParentElement(element);
     this._childrenController.setParent(element);
+  }
+
+  public setUnsubscribe(fn: () => void) {
+    this._unsubscribeFuncs.push(fn);
+  }
+
+  public unsubscribe() {
+    this._unsubscribeFuncs.forEach((fn) => fn());
   }
 }

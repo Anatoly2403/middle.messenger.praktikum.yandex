@@ -1,35 +1,17 @@
-import { EMessageContentType, EMessageStatus, EMessageType } from './enums';
-
-export interface IMessage {
-  id: string;
-  type: EMessageType;
-  createdAt: Date;
-  content: string;
-  contentType: EMessageContentType;
-  status: EMessageStatus;
-}
-
-export interface IContact {
-  id: string;
-  name: string;
-  avatar?: string;
-  lastName: string;
-  phone: string;
-  messages: IMessage[];
-}
-
-export interface IPersonalData {
-  mail: string;
+export interface ISigninData {
   login: string;
-  name: string;
-  lastName: string;
-  phone: string;
   password: string;
-  avatar?: string;
 }
 
-export interface IUser {
-  id: string;
-  data: IPersonalData;
-  contacts: IContact[];
+export interface ISignupData extends ISigninData {
+  first_name: string;
+  second_name: string;
+  email: string;
+  phone: string;
+}
+
+export interface IUserData extends ISignupData {
+  id: number;
+  display_name: null | string;
+  avatar: null | string;
 }
