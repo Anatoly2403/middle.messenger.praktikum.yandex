@@ -5,7 +5,9 @@ import { LoginPage } from './pages/login-page/login-page';
 import { MainPage } from './pages/main-page';
 import { NotFoundPage } from './pages/not-found-page';
 import { ProfilePage } from './pages/profile-page';
+import { registerHbHelpers } from './core/component/utils';
 
+registerHbHelpers();
 const router = Router.getInstance();
 
 router.registerRoutes([

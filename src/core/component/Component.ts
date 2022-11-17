@@ -69,6 +69,10 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     return { ...this._props.data };
   }
 
+  public get state() {
+    return { ...this._state.data };
+  }
+
   private _bindContext(events?: TEvents) {
     if (!events) return events;
     return Object.keys(events).reduce<TEvents>((acc, key) => {

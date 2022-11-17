@@ -5,6 +5,7 @@ import { InputField, inputValidator, TInputFieldProps } from '../../ui-kit/input
 import { Button, TButtonProps } from '../../ui-kit/button';
 import { FileField, TFileFieldProps } from '../../ui-kit/file-field';
 import { ISimpleObject } from '../../core/models';
+import { prepareProps } from '../../utils/formUtils';
 
 function isInputFieldProps(item: TInputFieldProps | TFileFieldProps): item is TInputFieldProps {
   return 'type' in item && item.type === 'inputField';
@@ -55,22 +56,11 @@ function validateForm(propsData: Array<TInputFieldProps | TFileFieldProps>, fiel
       if (!acc) acc = isValid;
     }
     if ('required' in item && field) {
-      const isValid = item.required ? !!field?.files?.length : true;
+      const isValid = item.required ? !field?.files?.length : true;
       if (!acc) acc = isValid;
     }
     return acc;
   }, false);
-}
-
-function prepareProps(fields: NodeListOf<HTMLInputElement>) {
-  return Array.from(fields).reduce<Record<string, string | File>>((acc, item) => {
-    if (item.type === 'file' && item.files) {
-      acc[item.name] = item.files[0];
-    } else {
-      acc[item.name] = item.value;
-    }
-    return acc;
-  }, {});
 }
 
 function onSubmit(this: Component<TFormProps>, e: Event) {

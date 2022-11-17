@@ -5,6 +5,7 @@ export type TTextFieldProps = {
   name: string;
   label: string;
   value: string;
+  disabled: boolean;
 };
 
 const template = `
@@ -14,8 +15,10 @@ const template = `
         class="text-field__value"
         name="{{ props.name }}"
         value="{{ props.value }}" 
-        type="text" 
-        disabled
+        type="text"
+        {{#if_not props.disabled}}
+          disabled
+        {{/if_not}}       
       />
     </div>
   `;

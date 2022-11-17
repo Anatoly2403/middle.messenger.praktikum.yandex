@@ -10,8 +10,28 @@ export interface ISignupData extends ISigninData {
   phone: string;
 }
 
-export interface IUserData extends ISignupData {
+export interface IProfileData {
+  display_name: string;
+  first_name: string;
+  second_name: string;
+  login: string;
+  email: string;
+  phone: string;
+}
+
+export interface IUserData {
   id: number;
   display_name: null | string;
   avatar: null | string;
+  status: null | string;
+  first_name: string;
+  second_name: string;
+  login: string;
+  email: string;
+  phone: string;
+}
+
+export interface IPasswordData {
+  oldPassword: string;
+  newPassword: string;
 }

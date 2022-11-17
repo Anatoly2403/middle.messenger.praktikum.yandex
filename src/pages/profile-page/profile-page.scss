@@ -43,11 +43,18 @@
   }
 
   &__user-data {
+    width: 510px;
     height: 198px;
 
     &>div:last-child .text-field {
       border-bottom: 1px solid transparent;
     }
+  }
+
+  &__user-data-submit {
+    margin: 60px auto 0;
+    width: 280px;
+
   }
 
   &__control>div:last-child .text-button {

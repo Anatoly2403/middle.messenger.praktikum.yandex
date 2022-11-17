@@ -47,6 +47,7 @@ const state = {
 };
 
 function onClickContact(this: Component<ISimpleObject, TMainPageState>, id: string) {
+  // eslint-disable-next-line no-console
   console.log(id);
 }
 

@@ -27,3 +27,11 @@ export function validatePassword(password: string) {
 export function validatePhone(phone: string) {
   return regExps.PHONE.test(phone);
 }
+
+export const validatorsMap: Record<string, (name: string) => boolean> = {
+  name: validateName,
+  login: validateLogin,
+  email: validateEmail,
+  password: validatePassword,
+  phone: validatePhone,
+};

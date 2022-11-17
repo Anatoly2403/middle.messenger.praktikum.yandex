@@ -15,13 +15,24 @@ export function parseEvent(evString: string) {
 }
 
 export function registerHbHelpers() {
+  Handlebars.registerHelper('if_or', function (this: unknown, a, b, opts) {
+    return a || b ? opts.fn(this) : opts.inverse(this);
+  });
+
   Handlebars.registerHelper('if_eq', function (this: unknown, a, b, opts) {
     return a == b ? opts.fn(this) : opts.inverse(this);
+  });
+
+  Handlebars.registerHelper('if_not', function (this: unknown, a, opts) {
+    return !a ? opts.fn(this) : opts.inverse(this);
+  });
+
+  Handlebars.registerHelper('if_and-not', function (this: unknown, a, b, opts) {
+    return !a && !b ? opts.fn(this) : opts.inverse(this);
   });
 }
 
 export function renderDOM(selector: string, component: Component<AnyType>) {
-  registerHbHelpers();
   const parentElement = document.querySelector(selector);
   if (!parentElement) throw new Error(`Ошибка. Элемент с селектором ${selector} - отсутствует`);
   component.setParentElement(parentElement);
