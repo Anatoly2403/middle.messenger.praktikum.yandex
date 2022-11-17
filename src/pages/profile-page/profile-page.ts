@@ -37,23 +37,24 @@ const template = `
         <form class="profile-page__user-data" data-event="[submit:onSubmitData]"> 
           {{#if state.changePassword}}
             {{{
-              text-field 
+              text-field
                 key="oldPassword" 
                 disabled=state.changePassword
                 name="oldPassword" 
-                label="Старый пароль" 
+                label="Старый пароль"
                 value=''
             }}}
             {{{
-              text-field 
-                key="newPassword" 
+              text-field
+                key="newPassword"
                 disabled=state.changePassword
                 name="newPassword" 
-                label="Новый пароль" 
-                value=''}}}
+                label="Новый пароль"
+                value=''
+            }}}
           {{else}}
             {{{
-              text-field 
+              text-field
                 key="email"
                 disabled=state.changeData
                 name="email"
@@ -61,7 +62,7 @@ const template = `
                 value=props.user.email
               }}}
             {{{
-              text-field 
+              text-field
                 key="login"
                 disabled=state.changeData
                 name="login"
@@ -69,7 +70,7 @@ const template = `
                 value=props.user.login
               }}}
             {{{
-              text-field 
+              text-field
                 key="first_name"
                 disabled=state.changeData
                 name="first_name"
@@ -77,7 +78,7 @@ const template = `
                 value=props.user.first_name
               }}}
             {{{
-              text-field 
+              text-field
                 key="second_name"
                 disabled=state.changeData
                 name="second_name"
@@ -85,7 +86,7 @@ const template = `
                 value=props.user.second_name
               }}}
             {{{
-              text-field 
+              text-field
                 key="display_name"
                 disabled=state.changeData
                 name="display_name"
@@ -93,7 +94,7 @@ const template = `
                 value=props.user.display_name
               }}}
             {{{
-              text-field 
+              text-field
                 key="phone"
                 disabled=state.changeData
                 name="phone"
@@ -125,7 +126,7 @@ export const ProfilePage = withStore(
     componentDidMount: () => userService.getUserData(),
     children: [ArrowButton, Avatar, TextField, TextButton, Modal, Button],
     helpers: {
-      arrowBtnClick: () => redirect('/'),
+      arrowBtnClick,
       logout: () => userService.logout(),
       avatarClick,
       changeData,
@@ -137,6 +138,18 @@ export const ProfilePage = withStore(
     events: { onSubmitData },
   }),
 );
+
+function arrowBtnClick(this: Component<ISimpleObject, TProfilePageState>) {
+  if (this.state.changeData) {
+    this.setState((state) => ({ ...state, changeData: false }));
+    return;
+  }
+  if (this.state.changePassword) {
+    this.setState((state) => ({ ...state, changePassword: false }));
+    return;
+  }
+  redirect('/');
+}
 
 function avatarClick(this: Component<ISimpleObject, TProfilePageState>) {
   this.setState((state) => ({ ...state, showModal: true }));
