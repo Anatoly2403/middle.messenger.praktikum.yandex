@@ -19,10 +19,10 @@ const template = `
         </div>
         <div class="chats-item__data">
           <span class="chats-item__data-name">{{props.title}}</span>
-          <span class="chats-item__data-message">{{props.last_message}}</span>
+          <span class="chats-item__data-message">{{props.last_message.content}}</span>
         </div>
         <div class="chats-item__info">          
-          {{#time props.created_by}}
+          {{#time props.last_message.time}}
             <time class="chats-item__info-time">{{date}}</time>
           {{/time}}
           {{#if unread_count}}

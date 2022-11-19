@@ -1,23 +1,26 @@
 import { TPreComponent } from '../core/component/models';
 import { ISimpleObject } from '../core/models';
-import { IUserData, IChat } from '../models';
+import { IUserData, IChatItem, IMessage } from '../models';
 import { createStore } from './../core/store';
 
-interface TState {
+export interface TState {
+  userId: null | number;
   user: IUserData | null;
-  isLoading: boolean;
-  chats: IChat;
+  chats: IChatItem[];
+  activeChatToken: string | null;
+  activeChat: IChatItem | null;
+  messages: IMessage[];
 }
 
 export type TStore = typeof store;
 
 export const store = createStore<TState>({
-  isLoading: false,
+  userId: null,
   user: null,
-  chats: {
-    items: [],
-    active: undefined,
-  },
+  chats: [],
+  activeChatToken: null,
+  activeChat: null,
+  messages: [],
 });
 
 export function withStore<
@@ -28,14 +31,14 @@ export function withStore<
   innerWithStore.prototype['id'] = preComponent.prototype.id;
 
   function innerWithStore(props: TProps) {
-    const component = preComponent(props);
-    const state = store.getState();
+    const component = preComponent({ ...props });
+    const state = mapStateToProps ? mapStateToProps(store.getState()) : store.getState();
 
-    component.setProps(state);
+    component.setProps({ ...state });
 
     const unsubscribe = store.subscribe(({ data }) => {
       if (!mapStateToProps) {
-        return component.setProps(data);
+        return component.setProps({ ...data });
       }
       const mappedProps = mapStateToProps(data);
       component.setProps(mappedProps);

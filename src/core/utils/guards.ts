@@ -1,5 +1,5 @@
-import { ISimpleObject } from './../models/index';
-import { AnyType } from './../models/index';
+import { ISimpleObject } from '../models/index';
+import { AnyType } from '../models/index';
 
 export function isArray(x: unknown): x is AnyType[] {
   return Array.isArray(x);

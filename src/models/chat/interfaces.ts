@@ -21,7 +21,13 @@ export interface IChatItem {
   last_message: ILastMessage;
 }
 
-export interface IChat {
-  items: IChatItem[];
-  active?: number;
+export interface INewChatItem {
+  title: string;
+  avatar: string;
+  unread_count: number;
+  last_message: ILastMessage;
+}
+
+export interface IToken {
+  token: string;
 }

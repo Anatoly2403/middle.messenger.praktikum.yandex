@@ -45,4 +45,11 @@ export class UserApi extends HttpClient {
       data,
     });
   }
+
+  public async getUser<TResponseType = unknown>(login: string) {
+    return this.post<TResponseType>(`${this.url}/user/search`, {
+      data: { login },
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 }

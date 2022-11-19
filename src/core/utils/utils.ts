@@ -29,6 +29,20 @@ function compareValues(x: unknown, y: unknown): boolean {
   return false;
 }
 
+export function debounce<T>(func: (arg: T) => void, timeout = 200) {
+  let timer: NodeJS.Timeout;
+  return (arg: T) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(arg), timeout);
+  };
+}
+
+export function isEmpty(arg: unknown) {
+  if (arg instanceof Object) return !Object.keys(arg).length;
+  if (Array.isArray(arg)) return !arg.length;
+  return Boolean(arg);
+}
+
 export function isEqual(x: ISimpleObject, y: ISimpleObject): boolean {
   return compareValues(x, y);
 }

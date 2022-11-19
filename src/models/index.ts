@@ -1,3 +1,4 @@
-export * from './user/interfaces';
-export * from './chat/interface';
+export * from './user';
+export * from './chat';
 export * from './guards';
+export * from './message';

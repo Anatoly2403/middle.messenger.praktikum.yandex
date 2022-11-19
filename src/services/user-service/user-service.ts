@@ -39,7 +39,7 @@ class UserService {
 
   public async getUserData() {
     const userInfo = await this.api.info<IUserData>();
-    store.setState({ user: userInfo });
+    store.setState({ user: userInfo, userId: userInfo.id });
   }
 
   public async updateProfileData(data: IProfileData) {
@@ -63,6 +63,14 @@ class UserService {
     try {
       const userInfo = await this.api.updateAvatar<IUserData>(data);
       store.setState({ user: userInfo });
+    } catch (e) {
+      if (isError(e)) showError(e.reason);
+    }
+  }
+
+  public async getUserByLogin(login: string) {
+    try {
+      return await this.api.getUser<IUserData[]>(login);
     } catch (e) {
       if (isError(e)) showError(e.reason);
     }

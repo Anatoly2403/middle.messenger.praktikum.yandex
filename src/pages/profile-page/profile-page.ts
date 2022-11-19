@@ -1,20 +1,43 @@
 import './profile-page.scss';
 import { validatePassword, validateEmail, validateName, validatePhone, validateLogin } from './../../utils';
-import { withStore } from './../../store/Store';
+import { TState, withStore } from './../../store/Store';
 import { ArrowButton } from '../../ui-kit/arrow-button';
 import { ProfileAvatar } from '../../components/profile-avatar';
 import { TextField } from '../../ui-kit/text-field/text-field';
 import { TextButton } from '../../ui-kit/text-button/text-button';
 import { Modal } from '../../components/modal/modal';
-import { TAvatarData, TProfilePageState } from './types';
-import { avatarFormMeta } from './constants';
 import { redirect } from '../../core/router';
 import { Component, prepareComponent } from '../../core/component';
-import { ISimpleObject } from '../../core/models';
 import { userService } from '../../services/user-service';
-import { Button } from '../../ui-kit/button';
+import { Button, TButtonProps } from '../../ui-kit/button';
 import { showError } from '../../core/error';
-import { IProfileData, IPasswordData } from '../../models';
+import { IProfileData, IPasswordData, IUserData } from '../../models';
+import { TInputFieldProps } from '../../ui-kit/input-field';
+import { TFileFieldProps } from '../../ui-kit/file-field';
+
+type TProfilePageState = {
+  changeData: boolean;
+  changePassword: boolean;
+  showModal: boolean;
+  modalFormData: {
+    title: string;
+    fields: Array<TInputFieldProps | TFileFieldProps>;
+    submit: TButtonProps;
+  };
+};
+
+type TAvatarData = Record<string, File>;
+
+type TProfilePageProps = {
+  user: IUserData | null;
+};
+
+const avatarFormMeta = {
+  id: 'uploadFile',
+  title: 'Загрузите файл',
+  fields: [{ type: 'fileField', name: 'avatar', label: 'Выбрать файл на компьютере', required: true }],
+  submit: { type: 'submit', label: 'Поменять' },
+};
 
 const template = `
     <div class="profile-page">
@@ -23,7 +46,7 @@ const template = `
           modal
             show=state.showModal
             hideModal=helpers.hideModal
-            saveData=helpers.saveData
+            handleSubmit=helpers.saveData
             formData=state.modalFormData
         }}}    
       {{/if}}    
@@ -119,8 +142,12 @@ const template = `
     </div>
   `;
 
+function mapStateToProps(state: TState) {
+  return { user: state.user };
+}
+
 export const ProfilePage = withStore(
-  prepareComponent<ISimpleObject, TProfilePageState>({
+  prepareComponent<TProfilePageProps, TProfilePageState>({
     name: 'profile-page',
     template,
     componentDidMount: () => userService.getUserData(),
@@ -137,9 +164,10 @@ export const ProfilePage = withStore(
     state: { modalFormData: avatarFormMeta, changeData: false, changePassword: false, showModal: false },
     events: { onSubmitData },
   }),
+  mapStateToProps,
 );
 
-function arrowBtnClick(this: Component<ISimpleObject, TProfilePageState>) {
+function arrowBtnClick(this: Component<TProfilePageProps, TProfilePageState>) {
   if (this.state.changeData) {
     this.setState((state) => ({ ...state, changeData: false }));
     return;
@@ -151,29 +179,29 @@ function arrowBtnClick(this: Component<ISimpleObject, TProfilePageState>) {
   redirect('/');
 }
 
-function avatarClick(this: Component<ISimpleObject, TProfilePageState>) {
+function avatarClick(this: Component<TProfilePageProps, TProfilePageState>) {
   this.setState((state) => ({ ...state, showModal: true }));
 }
 
-function changeData(this: Component<ISimpleObject, TProfilePageState>) {
+function changeData(this: Component<TProfilePageProps, TProfilePageState>) {
   this.setState((state) => ({ ...state, changeData: true }));
 }
-function changePassword(this: Component<ISimpleObject, TProfilePageState>) {
+function changePassword(this: Component<TProfilePageProps, TProfilePageState>) {
   this.setState((state) => ({ ...state, changePassword: true }));
 }
 
-function hideModal(this: Component<ISimpleObject, TProfilePageState>) {
+function hideModal(this: Component<TProfilePageProps, TProfilePageState>) {
   this.setState((state) => ({ ...state, showModal: false }));
 }
 
-async function saveData(this: Component<ISimpleObject, TProfilePageState>, data: TAvatarData) {
+async function saveData(this: Component<TProfilePageProps, TProfilePageState>, data: TAvatarData) {
   const formData = new FormData();
   formData.append('avatar', data.avatar, data.avatar.name);
   await userService.updateAvatar(formData);
   this.setState((state) => ({ ...state, showModal: false }));
 }
 
-async function onSubmitData(this: Component<ISimpleObject, TProfilePageState>, e: Event) {
+async function onSubmitData(this: Component<TProfilePageProps, TProfilePageState>, e: Event) {
   e.preventDefault();
   const form = e.target as HTMLElement;
   const inputs = form.querySelectorAll('input');

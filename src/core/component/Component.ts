@@ -31,6 +31,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
   private _childrenController: ChildrenController;
   private _componentDidMount?: (props: TDataObserverProps<TProps>) => void;
   private _componentDidUpdate?: (props: TDataObserverProps<TProps>) => void;
+  private _componentWillUnmount?: () => void;
   private _unsubscribeFuncs: Array<() => void> = [];
 
   constructor({ id, config, props }: TComponentProps<TProps>) {
@@ -39,6 +40,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     this._props = new DataObservable<TProps>({ ...props } as TProps);
     this._state = new DataObservable<TState>({ ...config.state } as TState);
     this._componentDidMount = config.componentDidMount?.bind(this);
+    this._componentWillUnmount = config.componentWillUnmount?.bind(this);
     this._componentDidUpdate = config.componentDidUpdate?.bind(this);
     this._childrenController = new ChildrenController(config.children || []);
     this._elementController = new ElementController<TProps>({
@@ -49,15 +51,17 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     });
 
     this._registerEvents();
-    const propsUnsubscribe = this._props.subscribe(({ prevData, data }) => {
-      this._eventBus.emit(EEvents.UPDATE_PROPS, prevData, data);
-    });
-    this.setUnsubscribe(propsUnsubscribe);
+    this.setUnsubscribe(
+      this._props.subscribe(({ prevData, data }) => {
+        this._eventBus.emit(EEvents.UPDATE_PROPS, prevData, data);
+      }),
+    );
     if (config.state) {
-      const stateUnsubscribe = this._state.subscribe(({ prevData, data }) =>
-        this._eventBus.emit(EEvents.UPDATE_STATE, prevData, data),
+      this.setUnsubscribe(
+        this._state.subscribe(({ prevData, data }) => {
+          this._eventBus.emit(EEvents.UPDATE_STATE, prevData, data);
+        }),
       );
-      this.setUnsubscribe(stateUnsubscribe);
     }
   }
 
@@ -94,8 +98,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
   private updateComponent(prevData: TProps, data: TProps) {
     this._elementController.compileTemplate({ ...this._props.data }, { ...this._state.data });
     this._elementController.mountTemplate();
-    if (this._componentDidUpdate) this._componentDidUpdate.call(this, { prevData, data: { ...data } });
-
+    if (this._componentDidUpdate) this._componentDidUpdate({ prevData, data: { ...data } });
     this._childrenController.setParent(this._elementController.parent);
     this._childrenController.updateChildren();
   }
@@ -104,7 +107,7 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     this._elementController.compileTemplate(this._props.data, this._state.data);
     this._elementController.mountTemplate();
     if (this._componentDidMount)
-      this._componentDidMount.call(this, { prevData: this._props.prevData, data: { ...this._props.data } });
+      this._componentDidMount({ prevData: this._props.prevData, data: { ...this._props.data } });
     this._childrenController.mountChildren();
   }
 
@@ -135,5 +138,13 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     this._unsubscribeFuncs.forEach((fn) => fn());
     this._childrenController.destroy();
     this._elementController.destroy();
+    if (this._componentWillUnmount) this._componentWillUnmount();
+  }
+
+  public forceUpdate() {
+    this._elementController.compileTemplate({ ...this._props.data }, { ...this._state.data });
+    this._elementController.mountTemplate();
+    this._childrenController.setParent(this._elementController.parent);
+    this._childrenController.updateChildren();
   }
 }

@@ -15,14 +15,6 @@ export function parseEvent(evString: string) {
   });
 }
 
-export function debounce<T>(func: (arg: T) => void, timeout = 200) {
-  let timer: NodeJS.Timeout;
-  return (arg: T) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => func(arg), timeout);
-  };
-}
-
 export function registerHbHelpers() {
   Handlebars.registerHelper('if_or', function (this: unknown, a, b, opts) {
     return a || b ? opts.fn(this) : opts.inverse(this);
@@ -40,9 +32,9 @@ export function registerHbHelpers() {
     return !a && !b ? opts.fn(this) : opts.inverse(this);
   });
 
-  Handlebars.registerHelper('time', function (this: unknown, timeStamp, opts) {
-    if (!timeStamp) return opts.inverse(this);
-    const date = parseDate(new Date(new Date().getTime() - timeStamp));
+  Handlebars.registerHelper('time', function (this: unknown, time, opts) {
+    if (!time) return opts.inverse(this);
+    const date = parseDate(new Date(time));
     return opts.fn({ date });
   });
 }

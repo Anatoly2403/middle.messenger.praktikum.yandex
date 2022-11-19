@@ -14,17 +14,17 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
   private _dataLength = 0;
 
   constructor(data: TData) {
-    this._data = this.makeAsProxy(data, this._callSubscribers.bind(this));
+    this._data = this.makeAsProxy({ ...data }, this._callSubscribers.bind(this));
     this._prevData = { ...data };
     this.subscribe = this.subscribe.bind(this);
   }
 
   public get data(): TData {
-    return this._data;
+    return { ...this._data };
   }
 
   public get prevData(): TData {
-    return this._prevData;
+    return { ...this._prevData };
   }
 
   private makeAsProxy(data: TData, callback: (props: TDataObserverProps<TData>) => void) {
@@ -40,8 +40,8 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
 
   private _callSubscribers(props: TDataObserverProps<TData>) {
     this._dataLength--;
-    this._prevData = props.prevData;
     if (this._dataLength === 0) {
+      this._prevData = props.prevData;
       this._subscribers.forEach((fn) => fn(props));
     }
   }

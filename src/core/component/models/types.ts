@@ -19,6 +19,7 @@ export type TConfig<TProps extends ISimpleObject = ISimpleObject, TState extends
   children?: TPreComponent[];
   componentDidMount?: (props: TDataObserverProps<TProps>) => void
   componentDidUpdate?: (props: TDataObserverProps<TProps>) => void
+  componentWillUnmount?: () => void
 };
 
 export type TEvents = Record<string, EventListener>;

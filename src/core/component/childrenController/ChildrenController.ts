@@ -1,5 +1,6 @@
 import Handlebars, { HelperOptions } from 'handlebars';
 import { ISimpleObject } from '../../models';
+import { isEmpty } from '../../utils';
 import { Component } from '../Component';
 import { TPreComponent } from '../models';
 
@@ -50,7 +51,8 @@ export class ChildrenController {
   private _updateChild(id: string, parent: Element, props: ISimpleObject, child?: Component) {
     if (child) {
       child.setParentElement(parent);
-      child.setProps(props);
+      if (isEmpty(props)) child.forceUpdate();
+      else child.setProps(props);
       return child;
     }
     const childPreComponent = this._children[id];
