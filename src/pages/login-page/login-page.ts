@@ -1,5 +1,5 @@
 import './login-page.scss';
-import { ISigninData } from '../../models/interfaces';
+import { ISigninData } from '../../models/user/interfaces';
 import { Form } from '../../components/form/form';
 import { validatePassword, validateLogin } from '../../utils';
 import { TInputFieldProps } from '../../ui-kit/input-field';

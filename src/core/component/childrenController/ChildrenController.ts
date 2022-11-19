@@ -53,7 +53,9 @@ export class ChildrenController {
       child.setProps(props);
       return child;
     }
-    const newChild = this._children[id](props);
+    const childPreComponent = this._children[id];
+    if (!childPreComponent) return;
+    const newChild = childPreComponent(props);
     newChild.setParentElement(parent);
     newChild.mount();
     return newChild;
@@ -67,7 +69,8 @@ export class ChildrenController {
   ) {
     return propsArray.reduce<Component[]>((acc, prop, idx) => {
       const child = childArray[idx];
-      acc[idx] = this._updateChild(id, parents[idx], prop, child);
+      const childComponent = this._updateChild(id, parents[idx], prop, child);
+      if (childComponent) acc[idx] = childComponent;
       return acc;
     }, []);
   }
@@ -84,7 +87,8 @@ export class ChildrenController {
       if (Array.isArray(propsRecord)) {
         acc[key] = this._updateChildArray(key, parents, propsRecord, []);
       } else {
-        acc[key] = this._updateChild(key, parents[0], propsRecord);
+        const childComponent = this._updateChild(key, parents[0], propsRecord);
+        if (childComponent) acc[key] = childComponent;
       }
       return acc;
     }, {});
@@ -98,12 +102,21 @@ export class ChildrenController {
       if (parents) {
         if (Array.isArray(propsRecord) && Array.isArray(childRecord)) {
           acc[key] = this._updateChildArray(key, parents, propsRecord, childRecord);
-        }
-        if (!Array.isArray(childRecord)) {
-          acc[key] = this._updateChild(key, parents[0], propsRecord, childRecord);
+        } else if (Array.isArray(propsRecord) && !childRecord) {
+          acc[key] = this._updateChildArray(key, parents, propsRecord, []);
+        } else if (!Array.isArray(propsRecord) && !Array.isArray(childRecord)) {
+          const childComponent = this._updateChild(key, parents[0], propsRecord, childRecord);
+          if (childComponent) acc[key] = childComponent;
         }
       }
       return acc;
     }, {});
+  }
+
+  public destroy() {
+    this._parent = null;
+    this._children = {};
+    this._childTree = {};
+    this._childPropsTree = {};
   }
 }

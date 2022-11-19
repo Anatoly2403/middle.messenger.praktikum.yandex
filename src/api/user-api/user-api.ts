@@ -1,4 +1,4 @@
-import { HttpClient } from '../../core/httpClient/HttpClient';
+import { HttpClient } from '../../core/httpClient';
 import { IPasswordData, IProfileData, ISigninData, ISignupData } from '../../models';
 
 export class UserApi extends HttpClient {

@@ -21,4 +21,8 @@ export class Route {
     this.component = this.view({});
     renderDOM(this.props?.rootQuery || '#app', this.component);
   }
+
+  public destroy() {
+    this.component?.destroy();
+  }
 }

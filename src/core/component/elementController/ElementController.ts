@@ -32,8 +32,8 @@ export class ElementController<
       if (!dataset.event) return;
       const events = parseEvent(dataset.event);
       events.forEach(({ event, name }) => {
-        if (action === EManageEventsAction.ADD) elem.addEventListener(event, this._events[name]);
-        if (action === EManageEventsAction.REMOVE) elem.removeEventListener(event, this._events[name]);
+        if (action === EManageEventsAction.ADD) elem.addEventListener(event, this._events[name], true);
+        if (action === EManageEventsAction.REMOVE) elem.removeEventListener(event, this._events[name], true);
       });
     });
   }
@@ -41,8 +41,8 @@ export class ElementController<
   public compileTemplate(props: TProps, state: TState) {
     const elemWrapper = document.createElement('div');
     elemWrapper.innerHTML = compile(this._hbsTmp)({
-      props,
-      state,
+      props: { ...props },
+      state: { ...state },
       helpers: this._helpers,
     });
     const elem = (elemWrapper.firstElementChild as unknown) as HTMLOrSVGElement;
@@ -59,5 +59,11 @@ export class ElementController<
 
   public setParentElement(parent: Element) {
     this._parentElement = parent;
+  }
+
+  public destroy() {
+    this._manageEvents(EManageEventsAction.REMOVE);
+    this._compiledTemplate = null;
+    this._parentElement?.remove();
   }
 }

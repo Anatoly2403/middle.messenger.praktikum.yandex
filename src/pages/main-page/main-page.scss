@@ -13,52 +13,22 @@
     border-right: 1px solid $white2;
 
     &__header {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: auto 25px;
+      align-items: center;
+      gap: 5px;
       padding: 21px 10px 14px;
-      height: 102px;
       border-bottom: 1px solid $white2;
     }
-
-    &__header-link {
-      position: relative;
-      padding-right: 10px;
-      text-align: end;
-
-      &::after,
-      &::before {
-        position: absolute;
-        content: '';
-        width: 5px;
-        height: 1px;
-        background-color: $blue;
-
-      }
-
-      &::after {
-        top: 13px;
-        right: -2px;
-        transform: rotate(-45deg);
-      }
-
-      &::before {
-        top: 10px;
-        right: -2px;
-        transform: rotate(45deg);
-      }
-    }
-
-    &__list {
-      height: calc(100vh - 102px);
-      overflow-y: scroll;
-      padding: 0;
-    }
   }
 
-  .message-block {
-    height: 100%;
+  &__list {
+    height: calc(100vh - 102px);
+    overflow-y: scroll;
+    padding: 0;
   }
+}
 
-
+.message-block {
+  height: 100%;
 }

@@ -49,11 +49,15 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     });
 
     this._registerEvents();
-    this._props.subscribe(({ prevData, data }) => {
+    const propsUnsubscribe = this._props.subscribe(({ prevData, data }) => {
       this._eventBus.emit(EEvents.UPDATE_PROPS, prevData, data);
     });
+    this.setUnsubscribe(propsUnsubscribe);
     if (config.state) {
-      this._state.subscribe(({ prevData, data }) => this._eventBus.emit(EEvents.UPDATE_STATE, prevData, data));
+      const stateUnsubscribe = this._state.subscribe(({ prevData, data }) =>
+        this._eventBus.emit(EEvents.UPDATE_STATE, prevData, data),
+      );
+      this.setUnsubscribe(stateUnsubscribe);
     }
   }
 
@@ -127,7 +131,9 @@ export class Component<TProps extends ISimpleObject = ISimpleObject, TState exte
     this._unsubscribeFuncs.push(fn);
   }
 
-  public unsubscribe() {
+  public destroy() {
     this._unsubscribeFuncs.forEach((fn) => fn());
+    this._childrenController.destroy();
+    this._elementController.destroy();
   }
 }

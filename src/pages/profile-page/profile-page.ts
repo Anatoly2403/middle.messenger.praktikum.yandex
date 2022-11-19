@@ -2,7 +2,7 @@ import './profile-page.scss';
 import { validatePassword, validateEmail, validateName, validatePhone, validateLogin } from './../../utils';
 import { withStore } from './../../store/Store';
 import { ArrowButton } from '../../ui-kit/arrow-button';
-import { Avatar } from '../../components/avatar';
+import { ProfileAvatar } from '../../components/profile-avatar';
 import { TextField } from '../../ui-kit/text-field/text-field';
 import { TextButton } from '../../ui-kit/text-button/text-button';
 import { Modal } from '../../components/modal/modal';
@@ -32,7 +32,7 @@ const template = `
       </div>
       <div class="profile-page__block_right">
         <div class="profile-page__avatar">
-          {{{avatar avatarSrc=props.user.avatar avatarClick=helpers.avatarClick}}}
+          {{{profile-avatar avatarSrc=props.user.avatar avatarClick=helpers.avatarClick}}}
         </div>  
         <form class="profile-page__user-data" data-event="[submit:onSubmitData]"> 
           {{#if state.changePassword}}
@@ -124,7 +124,7 @@ export const ProfilePage = withStore(
     name: 'profile-page',
     template,
     componentDidMount: () => userService.getUserData(),
-    children: [ArrowButton, Avatar, TextField, TextButton, Modal, Button],
+    children: [ArrowButton, ProfileAvatar, TextField, TextButton, Modal, Button],
     helpers: {
       arrowBtnClick,
       logout: () => userService.logout(),

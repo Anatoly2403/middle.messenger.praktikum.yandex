@@ -8,6 +8,7 @@ import { ProfilePage } from './pages/profile-page';
 import { registerHbHelpers } from './core/component/utils';
 
 registerHbHelpers();
+
 const router = Router.getInstance();
 
 router.registerRoutes([

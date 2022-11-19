@@ -1,69 +1,63 @@
 import { Component, prepareComponent } from '../../core/component';
 import './main-page.scss';
-import { Contact } from '../../components/contact';
+import { Chats } from '../../components/chats';
 import { Link } from '../../core/router/components/link';
 import { SearchInput } from '../../ui-kit/search-input';
 import { Chat } from '../../components/chat';
-
+import { chatsService } from '../../services/chats-service';
+import { debounce } from '../../core/component/utils';
+import { ActionMenu } from '../../components/action-menu';
 import { ISimpleObject } from '../../core/models';
+import { redirect } from '../../core/router';
 
-type TMainPageState = typeof state;
+type TChatState = typeof state;
+
+const state = {
+  menuItems: [
+    { name: 'profile', value: 'Перейти в профиль' },
+    { name: 'add', value: 'Добавить чат' },
+    { name: 'remove', value: 'Удалить чат' },
+  ],
+};
 
 const template = `
-  <div class="main-page">
+  <div class="main-page">    
     <div class="contact-block">
       <div class="contact-block__header">
-        <div class="contact-block__header-link">
-          {{{ link href="/profile" label="Профиль" }}}
-        </div>
-        <div>
-          {{{ search-input onChange=helpers.searchInputHandler }}}
-        </div>
+        {{{ search-input onChange=helpers.searchInputHandler }}}
+        {{{ action-menu menuItems=state.menuItems handler=helpers.handleMenuActions }}}    
       </div>
-      <div class="contact-block__list">
-        {{#each state.contacts}}   
-          {{{ contact 
-                key=@index 
-                id=id
-                name=name
-                avatar=avatar
-                lastName=lastName
-                phone=phone
-                messages=messages
-                onClickContact=../helpers.onClickContact
-                isActive=isActive
-          }}}
-        {{/each}} 
-      </div>
-    </div>  
-    <div class="message-block">
-      {{{ chat }}}
-    </div>    
+      {{{chats}}}
+    </div>
+    <div class="message-block">    
+      {{{chat}}}
+    </div>
   </div>
 `;
 
-const state = {
-  contacts: [],
-};
-
-function onClickContact(this: Component<ISimpleObject, TMainPageState>, id: string) {
-  // eslint-disable-next-line no-console
-  console.log(id);
-}
-
-function searchInputHandler(this: Component<ISimpleObject, TMainPageState>, searchValue: string) {
-  // eslint-disable-next-line no-console
-  console.log(searchValue);
-  this.setState((state) => ({
-    ...state,
-    contacts: [],
-  }));
-}
-
-export const MainPage = prepareComponent<ISimpleObject, TMainPageState>({
+export const MainPage = prepareComponent<ISimpleObject, TChatState>({
   name: 'main-page',
-  template,
   state,
-  children: [Link, SearchInput, Contact, Chat],
-  helpers: { searchInputHandler, onClickContact },
+  template,
+  componentDidMount: () => chatsService.getAllChats(),
+  children: [Link, SearchInput, Chats, Chat, ActionMenu],
+  helpers: { searchInputHandler, handleMenuActions },
 });
+
+const searchChat = debounce<string>(chatsService.getAllChats, 300);
+
+function searchInputHandler(this: Component, searchValue: string) {
+  searchChat(searchValue);
+}
+
+function handleMenuActions(actionName: string | null) {
+  if (actionName === 'profile') {
+    redirect('/profile');
+  }
+  if (actionName === 'add') {
+    console.log('add');
+  }
+  if (actionName === 'remove') {
+    console.log('remove');
+  }
+}

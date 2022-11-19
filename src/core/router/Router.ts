@@ -12,6 +12,7 @@ export class Router {
   private static instance: Router;
   private routes: Route[] = [];
   private history = window.history;
+  private currentRoute: Route | null = null;
 
   private constructor() {}
 
@@ -26,7 +27,9 @@ export class Router {
   private _onRoute(pathname: string) {
     const route = this._getRoute(pathname);
     if (!route) return;
-    route.render();
+    if (this.currentRoute) this.currentRoute.destroy();
+    this.currentRoute = route;
+    this.currentRoute.render();
   }
 
   public static getInstance() {

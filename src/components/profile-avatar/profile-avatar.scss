@@ -1,7 +1,7 @@
 @import 'src/styles/colors.scss';
 @import 'src/styles/constants.scss';
 
-.avatar {
+.profile-avatar {
   position: relative;
   display: flex;
   align-items: center;
@@ -47,11 +47,9 @@
     }
   }
 
-  .profile-avatar__avatar {
+  &__avatar {
     width: 120px;
     height: 120px;
     border-radius: 50%;
   }
-
-
 }

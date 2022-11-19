@@ -11,6 +11,7 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
   private _data: TData;
   private _prevData: TData;
   private _subscribers: Array<(props: TDataObserverProps<TData>) => void> = [];
+  private _dataLength = 0;
 
   constructor(data: TData) {
     this._data = this.makeAsProxy(data, this._callSubscribers.bind(this));
@@ -27,29 +28,26 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
   }
 
   private makeAsProxy(data: TData, callback: (props: TDataObserverProps<TData>) => void) {
-    let dataLength = Object.keys(data).length - 1;
     return new Proxy(data, {
       set(target: TData, key: keyof TData, val) {
         const prevTarget = { ...target };
         target[key] = val;
-
-        if (dataLength > 0) {
-          dataLength--;
-        } else {
-          callback({ data: target, prevData: prevTarget });
-          dataLength = Object.keys(data).length - 1;
-        }
+        callback({ data: target, prevData: prevTarget });
         return true;
       },
     });
   }
 
   private _callSubscribers(props: TDataObserverProps<TData>) {
+    this._dataLength--;
     this._prevData = props.prevData;
-    this._subscribers.forEach((fn) => fn(props));
+    if (this._dataLength === 0) {
+      this._subscribers.forEach((fn) => fn(props));
+    }
   }
 
   public updateData(data: TData) {
+    this._dataLength = Object.keys({ ...this._data, ...data }).length;
     Object.assign(this._data, data);
   }
 
