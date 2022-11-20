@@ -113,4 +113,19 @@
 
 
   }
+
+  &__control-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+
+  &__setting-btn {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../assets/icons/setting.svg');
+    cursor: pointer;
+  }
 }

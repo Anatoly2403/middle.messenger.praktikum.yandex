@@ -1,6 +1,6 @@
 import { TPreComponent } from '../core/component/models';
 import { ISimpleObject } from '../core/models';
-import { IUserData, IChatItem, IMessage } from '../models';
+import { IUserData, IChatItem, IMessage, IChatUser } from '../models';
 import { createStore } from './../core/store';
 
 export interface TState {
@@ -9,7 +9,9 @@ export interface TState {
   chats: IChatItem[];
   activeChatToken: string | null;
   activeChat: IChatItem | null;
+  activeChatUsers: IChatUser[];
   messages: IMessage[];
+  foundUsers: IChatUser[];
 }
 
 export type TStore = typeof store;
@@ -21,6 +23,8 @@ export const store = createStore<TState>({
   activeChatToken: null,
   activeChat: null,
   messages: [],
+  activeChatUsers: [],
+  foundUsers: [],
 });
 
 export function withStore<

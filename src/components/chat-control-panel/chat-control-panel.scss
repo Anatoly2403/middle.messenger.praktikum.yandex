@@ -1,0 +1,133 @@
+@import 'src/styles/colors.scss';
+
+.chat-control-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+  background: $background-black-opacity4;
+  z-index: 999;
+
+  &__inner {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 68px 1fr;
+    width: 300px;
+    background: $background2;
+    animation: in 0.1s ease forwards;
+  }
+
+  &__inner-header {
+    padding: 20px 10px;
+    border-bottom: 1px solid $white2;
+  }
+
+  &__inner-form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    grid-template-rows: 1fr;
+    gap: 10px;
+
+    &-input {
+      width: 100%;
+      height: 32px;
+      background: #efefef;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+      padding: 0 24px;
+
+      &::placeholder {
+        color: $gray;
+        text-align: center;
+        font-size: 12px;
+      }
+    }
+
+    &-btn {
+      border-radius: 5px;
+      border: none;
+      background-color: $blue;
+      outline: none;
+      color: $white2;
+      font-size: 18px;
+      cursor: pointer;
+
+      &:active {
+        transform: scale(0.96);
+      }
+
+      &>div {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+
+  &__inner-content {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr 40px;
+    padding: 20px 10px;
+  }
+
+  &__inner-content-users {
+    overflow-y: scroll;
+  }
+
+  &__user {
+    font-weight: 600;
+    font-size: 13px;
+    height: 71px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+
+    &-data {
+      display: flex;
+      gap: 10px;
+    }
+
+    &-avatar {
+      width: 47px;
+      height: 47px;
+      border-radius: 50%;
+      background: $background;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & img {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &__btn {
+    outline: none;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 12px;
+
+    &:active {
+      transform: scale(0.96);
+    }
+
+    &_remove {
+      background: $danger2;
+      border: 1px solid $danger1;
+    }
+
+    &_add {
+      background: $primary2;
+      border: 1px solid $primary1;
+    }
+  }
+}

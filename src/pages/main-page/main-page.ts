@@ -50,7 +50,7 @@ const template = `
           {{{ link href="/profile" label="Профиль" }}}
         </div>
         <div class="contact-block__header-panel">
-          {{{ search-input onChange=helpers.searchInputHandler }}}
+          {{{ search-input key=0 onChange=helpers.searchInputHandler }}}
           <button class="contact-block__header-panel__add" data-event="[click:showModal]">+</button>
         </div>
       </div>

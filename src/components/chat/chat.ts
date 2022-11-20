@@ -1,10 +1,10 @@
 import { Component, prepareComponent } from '../../core/component';
-import { showError } from '../../core/error';
 import { IChatItem, IMessage } from '../../models';
 import { chatsService } from '../../services/chats-service';
 import { messageService } from '../../services/message-service/message-service';
 import { TState, withStore } from '../../store';
 import { ActionMenu } from '../action-menu';
+import { ChatControlPanel } from '../chat-control-panel';
 import { MessageForm } from '../message-form';
 import './chat.scss';
 
@@ -15,15 +15,11 @@ type TChatProps = {
 };
 
 type TChatState = {
-  menuItems: { name: string; value: string }[];
+  showControlPanel: boolean;
 };
 
 const state: TChatState = {
-  menuItems: [
-    { name: 'removeChat', value: 'Удалить чат' },
-    { name: 'addUser', value: 'Добавить пользователя' },
-    { name: 'removeUser', value: 'Удалить пользователя' },
-  ],
+  showControlPanel: false,
 };
 
 const template = `
@@ -41,7 +37,7 @@ const template = `
           <div class="chat__contact-name">{{props.activeChat.title}}</div>
         </div>
         <div class="chat__menu">
-          {{{ action-menu menuItems=state.menuItems handler=helpers.handleMenuActions }}}
+          <div class="chat__setting-btn" data-event="[click:showControlPanel]"></div>  
         </div>
       </div>
       <div class="chat__content">
@@ -55,9 +51,21 @@ const template = `
       </div>
       <div class="chat__footer">
         <div class="chat__footer-clip"></div>
-        <div class="chat__footer-message"></div>
-        {{{ message-form onSubmit=helpers.sendMessage }}}
-      </div>
+        <div class="chat__footer-message">
+          {{{ message-form onSubmit=helpers.sendMessage }}}
+        </div>  
+      </div>   
+      {{#if state.showControlPanel}}
+        <div class="chat__control-panel">          
+            {{{
+              chat-control-panel             
+                hide=helpers.hideControlPanel 
+                removeChat=helpers.removeChat
+                chatUsers=props.activeChatUsers
+                foundUsers=props.foundUsers
+            }}}
+        </div>
+      {{/if}}
     </div>
   {{else}}
     <div class="chat_empty">Выберите чат чтобы отправить сообщение</div> 
@@ -68,6 +76,8 @@ function mapStateToProps(state: TState) {
     userId: state.userId,
     activeChat: state.activeChat,
     messages: state.messages,
+    activeChatUsers: state.activeChatUsers,
+    foundUsers: state.foundUsers,
   };
 }
 
@@ -76,32 +86,27 @@ export const Chat = withStore(
     name: 'chat',
     template,
     state,
-    children: [MessageForm, ActionMenu],
-    helpers: { sendMessage, handleMenuActions },
+    children: [MessageForm, ActionMenu, ChatControlPanel],
+    events: { showControlPanel },
+    helpers: { sendMessage, removeChat, hideControlPanel },
   }),
   mapStateToProps,
 );
 
-function handleMenuActions(this: Component<TChatProps, TChatState>, actionName: string | null) {
-  if (actionName === 'removeChat') {
-    if (!this.props.activeChat?.id) {
-      return showError('Выберите чат');
-    }
-    chatsService.removeChat(this.props.activeChat.id);
-  }
-  if (actionName === 'addUser') {
-    if (!this.props.activeChat?.id) {
-      return showError('Выберите чат');
-    }
-  }
-  if (actionName === 'removeUser') {
-    if (!this.props.activeChat?.id) {
-      return showError('Выберите чат');
-    }
-  }
+function removeChat(this: Component<TChatProps, TChatState>) {
+  chatsService.removeChat();
+  this.setState((state) => ({ ...state, showControlPanel: false }));
 }
 
 function sendMessage(message: string) {
   if (!message) return;
   messageService.sendMessage(message);
+}
+
+function showControlPanel(this: Component<TChatProps, TChatState>) {
+  this.setState((state) => ({ ...state, showControlPanel: true }));
+}
+
+function hideControlPanel(this: Component<TChatProps, TChatState>) {
+  this.setState((state) => ({ ...state, showControlPanel: false }));
 }

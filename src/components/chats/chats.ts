@@ -46,7 +46,7 @@ export const Chats = withStore(
       async handleChatItem(this: Component<TChatsProps>, id: number) {
         if (this.props.activeChat?.id === id) return;
         await chatsService.getToken(id);
-        chatsService.setActiveChat(id);
+        await chatsService.setActiveChat(id);
         messageService.init();
       },
     },

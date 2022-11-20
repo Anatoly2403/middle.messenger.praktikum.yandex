@@ -1,6 +1,6 @@
 import { UserApi } from '../../api/user-api';
 import { redirect } from './../../core/router';
-import { IPasswordData, IProfileData, isError, ISigninData, ISignupData, IUserData } from '../../models';
+import { IChatUser, IPasswordData, IProfileData, isError, ISigninData, ISignupData, IUserData } from '../../models';
 import { store } from '../../store';
 import { showError } from '../../core/error';
 
@@ -70,10 +70,15 @@ class UserService {
 
   public async getUserByLogin(login: string) {
     try {
-      return await this.api.getUser<IUserData[]>(login);
+      const users = await this.api.getUser<IChatUser[]>(login);
+      store.setState({ foundUsers: users });
     } catch (e) {
       if (isError(e)) showError(e.reason);
     }
+  }
+
+  public removeFoundUsers() {
+    store.setState({ foundUsers: [] });
   }
 }
 

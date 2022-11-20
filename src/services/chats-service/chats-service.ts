@@ -1,5 +1,5 @@
 import { ChatApi } from '../../api';
-import { IChatItem, isError, IToken } from './../../models';
+import { IChatItem, IChatUser, isError, IToken } from './../../models';
 import { store } from '../../store';
 import { showError } from '../../core/error';
 
@@ -24,7 +24,15 @@ class ChatsService {
     }
   };
 
-  public setActiveChat(id: number) {
+  public async setActiveChat(id: number) {
+    try {
+      const users = await this.api.getChatUsers<IChatUser[]>(id);
+      const activeChat = store.getState().chats.find((item) => item.id === id) || null;
+      store.setState({ activeChat, messages: [], activeChatUsers: users });
+    } catch (e) {
+      if (isError(e)) showError(e.reason);
+    }
+
     const activeChat = store.getState().chats.find((item) => item.id === id) || null;
     store.setState({ activeChat, messages: [] });
   }
@@ -38,7 +46,9 @@ class ChatsService {
     }
   }
 
-  public async removeChat(id: number) {
+  public async removeChat() {
+    const id = store.getState().activeChat?.id;
+    if (!id) return;
     try {
       await this.api.remove(id);
       await this.getAllChats();
@@ -46,6 +56,30 @@ class ChatsService {
         activeChat: null,
         activeChatToken: null,
       });
+    } catch (e) {
+      if (isError(e)) showError(e.reason);
+    }
+  }
+
+  public async addUserToChat(userId: number) {
+    const chatId = store.getState().activeChat?.id;
+    if (!chatId) return;
+    try {
+      await this.api.addUserToChat(userId, chatId);
+      const users = await this.api.getChatUsers<IChatUser[]>(chatId);
+      store.setState({ activeChatUsers: users, foundUsers: [] });
+    } catch (e) {
+      if (isError(e)) showError(e.reason);
+    }
+  }
+
+  public async removeUserFromChat(userId: number) {
+    const chatId = store.getState().activeChat?.id;
+    if (!chatId) return;
+    try {
+      await this.api.removeUserFromChat(userId, chatId);
+      const users = await this.api.getChatUsers<IChatUser[]>(chatId);
+      store.setState({ activeChatUsers: users });
     } catch (e) {
       if (isError(e)) showError(e.reason);
     }

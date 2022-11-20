@@ -31,3 +31,15 @@ export interface INewChatItem {
 export interface IToken {
   token: string;
 }
+
+export interface IChatUser {
+  id: number;
+  first_name: string;
+  second_name: string;
+  display_name: string;
+  login: string;
+  avatar: string;
+  email: string;
+  phone: string;
+  role: string;
+}

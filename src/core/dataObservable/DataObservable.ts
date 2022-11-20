@@ -40,7 +40,7 @@ export class DataObservable<TData extends ISimpleObject = ISimpleObject> {
 
   private _callSubscribers(props: TDataObserverProps<TData>) {
     this._dataLength--;
-    if (this._dataLength === 0) {
+    if (this._dataLength < 1) {
       this._prevData = props.prevData;
       this._subscribers.forEach((fn) => fn(props));
     }

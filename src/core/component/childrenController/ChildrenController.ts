@@ -101,6 +101,7 @@ export class ChildrenController {
       const propsRecord = this._childPropsTree[key];
       const childRecord = this._childTree[key];
       const parents = this._getChildParentArray(key);
+
       if (parents) {
         if (Array.isArray(propsRecord) && Array.isArray(childRecord)) {
           acc[key] = this._updateChildArray(key, parents, propsRecord, childRecord);
