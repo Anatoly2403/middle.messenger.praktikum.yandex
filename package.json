@@ -7,7 +7,7 @@
   "browserslist": "last 2 versions, not dead",
   "private": false,
   "scripts": {
-    "build": "parcel build src/index.html --no-optimize",
+    "build": "parcel build src/index.html",
     "start": "npm run build && node src/server/app.ts",
     "dev": "parcel src/index.html --open",
     "dev:server": "nodemon node src/server/app.ts",
