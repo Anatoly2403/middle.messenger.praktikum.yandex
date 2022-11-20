@@ -25,7 +25,7 @@ const template = `
           {{#time props.last_message.time}}
             <time class="chats-item__info-time">{{date}}</time>
           {{/time}}
-          {{#if unread_count}}
+          {{#if props.unread_count}}
             <span class="chats-item__info-count">{{props.unread_count}}</span>
           {{/if}}
         </div>

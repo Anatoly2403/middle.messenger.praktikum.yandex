@@ -1,11 +1,12 @@
 import { TPreComponent } from '../component/models';
 import { EventTargetWithLocation } from './models/types';
-import { Route } from './route/Route';
+import { Route, TGuard } from './route/Route';
 
 type TRoutes = Array<{
   path: string;
   view: TPreComponent;
   props?: Record<string, string>;
+  guard?: TGuard;
 }>;
 
 export class Router {
@@ -54,6 +55,6 @@ export class Router {
   }
 
   public registerRoutes(routes: TRoutes) {
-    this.routes = routes.map((item) => new Route(item.path, item.view, item.props));
+    this.routes = routes.map((item) => new Route(item.path, item.view, item.props, item.guard));
   }
 }

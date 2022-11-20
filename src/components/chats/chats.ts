@@ -48,6 +48,7 @@ export const Chats = withStore(
         await chatsService.getToken(id);
         await chatsService.setActiveChat(id);
         messageService.init();
+        chatsService.getAllChats();
       },
     },
   }),
