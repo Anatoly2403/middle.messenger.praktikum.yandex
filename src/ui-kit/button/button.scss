@@ -1,0 +1,17 @@
+@import 'src/styles/colors.scss';
+
+.btn {
+  font-size: 13px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 100%;
+  height: 37px;
+  background: $blue;
+  border-radius: 8px;
+  color: $white;
+
+  &:active {
+    transform: scale(0.99);
+  }
+}

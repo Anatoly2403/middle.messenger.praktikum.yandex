@@ -1,0 +1,7 @@
+@import 'src/styles/colors.scss';
+
+.chats-wrapper {
+  height: calc(100vh - 102px);
+  overflow-y: scroll;
+  padding: 0;
+}

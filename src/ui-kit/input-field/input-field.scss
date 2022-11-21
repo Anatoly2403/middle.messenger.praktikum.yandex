@@ -1,0 +1,45 @@
+@import 'src/styles/colors.scss';
+
+.input-field {
+  position: relative;
+  padding: 18px 0 0;
+
+  &__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 9px;
+    color: $gray;
+    transition: all 0.2s;
+    pointer-events: none;
+
+    &_low {
+      font-size: 13px;
+      transform: translateY(18px);
+      transition: all 0.2s;
+    }
+  }
+
+  &__error {
+    position: absolute;
+    top: 47px;
+    left: 0;
+    font-weight: 400;
+    font-size: 8px;
+    color: $red;
+    white-space: nowrap;
+  }
+
+  &__input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid $blue;
+    padding-bottom: 7px;
+    outline: none;
+
+    &_invalid {
+      border-bottom: 1px solid $red;
+      color: $red;
+    }
+  }
+}

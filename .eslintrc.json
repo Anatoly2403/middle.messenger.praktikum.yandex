@@ -1,0 +1,25 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "eslint-plugin-prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-prettier"
+  ],
+  "rules": {
+    "no-console": 1,
+    "max-len": [2, { "code": 120 }],
+    "no-multi-spaces": 2,
+    "no-multiple-empty-lines": 2,
+    "prefer-const": 2,
+    "semi": 2,
+    "no-debugger": 2,
+    "no-empty-function": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "@typescript-eslint/no-var-requires": 0,
+    "no-undef": 0,
+    "eol-last": 2
+  }
+}
