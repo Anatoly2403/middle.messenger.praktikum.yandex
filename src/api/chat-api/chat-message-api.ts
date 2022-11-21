@@ -1,3 +1,5 @@
+import { BASE_WSS_URL } from '../constants';
+
 type THandlers = {
   open: (e: Event) => void;
   close: (e: CloseEvent) => void;
@@ -10,7 +12,7 @@ interface IPayload {
 }
 
 export class ChatMessageApi {
-  private url = 'wss://ya-praktikum.tech/ws/chats';
+  private url = BASE_WSS_URL;
   private socket: WebSocket | null = null;
 
   private setOpenHandler(handler: (e: Event) => void) {

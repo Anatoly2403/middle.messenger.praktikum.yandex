@@ -7,11 +7,11 @@ const tmp = `
   </div>
 `;
 
-export function showError(message: string) {
+export function showError(message: string, delay = 1500) {
   const template = compile(tmp)({ message });
   const elem = document.createElement('div');
   elem.innerHTML = template;
   document.body.append(elem);
 
-  setTimeout(() => elem.remove(), 1500);
+  setTimeout(() => elem.remove(), delay);
 }

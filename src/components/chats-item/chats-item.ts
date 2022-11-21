@@ -1,3 +1,4 @@
+import { BASE_URL } from '../../api/constants';
 import { Component, prepareComponent } from '../../core/component';
 import { IChatItem } from '../../models';
 import './chats-item.scss';
@@ -14,7 +15,7 @@ const template = `
       > 
         <div class="chats-item__avatar">
           {{#if props.avatar}}
-            <img src="https://ya-praktikum.tech/api/v2/resources/{{props.avatar}}" alt="contact avatar" />
+            <img src="${BASE_URL}/resources/{{props.avatar}}" alt="contact avatar" />
           {{/if}}
         </div>
         <div class="chats-item__data">

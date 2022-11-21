@@ -17,13 +17,17 @@ class MessageService {
   }
 
   private messageHandler(e: MessageEvent) {
-    const data: IMessage | IMessage[] = JSON.parse(e.data);
-    let messages = [...store.getState().messages];
-    if (isArray(data)) messages = [...messages, ...data];
-    else messages = [...messages, data];
-    store.setState({
-      messages: messages.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()),
-    });
+    try {
+      const data: IMessage | IMessage[] = JSON.parse(e.data);
+      let messages = [...store.getState().messages];
+      if (isArray(data)) messages = [...messages, ...data];
+      else messages = [...messages, data];
+      store.setState({
+        messages: messages.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()),
+      });
+    } catch (e) {
+      if (e instanceof Error) showError(e.message);
+    }
   }
 
   private getConnectData() {

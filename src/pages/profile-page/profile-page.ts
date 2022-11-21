@@ -151,9 +151,11 @@ async function onSubmitData(this: Component<TProfilePageProps, TProfilePageState
   e.preventDefault();
   const form = e.target as HTMLElement;
   const inputs = form.querySelectorAll('input');
-  const isValid = validate(inputs);
-  if (!isValid) {
-    return showError('Form is invalid');
+  const invalid = validate(inputs);
+  if (invalid) {
+    invalid.classList.add('text-field_error');
+    showErrorMessage(invalid);
+    return;
   }
   const data = prepareData(inputs);
   if (this.state.changeData) {
@@ -166,27 +168,34 @@ async function onSubmitData(this: Component<TProfilePageProps, TProfilePageState
 }
 
 function validate(inputs: NodeListOf<HTMLInputElement>) {
-  return Array.from(inputs).every(({ name, value }) => {
+  return Array.from(inputs).find(({ name, value, classList }) => {
+    classList.remove('text-field_error');
     if (name === 'oldPassword' || name === 'newPassword') {
-      return validatePassword(value);
+      return !validatePassword(value);
     }
     if (name === 'email') {
-      return validateEmail(value);
+      return !validateEmail(value);
     }
     if (name === 'login') {
-      return validateLogin(value);
-    }
-    if (name === 'login') {
-      return validateLogin(value);
+      return !validateLogin(value);
     }
     if (name === 'first_name' || name === 'second_name') {
-      return validateName(value);
+      return !validateName(value);
     }
     if (name === 'phone') {
-      return validatePhone(value);
+      return !validatePhone(value);
     }
-    return !!value;
+    return !value;
   });
+}
+
+function showErrorMessage({ name }: HTMLInputElement) {
+  if (name === 'oldPassword' || name === 'newPassword') showError('Невалидный пароль', 2000);
+  if (name === 'email') showError('Невалидный email', 2000);
+  if (name === 'second_name') showError('Невалидная фамилия', 2000);
+  if (name === 'login') showError('Невалидная логин', 2000);
+  if (name === 'first_name') showError('Невалидное имя', 2000);
+  if (name === 'phone') showError('Невалидный номер телефона', 2000);
 }
 
 function prepareData(inputs: NodeListOf<HTMLInputElement>) {

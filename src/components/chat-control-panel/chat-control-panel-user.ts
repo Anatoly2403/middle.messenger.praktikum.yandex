@@ -1,3 +1,4 @@
+import { BASE_URL } from '../../api/constants';
 import { Component, prepareComponent } from '../../core/component';
 import { Button } from '../../ui-kit/button';
 import { SearchInput } from '../../ui-kit/search-input';
@@ -16,7 +17,7 @@ const template = `
     <div class="chat-control-panel__user-data">
       <div class="chat-control-panel__user-avatar">
         {{#if props.avatar}}
-          <img src="https://ya-praktikum.tech/api/v2/resources/{{props.avatar}}" alt="contact avatar" />
+          <img src="${BASE_URL}/resources/{{props.avatar}}" alt="contact avatar" />
         {{/if}}
       </div>                
       <span class="chats-item__data-name">{{props.display_name}}</span>

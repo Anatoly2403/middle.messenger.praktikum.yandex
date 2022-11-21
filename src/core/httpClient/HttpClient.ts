@@ -9,21 +9,21 @@ export class HttpClient {
       options,
     });
   }
-  protected post<T = unknown>(url: string, options: IOptions = {}) {
+  protected post<T = unknown>(url: string, options: IOptions = {}): Promise<T> {
     return this._request<T>({
       url,
       method: EMethods.POTS,
       options,
     });
   }
-  protected put<T = unknown>(url: string, options: IOptions = {}) {
+  protected put<T = unknown>(url: string, options: IOptions = {}): Promise<T> {
     return this._request<T>({
       url,
       method: EMethods.PUT,
       options,
     });
   }
-  protected delete<T = unknown>(url: string, options: IOptions = {}) {
+  protected delete<T = unknown>(url: string, options: IOptions = {}): Promise<T> {
     return this._request<T>({
       url,
       method: EMethods.DELETE,

@@ -1,3 +1,4 @@
+import { BASE_URL } from '../../api/constants';
 import { Component, prepareComponent } from '../../core/component';
 import { AnyType } from '../../core/models/index';
 import './profile-avatar.scss';
@@ -17,7 +18,7 @@ export const ProfileAvatar = prepareComponent<TAvatarProps>({
                   {{#if props.avatarSrc}}
                     <img 
                       class="profile-avatar__avatar" 
-                      src="https://ya-praktikum.tech/api/v2/resources/{{props.avatarSrc}}" alt="avatar"/>
+                      src="${BASE_URL}/resources/{{props.avatarSrc}}" alt="avatar"/>
                   {{/if}}
               </div>
   `,

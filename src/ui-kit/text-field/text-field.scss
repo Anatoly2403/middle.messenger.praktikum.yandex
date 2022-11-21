@@ -17,4 +17,12 @@
     background: none;
     color: $gray;
   }
+
+  &_error {
+    color: $red;
+
+    &>.text-field__value {
+      color: $red;
+    }
+  }
 }

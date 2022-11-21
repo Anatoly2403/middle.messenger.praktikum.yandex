@@ -1,8 +1,9 @@
 import { HttpClient } from '../../core/httpClient';
 import { IPasswordData, IProfileData, ISigninData, ISignupData } from '../../models';
+import { BASE_URL } from '../constants';
 
 export class UserApi extends HttpClient {
-  private url = 'https://ya-praktikum.tech/api/v2';
+  private url = BASE_URL;
 
   public async signin<TResponseType = unknown>(data: ISigninData): Promise<TResponseType> {
     return this.post<TResponseType>(`${this.url}/auth/signin`, {
