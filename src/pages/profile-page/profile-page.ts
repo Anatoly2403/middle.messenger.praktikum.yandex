@@ -3,17 +3,18 @@ import { validatePassword, validateEmail, validateName, validatePhone, validateL
 import { TState, withStore } from './../../store/Store';
 import { ArrowButton } from '../../ui-kit/arrow-button';
 import { ProfileAvatar } from '../../components/profile-avatar';
-import { TextField } from '../../ui-kit/text-field/text-field';
 import { TextButton } from '../../ui-kit/text-button/text-button';
 import { Modal } from '../../components/modal/modal';
 import { redirect } from '../../core/router';
 import { Component, prepareComponent } from '../../core/component';
 import { userService } from '../../services/user-service';
-import { Button, TButtonProps } from '../../ui-kit/button';
+import { TButtonProps } from '../../ui-kit/button';
 import { showError } from '../../core/error';
 import { IProfileData, IPasswordData, IUserData } from '../../models';
 import { TInputFieldProps } from '../../ui-kit/input-field';
 import { TFileFieldProps } from '../../ui-kit/file-field';
+import { ProfilePagePasswordForm } from './password-form';
+import { ProfilePageDataForm } from './data-form';
 
 type TProfilePageState = {
   changeData: boolean;
@@ -56,81 +57,26 @@ const template = `
       <div class="profile-page__block_right">
         <div class="profile-page__avatar">
           {{{profile-avatar avatarSrc=props.user.avatar avatarClick=helpers.avatarClick}}}
-        </div>  
-        <form class="profile-page__user-data" data-event="[submit:onSubmitData]"> 
+        </div>
           {{#if state.changePassword}}
             {{{
-              text-field
-                key="oldPassword" 
-                disabled=state.changePassword
-                name="oldPassword" 
-                label="Старый пароль"
-                value=''
-            }}}
-            {{{
-              text-field
-                key="newPassword"
-                disabled=state.changePassword
-                name="newPassword" 
-                label="Новый пароль"
-                value=''
+              profile-page-password-form
+                onSubmit=helpers.onSubmitData
+                isDisabled=state.changePassword
             }}}
           {{else}}
             {{{
-              text-field
-                key="email"
-                disabled=state.changeData
-                name="email"
-                label="Почта"
-                value=props.user.email
-              }}}
-            {{{
-              text-field
-                key="login"
-                disabled=state.changeData
-                name="login"
-                label="Логин"
-                value=props.user.login
-              }}}
-            {{{
-              text-field
-                key="first_name"
-                disabled=state.changeData
-                name="first_name"
-                label="Имя"
-                value=props.user.first_name
-              }}}
-            {{{
-              text-field
-                key="second_name"
-                disabled=state.changeData
-                name="second_name"
-                label="Фамилия"
-                value=props.user.second_name
-              }}}
-            {{{
-              text-field
-                key="display_name"
-                disabled=state.changeData
-                name="display_name"
-                label="Имя в чате"
-                value=props.user.display_name
-              }}}
-            {{{
-              text-field
-                key="phone"
-                disabled=state.changeData
-                name="phone"
-                label="Телефон"
-                value=props.user.phone
-              }}}
+              profile-page-data-form
+                onSubmit=helpers.onSubmitData
+                isDisabled=state.changeData
+                email=props.user.email
+                login=props.user.login
+                first_name=props.user.first_name
+                second_name=props.user.second_name
+                display_name=props.user.display_name
+                phone=props.user.phone
+            }}}
           {{/if}}
-          {{#if_or state.changePassword state.changeData}}         
-            <div class="profile-page__user-data-submit">
-              {{{button type="submit" label="Сохранить"}}}
-            </div>       
-          {{/if_or}}
-        </form>  
         <div class="profile-page__control">
         {{#if_and-not state.changePassword state.changeData}}
           {{{text-button key=0 name="changeData" label="Изменить данные" onTextBtnClick=helpers.changeData}}}
@@ -151,7 +97,7 @@ export const ProfilePage = withStore(
     name: 'profile-page',
     template,
     componentDidMount: () => userService.getUserData(),
-    children: [ArrowButton, ProfileAvatar, TextField, TextButton, Modal, Button],
+    children: [ArrowButton, ProfileAvatar, ProfilePagePasswordForm, ProfilePageDataForm, TextButton, Modal],
     helpers: {
       arrowBtnClick,
       logout: () => userService.logout(),
@@ -160,9 +106,9 @@ export const ProfilePage = withStore(
       hideModal,
       saveData,
       changePassword,
+      onSubmitData,
     },
     state: { modalFormData: avatarFormMeta, changeData: false, changePassword: false, showModal: false },
-    events: { onSubmitData },
   }),
   mapStateToProps,
 );

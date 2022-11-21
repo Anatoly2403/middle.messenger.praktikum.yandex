@@ -6,6 +6,7 @@ export type TTextFieldProps = {
   label: string;
   value: string;
   disabled: boolean;
+  type?: string;
 };
 
 const template = `
@@ -14,8 +15,12 @@ const template = `
       <input 
         class="text-field__value"
         name="{{ props.name }}"
-        value="{{ props.value }}" 
-        type="text"
+        value="{{ props.value }}"
+        {{#if_eq props.type "password"}}
+          type="password"
+        {{else}}
+          type="text"
+        {{/if_eq}}  
         {{#if_not props.disabled}}
           disabled
         {{/if_not}}       
