@@ -3,7 +3,6 @@ import { redirect } from './../../core/router';
 import { IChatUser, IPasswordData, IProfileData, isError, ISigninData, ISignupData, IUserData } from '../../models';
 import { store } from '../../store';
 import { showError } from '../../core/error';
-import { authGuard } from '../auth-guard';
 
 class UserService {
   private api = new UserApi();
@@ -32,7 +31,6 @@ class UserService {
     try {
       await this.api.logout();
       store.setState({ user: null });
-      authGuard.remove();
       redirect('/login');
     } catch (e) {
       if (isError(e)) showError(e.reason);
@@ -40,11 +38,14 @@ class UserService {
   }
 
   public async getUserData() {
-    const userInfo = await this.api.info<IUserData>();
-    store.setState({ user: userInfo, userId: userInfo.id });
-    authGuard.set(userInfo.id);
+    try {
+      const userInfo = await this.api.info<IUserData>();
+      store.setState({ user: userInfo, userId: userInfo.id });
+    } catch (e) {
+      if (isError(e)) showError(e.reason);
+      redirect('/login');
+    }
   }
-
   public async updateProfileData(data: IProfileData) {
     try {
       const userInfo = await this.api.updateData<IUserData>(data);

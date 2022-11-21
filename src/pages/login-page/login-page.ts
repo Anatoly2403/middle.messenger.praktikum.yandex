@@ -41,8 +41,15 @@ export const LoginPage = prepareComponent<ISimpleObject, TLoginPageState>({
   helpers: { onSubmit },
   state: {
     fields: [
-      { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin] },
-      { type: 'inputField', name: 'password', label: 'Пароль', validators: [validatePassword] },
+      { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin], errorText: 'Неверный логин' },
+      {
+        type: 'inputField',
+        name: 'password',
+        label: 'Пароль',
+        fieldType: 'password',
+        validators: [validatePassword],
+        errorText: 'Неверный пароль',
+      },
     ],
     button: {
       type: 'submit',

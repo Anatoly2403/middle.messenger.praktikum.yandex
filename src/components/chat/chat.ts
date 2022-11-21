@@ -50,7 +50,6 @@ const template = `
         {{/each}}         
       </div>
       <div class="chat__footer">
-        <div class="chat__footer-clip"></div>
         <div class="chat__footer-message">
           {{{ message-form onSubmit=helpers.sendMessage }}}
         </div>  

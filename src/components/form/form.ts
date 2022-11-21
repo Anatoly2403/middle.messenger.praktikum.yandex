@@ -28,7 +28,15 @@ const template = `
         <div class="form__fields">
           {{#each props.fields}}
             {{#if_eq type "inputField"}}
-              {{{ input-field key=@index name=name label=label validators=validators fieldType=fieldType }}}
+              {{{ 
+                input-field 
+                  key=@index 
+                  name=name 
+                  label=label 
+                  validators=validators 
+                  fieldType=fieldType 
+                  errorText=errorText 
+              }}}
             {{/if_eq}}            
             {{#if_eq type "fileField"}}
               {{{ file-field key=@index name=name label=label validators=validators }}}

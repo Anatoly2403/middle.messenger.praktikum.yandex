@@ -6,7 +6,6 @@ import { MainPage } from './pages/main-page';
 import { NotFoundPage } from './pages/not-found-page';
 import { ProfilePage } from './pages/profile-page';
 import { registerHbHelpers } from './core/component/utils';
-import { authGuard } from './services/auth-guard';
 
 registerHbHelpers();
 
@@ -17,7 +16,6 @@ router.registerRoutes([
     path: '/',
     view: MainPage,
     props: { rootQuery: '#app' },
-    guard: { guardFn: () => authGuard.isAuthenticated, redirectPath: '/login' },
   },
   {
     path: '/login',
@@ -29,7 +27,6 @@ router.registerRoutes([
     path: '/profile',
     view: ProfilePage,
     props: { rootQuery: '#app' },
-    guard: { guardFn: () => authGuard.isAuthenticated, redirectPath: '/login' },
   },
   { path: '/500', view: ErrorPage, props: { rootQuery: '#app' } },
   { path: '/*', view: NotFoundPage, props: { rootQuery: '#app' } },
