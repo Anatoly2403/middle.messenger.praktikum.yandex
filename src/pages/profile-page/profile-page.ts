@@ -9,7 +9,6 @@ import { redirect } from '../../core/router';
 import { Component, prepareComponent } from '../../core/component';
 import { userService } from '../../services/user-service';
 import { TButtonProps } from '../../ui-kit/button';
-import { showError } from '../../core/error';
 import { IProfileData, IPasswordData, IUserData } from '../../models';
 import { TInputFieldProps } from '../../ui-kit/input-field';
 import { TFileFieldProps } from '../../ui-kit/file-field';
@@ -152,11 +151,8 @@ async function onSubmitData(this: Component<TProfilePageProps, TProfilePageState
   const form = e.target as HTMLElement;
   const inputs = form.querySelectorAll('input');
   const invalid = validate(inputs);
-  if (invalid) {
-    invalid.classList.add('text-field_error');
-    showErrorMessage(invalid);
-    return;
-  }
+  if (invalid) return;
+
   const data = prepareData(inputs);
   if (this.state.changeData) {
     await userService.updateProfileData((data as unknown) as IProfileData);
@@ -168,34 +164,33 @@ async function onSubmitData(this: Component<TProfilePageProps, TProfilePageState
 }
 
 function validate(inputs: NodeListOf<HTMLInputElement>) {
-  return Array.from(inputs).find(({ name, value, classList }) => {
-    classList.remove('text-field_error');
+  let isInValid = false;
+  Array.from(inputs).forEach(({ name, value, parentElement }) => {
+    let localIsInValid = false;
     if (name === 'oldPassword' || name === 'newPassword') {
-      return !validatePassword(value);
+      localIsInValid = !validatePassword(value);
     }
     if (name === 'email') {
-      return !validateEmail(value);
+      localIsInValid = !validateEmail(value);
     }
     if (name === 'login') {
-      return !validateLogin(value);
+      localIsInValid = !validateLogin(value);
     }
     if (name === 'first_name' || name === 'second_name') {
-      return !validateName(value);
+      localIsInValid = !validateName(value);
     }
     if (name === 'phone') {
-      return !validatePhone(value);
+      localIsInValid = !validatePhone(value);
     }
-    return !value;
-  });
-}
 
-function showErrorMessage({ name }: HTMLInputElement) {
-  if (name === 'oldPassword' || name === 'newPassword') showError('Невалидный пароль', 2000);
-  if (name === 'email') showError('Невалидный email', 2000);
-  if (name === 'second_name') showError('Невалидная фамилия', 2000);
-  if (name === 'login') showError('Невалидная логин', 2000);
-  if (name === 'first_name') showError('Невалидное имя', 2000);
-  if (name === 'phone') showError('Невалидный номер телефона', 2000);
+    if (localIsInValid) {
+      parentElement?.classList.add('text-field-error');
+    } else {
+      parentElement?.classList.remove('text-field-error');
+    }
+    isInValid = localIsInValid;
+  });
+  return isInValid;
 }
 
 function prepareData(inputs: NodeListOf<HTMLInputElement>) {

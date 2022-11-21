@@ -9,8 +9,20 @@ type TProfilePagePasswordForm = {
 
 const template = `
   <form class="profile-page__user-data" data-event="[submit:onSubmitData]">
-    {{{text-field key=0 disabled=props.isDisabled name="oldPassword" label="Старый пароль" type='password'}}}
-    {{{text-field key=1 disabled=props.isDisabled name="newPassword" label="Новый пароль" type='password'}}}
+    {{{text-field 
+        key=0
+        disabled=props.isDisabled
+        name="oldPassword"
+        errorMessage="Неверный пароль"
+        label="Старый пароль"
+        type='password'}}}
+    {{{text-field 
+        key=1
+        disabled=props.isDisabled
+        name="newPassword"
+        errorMessage="Неверный пароль"
+        label="Новый пароль"
+        type='password'}}}
     {{#if props.isDisabled}}
       <div class="profile-page__user-data-submit">
         {{{button type="submit" label="Сохранить"}}}

@@ -15,12 +15,47 @@ type TProfilePageDataForm = {
 
 const template = `
   <form class="profile-page__user-data" data-event="[submit:onSubmitData]">
-    {{{text-field key=0 disabled=props.isDisabled name="email" label="Почта" value=props.email}}}
-    {{{text-field key=1 disabled=props.isDisabled name="login" label="Логин" value=props.login}}}
-    {{{text-field key=2 disabled=props.isDisabled name="first_name" label="Имя" value=props.first_name}}}
-    {{{text-field key=3 disabled=props.isDisabled name="second_name" label="Фамилия" value=props.second_name}}}
-    {{{text-field key=4 disabled=props.isDisabled name="display_name" label="Имя в чате" value=props.display_name}}}
-    {{{text-field key=5 disabled=props.isDisabled name="phone" label="Телефон" value=props.phone }}}
+    {{{text-field 
+      key=0 
+      disabled=props.isDisabled
+      name="email" 
+      label="Почта"
+      errorMessage="Некорректная почта"
+      value=props.email}}}
+    {{{text-field 
+      key=1 
+      disabled=props.isDisabled
+      name="login" 
+      label="Логин"
+      errorMessage="Некорректный логин"
+      value=props.login}}}
+    {{{text-field 
+      key=2 
+      disabled=props.isDisabled
+      name="first_name" 
+      label="Имя"
+      errorMessage="Некорректное имя"
+      value=props.first_name}}}
+    {{{text-field 
+      key=3 
+      disabled=props.isDisabled
+      name="second_name" 
+      label="Фамилия"
+      errorMessage="Некорректная фамилия"
+      value=props.second_name}}}
+    {{{text-field 
+      key=4 
+      disabled=props.isDisabled
+      name="display_name" 
+      label="Имя в чате"
+      value=props.display_name}}}
+    {{{text-field 
+      key=5 
+      disabled=props.isDisabled
+      name="phone" 
+      label="Телефон"
+      errorMessage="Некорректный телефон"
+      value=props.phone }}}
     {{#if props.isDisabled}}
       <div class="profile-page__user-data-submit">
         {{{button type="submit" label="Сохранить"}}}
