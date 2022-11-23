@@ -5,6 +5,15 @@
   display: grid;
   grid-template-rows: 54px auto 54px;
 
+  &_empty {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $gray;
+    font-size: 12px;
+  }
+
   &__header {
     display: flex;
     align-items: center;
@@ -26,14 +35,19 @@
       height: 34px;
       border-radius: 50%;
       background: $background;
+
+      & img {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+      }
     }
   }
-
-
 
   &__content {
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     gap: 10px;
     padding: 20px;
     overflow-y: scroll;
@@ -100,5 +114,18 @@
 
   }
 
+  &__control-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
 
+  &__setting-btn {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../assets/icons/setting.svg');
+    cursor: pointer;
+  }
 }

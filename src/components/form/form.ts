@@ -1,10 +1,11 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/component';
 import './form.scss';
-import { Link, TLinkProps } from '../../ui-kit/link';
+import { Link, TLinkProps } from '../../core/router/components/link';
 import { InputField, inputValidator, TInputFieldProps } from '../../ui-kit/input-field';
 import { Button, TButtonProps } from '../../ui-kit/button';
-import { ISimpleObject } from '../../core/base/models';
 import { FileField, TFileFieldProps } from '../../ui-kit/file-field';
+import { ISimpleObject } from '../../core/models';
+import { prepareProps } from '../../utils/formUtils';
 
 function isInputFieldProps(item: TInputFieldProps | TFileFieldProps): item is TInputFieldProps {
   return 'type' in item && item.type === 'inputField';
@@ -27,7 +28,15 @@ const template = `
         <div class="form__fields">
           {{#each props.fields}}
             {{#if_eq type "inputField"}}
-              {{{ input-field key=@index name=name label=label validators=validators fieldType=fieldType }}}
+              {{{ 
+                input-field 
+                  key=@index 
+                  name=name 
+                  label=label 
+                  validators=validators 
+                  fieldType=fieldType 
+                  errorText=errorText 
+              }}}
             {{/if_eq}}            
             {{#if_eq type "fileField"}}
               {{{ file-field key=@index name=name label=label validators=validators }}}
@@ -55,30 +64,19 @@ function validateForm(propsData: Array<TInputFieldProps | TFileFieldProps>, fiel
       if (!acc) acc = isValid;
     }
     if ('required' in item && field) {
-      const isValid = item.required ? !!field?.files?.length : true;
+      const isValid = item.required ? !field?.files?.length : true;
       if (!acc) acc = isValid;
     }
     return acc;
   }, false);
 }
 
-function prepareProps(fields: NodeListOf<HTMLInputElement>) {
-  return Array.from(fields).reduce<Record<string, string | File>>((acc, item) => {
-    if (item.type === 'file' && item.files) {
-      acc[item.name] = item.files[0];
-    } else {
-      acc[item.name] = item.value;
-    }
-    return acc;
-  }, {});
-}
-
 function onSubmit(this: Component<TFormProps>, e: Event) {
   e.preventDefault();
   const form = e.target as HTMLElement;
   const inputs = form.querySelectorAll('input');
-  const formIsValid = validateForm(this.props.fields, inputs);
-  if (!formIsValid) return;
+  const formInValid = validateForm(this.props.fields, inputs);
+  if (formInValid) return;
   const data = prepareProps(inputs);
   this.props.onSubmit(data);
 }

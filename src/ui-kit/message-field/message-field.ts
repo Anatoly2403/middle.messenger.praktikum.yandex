@@ -1,4 +1,4 @@
-import { prepareComponent } from '../../core/base/component';
+import { prepareComponent } from '../../core/component';
 import './message-field.scss';
 
 type TMessageFieldProps = {

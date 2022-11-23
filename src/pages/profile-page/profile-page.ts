@@ -1,129 +1,201 @@
-import { Component, prepareComponent } from '../../core/base/component';
 import './profile-page.scss';
-import avatarSrc from '../../assets/icons/defaultAvatar.svg';
-import { Form } from '../../components/form/form';
-import { parseImg } from '../../utils';
+import { validatePassword, validateEmail, validateName, validatePhone, validateLogin } from './../../utils';
+import { TState, withStore } from './../../store/Store';
 import { ArrowButton } from '../../ui-kit/arrow-button';
-import { Avatar } from '../../components/avatar';
-import { TextField } from '../../ui-kit/text-field/text-field';
-import { TDataObserverProps } from '../../core/base/models';
+import { ProfileAvatar } from '../../components/profile-avatar';
 import { TextButton } from '../../ui-kit/text-button/text-button';
 import { Modal } from '../../components/modal/modal';
-import { isAvatarData, TAvatarData, TProfilePageProps, TUserData } from './types';
-import { avatarFormMeta, userDataFormMeta } from './constants';
+import { redirect } from '../../core/router';
+import { Component, prepareComponent } from '../../core/component';
+import { userService } from '../../services/user-service';
+import { TButtonProps } from '../../ui-kit/button';
+import { IProfileData, IPasswordData, IUserData } from '../../models';
+import { TInputFieldProps } from '../../ui-kit/input-field';
+import { TFileFieldProps } from '../../ui-kit/file-field';
+import { ProfilePagePasswordForm } from './password-form';
+import { ProfilePageDataForm } from './data-form';
+
+type TProfilePageState = {
+  changeData: boolean;
+  changePassword: boolean;
+  showModal: boolean;
+  modalFormData: {
+    title: string;
+    fields: Array<TInputFieldProps | TFileFieldProps>;
+    submit: TButtonProps;
+  };
+};
+
+type TAvatarData = Record<string, File>;
+
+type TProfilePageProps = {
+  user: IUserData | null;
+};
+
+const avatarFormMeta = {
+  id: 'uploadFile',
+  title: 'Загрузите файл',
+  fields: [{ type: 'fileField', name: 'avatar', label: 'Выбрать файл на компьютере', required: true }],
+  submit: { type: 'submit', label: 'Поменять' },
+};
 
 const template = `
-    <div class="profile">
-      {{#if props.modal.show}}  
+    <div class="profile-page">
+      {{#if state.showModal}}  
         {{{
           modal
-            show=props.modal.show
+            show=state.showModal
             hideModal=helpers.hideModal
-            saveData=helpers.saveData
-            formData=props.modal.formData
+            handleSubmit=helpers.saveData
+            formData=state.modalFormData
         }}}    
       {{/if}}    
-      <div class="profile__block_left">
-        {{{ arrow-button onClick=helpers.arrowBtnClick}}}
+      <div class="profile-page__block_left">
+        {{{arrow-button onClick=helpers.arrowBtnClick}}}
       </div>
-      <div class="profile__block_right">
-        <div class="profile__avatar">
-          {{{ avatar avatarSrc=props.avatar.src avatarClick=helpers.avatarClick}}}
+      <div class="profile-page__block_right">
+        <div class="profile-page__avatar">
+          {{{profile-avatar avatarSrc=props.user.avatar avatarClick=helpers.avatarClick}}}
         </div>
-        <div class="profile__user-data">
-          <div class="profile__main-info-wrapper">     
-            {{#each props.info}}
-              {{{ text-field key=@index name=name label=label value=value }}}   
-            {{/each}}                   
-          </div>
-        </div>
-        <div class="profile__control">
-          <div class="profile__main-btns-wrapper">
-            {{#each props.buttons}}           
-              {{{ 
-                text-button 
-                  key=@index 
-                  name=name  
-                  label=label 
-                  type=type 
-                  onTextBtnClick=../helpers.textButtonClick
-              }}}   
-            {{/each}} 
-          </div>
+          {{#if state.changePassword}}
+            {{{
+              profile-page-password-form
+                onSubmit=helpers.onSubmitData
+                isDisabled=state.changePassword
+            }}}
+          {{else}}
+            {{{
+              profile-page-data-form
+                onSubmit=helpers.onSubmitData
+                isDisabled=state.changeData
+                email=props.user.email
+                login=props.user.login
+                first_name=props.user.first_name
+                second_name=props.user.second_name
+                display_name=props.user.display_name
+                phone=props.user.phone
+            }}}
+          {{/if}}
+        <div class="profile-page__control">
+        {{#if_and-not state.changePassword state.changeData}}
+          {{{text-button key=0 name="changeData" label="Изменить данные" onTextBtnClick=helpers.changeData}}}
+          {{{text-button key=1 name="changePassword" label="Изменить пароль" onTextBtnClick=helpers.changePassword}}}
+          {{{text-button key=2 name="logout" label="Выйти" type="danger" onTextBtnClick=helpers.logout}}}
+        {{/if_and-not}} 
         </div>
       </div>
     </div>
   `;
 
-function componentDidMount(this: Component<TProfilePageProps>, props: TDataObserverProps<TProfilePageProps>) {
-  this.setProps({
-    ...props.data,
-    info: [
-      { name: 'mail', label: 'Почта', value: '' },
-      { name: 'login', label: 'Логин', value: '' },
-      { name: 'name', label: 'Имя', value: '' },
-      { name: 'lastName', label: 'Фамилия', value: '' },
-      { name: 'phoneNumber', label: 'Телефон', value: '' },
-      { name: 'password', label: 'Пароль', value: '' },
-    ],
-    avatar: {
-      src: avatarSrc,
+function mapStateToProps(state: TState) {
+  return { user: state.user };
+}
+
+export const ProfilePage = withStore(
+  prepareComponent<TProfilePageProps, TProfilePageState>({
+    name: 'profile-page',
+    template,
+    componentDidMount: () => userService.getUserData(),
+    children: [ArrowButton, ProfileAvatar, ProfilePagePasswordForm, ProfilePageDataForm, TextButton, Modal],
+    helpers: {
+      arrowBtnClick,
+      logout: () => userService.logout(),
+      avatarClick,
+      changeData,
+      hideModal,
+      saveData,
+      changePassword,
+      onSubmitData,
     },
-    buttons: [
-      { name: 'changeData', label: 'Изменить данные' },
-      { name: 'logout', label: 'Выйти', type: 'danger' },
-    ],
-    modal: {
-      show: false,
-    },
+    state: { modalFormData: avatarFormMeta, changeData: false, changePassword: false, showModal: false },
+  }),
+  mapStateToProps,
+);
+
+function arrowBtnClick(this: Component<TProfilePageProps, TProfilePageState>) {
+  if (this.state.changeData) {
+    this.setState((state) => ({ ...state, changeData: false }));
+    return;
+  }
+  if (this.state.changePassword) {
+    this.setState((state) => ({ ...state, changePassword: false }));
+    return;
+  }
+  redirect('/');
+}
+
+function avatarClick(this: Component<TProfilePageProps, TProfilePageState>) {
+  this.setState((state) => ({ ...state, showModal: true }));
+}
+
+function changeData(this: Component<TProfilePageProps, TProfilePageState>) {
+  this.setState((state) => ({ ...state, changeData: true }));
+}
+function changePassword(this: Component<TProfilePageProps, TProfilePageState>) {
+  this.setState((state) => ({ ...state, changePassword: true }));
+}
+
+function hideModal(this: Component<TProfilePageProps, TProfilePageState>) {
+  this.setState((state) => ({ ...state, showModal: false }));
+}
+
+async function saveData(this: Component<TProfilePageProps, TProfilePageState>, data: TAvatarData) {
+  const formData = new FormData();
+  formData.append('avatar', data.avatar, data.avatar.name);
+  await userService.updateAvatar(formData);
+  this.setState((state) => ({ ...state, showModal: false }));
+}
+
+async function onSubmitData(this: Component<TProfilePageProps, TProfilePageState>, e: Event) {
+  e.preventDefault();
+  const form = e.target as HTMLElement;
+  const inputs = form.querySelectorAll('input');
+  const invalid = validate(inputs);
+  if (invalid) return;
+
+  const data = prepareData(inputs);
+  if (this.state.changeData) {
+    await userService.updateProfileData((data as unknown) as IProfileData);
+  }
+  if (this.state.changePassword) {
+    await userService.updatePassword((data as unknown) as IPasswordData);
+  }
+  this.setState((state) => ({ ...state, changeData: false, changePassword: false }));
+}
+
+function validate(inputs: NodeListOf<HTMLInputElement>) {
+  let isInValid = false;
+  Array.from(inputs).forEach(({ name, value, parentElement }) => {
+    let localIsInValid = false;
+    if (name === 'oldPassword' || name === 'newPassword') {
+      localIsInValid = !validatePassword(value);
+    }
+    if (name === 'email') {
+      localIsInValid = !validateEmail(value);
+    }
+    if (name === 'login') {
+      localIsInValid = !validateLogin(value);
+    }
+    if (name === 'first_name' || name === 'second_name') {
+      localIsInValid = !validateName(value);
+    }
+    if (name === 'phone') {
+      localIsInValid = !validatePhone(value);
+    }
+
+    if (localIsInValid) {
+      parentElement?.classList.add('text-field-error');
+    } else {
+      parentElement?.classList.remove('text-field-error');
+    }
+    isInValid = localIsInValid;
   });
+  return isInValid;
 }
 
-function arrowBtnClick() {
-  window.location.href = '/main';
+function prepareData(inputs: NodeListOf<HTMLInputElement>) {
+  return Array.from(inputs).reduce<Record<string, string>>((acc, item) => {
+    acc[item.name] = item.value;
+    return acc;
+  }, {});
 }
-
-function avatarClick(this: Component<TProfilePageProps>) {
-  this.setProps((props) => ({ ...props, modal: { name: 'avatar', show: true, formData: avatarFormMeta } }));
-}
-
-function textButtonClick(this: Component<TProfilePageProps>, name: string) {
-  if (name === 'changeData') {
-    this.setProps((props) => ({ ...props, modal: { name: 'formData', show: true, formData: userDataFormMeta } }));
-  } else {
-    window.location.href = '/login';
-  }
-}
-
-function hideModal(this: Component<TProfilePageProps>) {
-  this.setProps((props) => ({ ...props, modal: { show: false, formData: undefined, name: undefined } }));
-}
-
-async function saveData(this: Component<TProfilePageProps>, data: TAvatarData | TUserData) {
-  if (isAvatarData(data)) {
-    const avatar = await parseImg(data.avatar);
-    this.setProps((props) => ({
-      ...props,
-      avatar: { src: avatar },
-      modal: { ...props.modal, show: false },
-    }));
-    // eslint-disable-next-line no-console
-    console.log({ avatar: avatar });
-  } else {
-    this.setProps((props) => ({
-      ...props,
-      info: props.info.map((item) => ({ ...item, value: data[item.name] })),
-      modal: { ...props.modal, show: false },
-    }));
-    // eslint-disable-next-line no-console
-    console.log(data);
-  }
-}
-
-export const ProfilePage = prepareComponent<TProfilePageProps>({
-  name: 'profile-page',
-  template,
-  componentDidMount,
-  children: [Form, ArrowButton, Avatar, TextField, TextButton, Modal],
-  helpers: { arrowBtnClick, avatarClick, textButtonClick, hideModal, saveData },
-});

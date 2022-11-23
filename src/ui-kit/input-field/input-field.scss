@@ -20,6 +20,16 @@
     }
   }
 
+  &__error {
+    position: absolute;
+    top: 47px;
+    left: 0;
+    font-weight: 400;
+    font-size: 8px;
+    color: $red;
+    white-space: nowrap;
+  }
+
   &__input {
     width: 100%;
     border: none;

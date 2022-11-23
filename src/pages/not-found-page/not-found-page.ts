@@ -1,12 +1,12 @@
-import { prepareComponent } from '../../core/base/component';
-import { Link } from '../../ui-kit/link';
+import { prepareComponent } from '../../core/component';
+import { Link } from '../../core/router/components/link';
 import './not-found-page.scss';
 
 const template = `
-    <div class="root">
-      <h1 class="root__code">404</h1>
-      <p class="root__message">Не туда попали</p>
-      {{{ link href="/main" label="Назад к чатам" }}}
+    <div class="not-found-page">
+      <h1 class="not-found-page__code">404</h1>
+      <p class="not-found-page__message">Не туда попали</p>
+      {{{ link href="/" label="Назад к чатам" }}}
     </div>
   `;
 

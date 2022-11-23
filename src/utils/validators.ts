@@ -2,7 +2,7 @@ const regExps = {
   NAME: /^[A-ZА-Я]+[a-zа-яA-ZА-Я]+([-]?)+[a-zа-яA-ZА-Я]+/,
   LOGIN: /(\d?)+([-|_]?)+[a-zA-z]+([-|_]?)+[a-zA-z]+(\d?)+/,
   EMAIL: /^[\w]+@([\d]?|[a-z]+\.)+[\w-]{2,4}$/,
-  PASSWORD: /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d).+/,
+  PASSWORD: /^(?=.*\d)(?=.*[A-Z])\w{8,40}$/i,
   PHONE: /^\+?\d{10,15}$/,
 };
 
@@ -27,3 +27,11 @@ export function validatePassword(password: string) {
 export function validatePhone(phone: string) {
   return regExps.PHONE.test(phone);
 }
+
+export const validatorsMap: Record<string, (name: string) => boolean> = {
+  name: validateName,
+  login: validateLogin,
+  email: validateEmail,
+  password: validatePassword,
+  phone: validatePhone,
+};

@@ -1,7 +1,7 @@
 @import 'src/styles/global.scss';
 @import 'src/styles/colors.scss';
 
-.profile {
+.profile-page {
   display: flex;
   height: 100vh;
 
@@ -43,19 +43,24 @@
   }
 
   &__user-data {
-    height: 198px;
+    width: 510px;
+    &>div:last-child .text-field {
+      border-bottom: 1px solid transparent;
+    }
+  }
+
+  &__user-data-submit {
+    margin: 60px auto 0;
+    width: 280px;
+
+  }
+
+  &__control>div:last-child .text-button {
+    border-bottom: 1px solid transparent;
   }
 
   &__password-wrapper {
     display: none;
-  }
-
-  &__main-info-wrapper>div:last-child>.text-field {
-    border-bottom: 1px solid transparent;
-  }
-
-  &__main-btns-wrapper>div:last-child>.text-button {
-    border-bottom: 1px solid transparent;
   }
 
   &__save-btns-wrapper {

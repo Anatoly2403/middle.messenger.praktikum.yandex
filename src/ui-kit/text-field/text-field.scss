@@ -1,14 +1,16 @@
 @import 'src/styles/colors.scss';
 
 .text-field {
+  position: relative;
   width: 100%;
-  height: 33px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid $white2;
   font-size: 13px;
   font-weight: 500;
+  padding: 7px 0;
 
   &__value {
     text-align: end;
@@ -16,5 +18,24 @@
     border: none;
     background: none;
     color: $gray;
+  }
+
+  &__error {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: $red;
+    font-size: 10px;
+  }
+
+  &-error {
+    &>.text-field__value {
+      color: $red;
+    }
+
+    &>.text-field__error {
+      display: block;
+    }
   }
 }

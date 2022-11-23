@@ -1,4 +1,4 @@
-import { AnyType } from '../../shared/models';
+import { AnyType, ISimpleObject } from '../../models';
 
 export enum EMethods {
   GET = 'GET',
@@ -7,11 +7,9 @@ export enum EMethods {
   DELETE = 'DELETE',
 }
 
-export type TSimpleObject = Record<string | symbol, AnyType>;
-
 export type IOptions = {
   data?: AnyType;
-  headers?: TSimpleObject;
+  headers?: ISimpleObject;
   timeout?: number;
 };
 

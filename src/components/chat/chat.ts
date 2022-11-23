@@ -1,71 +1,112 @@
-import { prepareComponent } from '../../core/base/component';
-import { IContact } from '../../models';
+import { BASE_URL } from '../../api/constants';
+import { Component, prepareComponent } from '../../core/component';
+import { IChatItem, IMessage } from '../../models';
+import { chatsService } from '../../services/chats-service';
+import { messageService } from '../../services/message-service/message-service';
+import { TState, withStore } from '../../store';
 import { ActionMenu } from '../action-menu';
+import { ChatControlPanel } from '../chat-control-panel';
 import { MessageForm } from '../message-form';
 import './chat.scss';
 
 type TChatProps = {
-  contact: IContact;
+  userId: number | null;
+  activeChat: IChatItem | null;
+  messages: IMessage[];
 };
 
 type TChatState = {
-  menuItems: { name: string; value: string }[];
-  message: string;
+  showControlPanel: boolean;
 };
 
 const state: TChatState = {
-  menuItems: [
-    { name: 'add', value: 'Добавить пользователя' },
-    { name: 'remove', value: 'Удалить пользователя' },
-  ],
-  message: '',
+  showControlPanel: false,
 };
 
-function manageContact(actionName: string | null) {
-  // eslint-disable-next-line no-console
-  console.log({ actionName });
+const template = `
+  {{#if props.activeChat}}
+    <div class="chat">
+      <div class="chat__header">
+        <div class="chat__contact">
+          <div class="chat__contact-avatar">
+            {{#if props.activeChat.avatar}}
+              <img 
+                src="${BASE_URL}/resources/{{props.activeChat.avatar}}"
+                alt="contact avatar" />
+            {{/if}}
+          </div>
+          <div class="chat__contact-name">{{props.activeChat.title}}</div>
+        </div>
+        <div class="chat__menu">
+          <div class="chat__setting-btn" data-event="[click:showControlPanel]"></div>  
+        </div>
+      </div>
+      <div class="chat__content">
+        {{#each props.messages}}
+          {{#if_eq ../props.userId user_id}}
+            <div class="chat__message chat__message_out"><div>{{content}}</div></div>
+          {{else}}
+            <div class="chat__message chat__message_in"><div>{{content}}</div></div>
+          {{/if_eq}}
+        {{/each}}         
+      </div>
+      <div class="chat__footer">
+        <div class="chat__footer-message">
+          {{{ message-form onSubmit=helpers.sendMessage }}}
+        </div>  
+      </div>   
+      {{#if state.showControlPanel}}
+        <div class="chat__control-panel">          
+            {{{
+              chat-control-panel             
+                hide=helpers.hideControlPanel 
+                removeChat=helpers.removeChat
+                chatUsers=props.activeChatUsers
+                foundUsers=props.foundUsers
+            }}}
+        </div>
+      {{/if}}
+    </div>
+  {{else}}
+    <div class="chat_empty">Выберите чат чтобы отправить сообщение</div> 
+  {{/if}}
+`;
+function mapStateToProps(state: TState) {
+  return {
+    userId: state.userId,
+    activeChat: state.activeChat,
+    messages: state.messages,
+    activeChatUsers: state.activeChatUsers,
+    foundUsers: state.foundUsers,
+  };
+}
+
+export const Chat = withStore(
+  prepareComponent<TChatProps, TChatState>({
+    name: 'chat',
+    template,
+    state,
+    children: [MessageForm, ActionMenu, ChatControlPanel],
+    events: { showControlPanel },
+    helpers: { sendMessage, removeChat, hideControlPanel },
+  }),
+  mapStateToProps,
+);
+
+function removeChat(this: Component<TChatProps, TChatState>) {
+  chatsService.removeChat();
+  this.setState((state) => ({ ...state, showControlPanel: false }));
 }
 
 function sendMessage(message: string) {
-  // eslint-disable-next-line no-console
-  console.log({ message });
+  if (!message) return;
+  messageService.sendMessage(message);
 }
 
-const template = `
-  <div class="chat">
-    <div class="chat__header">
-      <div class="chat__contact">
-        <div class="chat__contact-avatar">
-          {{#if props.contact.avatar}}
-            <img src={{props.contact.avatar}} alt="contact avatar" />
-          {{/if}}
-        </div>
-        <div class="chat__contact-name">{{props.contact.name}}</div>
-      </div>
-      <div class="chat__menu">
-        {{{ action-menu menuItems=state.menuItems handler=helpers.manageContact }}}
-      </div>
-    </div>
-    <div class="chat__content">
-      <div class="chat__message chat__message_in">
-        <div>Входящее</div>
-      </div>
-      <div class="chat__message chat__message_out">
-        <div>Исходящее</div>
-      </div>          
-    </div>
-    <div class="chat__footer">
-      <div class="chat__footer-clip"></div>
-      <div class="chat__footer-message">
-      {{{ message-form onSubmit=helpers.sendMessage }}}
-      </div>
-  </div>
-`;
+function showControlPanel(this: Component<TChatProps, TChatState>) {
+  this.setState((state) => ({ ...state, showControlPanel: true }));
+}
 
-export const Chat = prepareComponent<TChatProps, TChatState>({
-  name: 'chat',
-  template,
-  state,
-  children: [ActionMenu, MessageForm],
-  helpers: { manageContact, sendMessage },
-});
+function hideControlPanel(this: Component<TChatProps, TChatState>) {
+  this.setState((state) => ({ ...state, showControlPanel: false }));
+}

@@ -1,59 +1,63 @@
-import { Component, prepareComponent } from '../../core/base/component';
 import './login-page.scss';
+import { ISigninData } from '../../models/user/interfaces';
 import { Form } from '../../components/form/form';
 import { validatePassword, validateLogin } from '../../utils';
 import { TInputFieldProps } from '../../ui-kit/input-field';
-import { TDataObserverProps } from '../../core/base/models';
 import { TButtonProps } from '../../ui-kit/button';
-import { TLinkProps } from '../../ui-kit/link';
+import { TLinkProps } from '../../core/router/components/link';
+import { prepareComponent } from '../../core/component';
+import { ISimpleObject } from '../../core/models';
+import { userService } from '../../services/user-service';
 
-type TLoginPageProps = {
+type TLoginPageState = {
   fields: TInputFieldProps[];
   button: TButtonProps;
   link: TLinkProps;
 };
 
 const template = `
-    <div class="login">
-      <div class="login-form__wrapper">
+    <div class="login-page">
+      <div class="login-page-form__wrapper">
         {{{ 
             form 
               onSubmit=helpers.onSubmit
               title="Вход" 
-              fields=props.fields 
-              button=props.button
-              link=props.link
+              fields=state.fields 
+              button=state.button
+              link=state.link
         }}}
       </div>  
     </div>
   `;
 
-function componentDidMount(this: Component<TLoginPageProps>, props: TDataObserverProps<TLoginPageProps>) {
-  this.setProps({
-    ...props.data,
+function onSubmit(data: ISigninData) {
+  userService.login(data);
+}
+
+export const LoginPage = prepareComponent<ISimpleObject, TLoginPageState>({
+  name: 'login-page',
+  template,
+  children: [Form],
+  helpers: { onSubmit },
+  state: {
     fields: [
-      { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin] },
-      { type: 'inputField', name: 'password', label: 'Пароль', validators: [validatePassword] },
+      { type: 'inputField', name: 'login', label: 'Логин', validators: [validateLogin], errorText: 'Неверный логин' },
+      {
+        type: 'inputField',
+        name: 'password',
+        label: 'Пароль',
+        fieldType: 'password',
+        validators: [validatePassword],
+        errorText: 'Неверный пароль',
+      },
     ],
     button: {
       type: 'submit',
       label: 'Авторизоваться',
     },
     link: {
-      href: '/signin',
+      href: '/signup',
       label: 'Нет аккаунта?',
     },
-  });
-}
-
-function onSubmit(data: { login: string; password: string }) {
-  alert(JSON.stringify(data));
-}
-
-export const LoginPage = prepareComponent<TLoginPageProps>({
-  name: 'login-page',
-  template,
-  children: [Form],
-  componentDidMount,
-  helpers: { onSubmit },
+  },
 });

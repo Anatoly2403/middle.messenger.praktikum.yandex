@@ -1,4 +1,4 @@
-import { Component, prepareComponent } from '../../core/base/component';
+import { Component, prepareComponent } from '../../core/component';
 import './input-field.scss';
 
 export type TInputFieldProps = {
@@ -6,15 +6,22 @@ export type TInputFieldProps = {
   fieldType?: string;
   name: string;
   label: string;
+  errorText?: string;
   validators?: Array<(value: string) => boolean>;
 };
 
 export function inputValidator(input: HTMLInputElement, validators?: Array<(value: string) => boolean>) {
+  const error = input.nextElementSibling as HTMLElement;
   const { value } = input;
   if (!validators || !validators.length) return true;
   const isInValid = validators.some((validator) => !validator(value));
-  if (isInValid) input.classList.add(`input-field__input_invalid`);
-  else input.classList.remove(`input-field__input_invalid`);
+  if (isInValid) {
+    input.classList.add(`input-field__input_invalid`);
+    error.hidden = false;
+  } else {
+    input.classList.remove(`input-field__input_invalid`);
+    error.hidden = true;
+  }
   return isInValid;
 }
 
@@ -41,6 +48,7 @@ const template = `
           name="{{ props.name }}" 
           data-event="[focus:handleFocus, blur:handleBlur]"  
         />
+        <span hidden class="input-field__error">{{props.errorText}}</span>
     </div>
   `;
 
