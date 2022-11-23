@@ -58,7 +58,7 @@ const template = `
       value=props.phone }}}
     {{#if props.isDisabled}}
       <div class="profile-page__user-data-submit">
-        {{{button type="submit" label="Сохранить"}}}
+        {{{button key=2 type="submit" label="Сохранить"}}}
       </div>
     {{/if}}
   </form>  

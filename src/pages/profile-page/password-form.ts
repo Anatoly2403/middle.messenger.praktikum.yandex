@@ -25,7 +25,7 @@ const template = `
         type='password'}}}
     {{#if props.isDisabled}}
       <div class="profile-page__user-data-submit">
-        {{{button type="submit" label="Сохранить"}}}
+        {{{button key=3 type="submit" label="Сохранить"}}}
       </div>
     {{/if}}
   </form>  

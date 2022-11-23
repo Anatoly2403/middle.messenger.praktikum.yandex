@@ -45,7 +45,7 @@ const template = `
         </div>
       </div>
       <div class="form__submit">
-        {{{ button type=props.button.type label=props.button.label }}}
+        {{{ button key=1 type=props.button.type label=props.button.label }}}
       </div>
       {{#if props.link }}
         <div class="form__link">
