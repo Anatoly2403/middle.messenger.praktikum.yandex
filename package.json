@@ -8,7 +8,8 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
-    "start": "npm run build && node src/server/app.ts",
+    "build-server": "tsc server/app.ts --esModuleInterop",
+    "start": "npm run build && npm run build-server && node server/app.js",
     "dev": "webpack-dev-server --mode development --open",
     "lint": "eslint . --ext .ts --color",
     "lint-fix": "eslint . --ext .ts --fix",
