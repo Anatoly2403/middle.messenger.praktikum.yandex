@@ -7,6 +7,7 @@
   "browserslist": "last 2 versions, not dead",
   "private": true,
   "scripts": {
+    "build-all": "npm run build && npm run build-server",
     "build": "webpack --mode production",
     "build-server": "tsc server/app.ts --esModuleInterop",
     "start": "npm run build && npm run build-server && node server/app.js",

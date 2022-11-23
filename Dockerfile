@@ -6,4 +6,8 @@ COPY . .
 
 RUN npm install
 
-CMD
+RUN npm run build-all
+
+EXPOSE 3000
+
+CMD [ "node", "server/app.js" ]
