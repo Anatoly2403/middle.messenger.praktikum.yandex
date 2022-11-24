@@ -2,9 +2,11 @@ FROM node:14.18.3
 
 WORKDIR  /app
 
-COPY . .
+COPY package.json /app
 
 RUN npm install
+
+COPY . .
 
 RUN npm run build-all
 
