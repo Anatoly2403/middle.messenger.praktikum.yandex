@@ -57,7 +57,7 @@ const template = `
             {{/if}}  
           </div>
           <div class="chat-control-panel__inner-content-footer">
-            {{{button label="Удалить чат" onClick=helpers.removeChat}}}
+            {{{button key=0 label="Удалить чат" onClick=helpers.removeChat}}}
           </div>
         </div>
       </div>
